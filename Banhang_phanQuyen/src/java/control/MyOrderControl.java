@@ -38,7 +38,7 @@ public class MyOrderControl extends HttpServlet {
         
         List<Order> orderList = new OrderDAO().getOrdersByUserId(user.getUserID(), pageSize, page);
         
-        if (orderList.isEmpty()) {
+        if (orderList.isEmpty() && page != 1) {
             response.sendRedirect("my-order");
             return;
         }
