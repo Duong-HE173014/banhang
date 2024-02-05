@@ -16,11 +16,20 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author anhdu
+ * @author lvhn1
  */
-@WebServlet(name = "LoginControl", urlPatterns = {"/login"})
-public class LoginControl extends HttpServlet {
+@WebServlet(name = "ChangePasswordControl", urlPatterns = {"/change-password"})
+public class ChangePasswordControl extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -29,10 +38,10 @@ public class LoginControl extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginControl</title>");
+            out.println("<title>Servlet ChangePasswordControl</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginControl at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ChangePasswordControl at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -50,7 +59,7 @@ public class LoginControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("Login.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -64,36 +73,25 @@ public class LoginControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        // lấy thông tin người dùng
+        User user = (User) request.getSession().getAttribute("user");
 
-        String email = request.getParameter("email");
+        String oldPassword = request.getParameter("oldpassword");
         String password = request.getParameter("password");
+        String repassword = request.getParameter("repassword");
 
-        UserDAO userDAO = new UserDAO();
-        User user = userDAO.loginUser(email, password);
+        if (password.equals(repassword) && user.getPassword().equals(oldPassword)) {
 
-        if (user != null) {
-            // Login successful
-            String role = user.getRole();
-            request.getSession().setAttribute("role", role);
-            request.getSession().setAttribute("user", user);
-            if ("Admin".equals(role)) {
-                response.sendRedirect("admin"); 
-            } else if ("SaleManager".equals(role)) {
-                response.sendRedirect("saleManagerHome"); 
-            } else if("Saler".equals(role)){
-                response.sendRedirect("salerHome"); 
-            } else if("Marketing".equals(role)){
-                response.sendRedirect("marketingHome"); 
-            }else {
-                response.sendRedirect("home"); 
-            }
-        } else {
-            // Login failed
-            request.setAttribute("errorMessage", "Invalid email or password");
-            request.getRequestDispatcher("Login.jsp").forward(request, response);
-        }
+            user.setPassword(password);
+            new UserDAO().updateUser(user);
+            
+            response.sendRedirect("userprofile?successcp");
+
+        } else response.sendRedirect("userprofile?failcp");
+
+        
     }
-
 
     /**
      * Returns a short description of the servlet.

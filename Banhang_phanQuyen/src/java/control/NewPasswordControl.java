@@ -13,6 +13,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -21,111 +25,87 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "NewPasswordControl", urlPatterns = {"/new-password"})
 public class NewPasswordControl extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet NewPasswordControl</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet NewPasswordControl at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String email = request.getParameter("email");
         String otp = request.getParameter("otp");
-        
+
         request.setAttribute("otp", otp);
         request.setAttribute("email", email);
-        
+
         request.getRequestDispatcher("NewPassword.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String email = request.getParameter("email");
         String otp = request.getParameter("otp");
-        
+
         String password = request.getParameter("password");
         String retypePassword = request.getParameter("retypePassword");
-        
+
         String checkOtp = (String) request.getSession().getAttribute(email + "_reset_otp");
-        
+        String expireTime = (String) request.getSession().getAttribute(email + "_reset_time");
+
         User user = new UserDAO().getUserByEmail(email);
-        
-        String msg = "";      
-        
-        if (user==null) {
+
+        String msg = "";
+
+        if (user == null) {
             msg = "Email not found";
         } else if (otp.equals(checkOtp)) {
-            
-            if (password.equals(retypePassword)) {
-                
-                user.setPassword(password);
-                new UserDAO().updateUser(user);
-                msg = "Reset password success";
-                
+
+            if (isExpired(expireTime)) {
+                msg = "Link expired";
             } else {
-                msg = "2 password not match";
+
+                if (password.equals(retypePassword)) {
+
+                    user.setPassword(password);
+                    new UserDAO().updateUser(user);
+                    msg = "Reset password success";
+                    request.getSession().removeAttribute(email + "_reset_otp");
+
+                } else {
+                    msg = "2 password not match";
+                }
+
             }
-            
+
         } else {
             msg = "Error! Cant reset password";
         }
-        
+
         request.setAttribute("errorMessage", msg);
         request.setAttribute("otp", otp);
         request.setAttribute("email", email);
-        
+
         request.getRequestDispatcher("NewPassword.jsp").forward(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    public boolean isExpired(String dateString) {
+        // Define the date format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            // Parse the input date string
+            Date expiryDate = dateFormat.parse(dateString);
+
+            // Get current time
+            Calendar calendar = Calendar.getInstance();
+            Date currentTime = calendar.getTime();
+
+            // Compare the dates
+            return currentTime.after(expiryDate);
+        } catch (ParseException e) {
+            // Handle parsing exception
+            System.out.println("Error parsing date: " + e.getMessage());
+            return false;
+        }
+    }
 
 }

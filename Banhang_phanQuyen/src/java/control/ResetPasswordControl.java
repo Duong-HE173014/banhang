@@ -17,6 +17,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -24,6 +27,8 @@ import java.security.SecureRandom;
  */
 @WebServlet(name = "ResetPasswordControl", urlPatterns = {"/reset-password"})
 public class ResetPasswordControl extends HttpServlet {
+    
+    private static int expiredMinute = 1;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -49,6 +54,7 @@ public class ResetPasswordControl extends HttpServlet {
             // generate otp
             String otp = generatePassword(12);
             request.getSession().setAttribute(emailaddress + "_reset_otp", otp);
+            request.getSession().setAttribute(emailaddress + "_reset_time", getExpiredTime(expiredMinute));
             String resetLink = "http://" + request.getServerName() + ":" + request.getServerPort()
                     + request.getContextPath() + "/new-password?otp=" + otp + "&email=" + emailaddress;
 
@@ -125,6 +131,22 @@ public class ResetPasswordControl extends HttpServlet {
         }
 
         return password.toString();
+    }
+    
+    public String getExpiredTime(int n) {
+        // Get current time
+        Calendar calendar = Calendar.getInstance();
+        Date currentTime = calendar.getTime();
+
+        // Add n minutes
+        calendar.add(Calendar.MINUTE, n);
+        Date newTime = calendar.getTime();
+
+        // Format the result as a string
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String result = dateFormat.format(newTime);
+
+        return result;
     }
 
 

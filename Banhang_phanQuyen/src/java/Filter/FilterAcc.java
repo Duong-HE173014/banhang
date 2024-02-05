@@ -117,7 +117,7 @@ public class FilterAcc implements Filter {
         }
 
         //đường dẫn đặc biệt
-        if (Arrays.asList("/userprofile", "/show","/new-password").contains(currentPath)) {
+        if (Arrays.asList("/userprofile", "/show","/new-password", "/my-order", "/order-details", "change-password").contains(currentPath)) {
             if (session != null && session.getAttribute("role") != null) {
                 chain.doFilter(request, response);
             } else {

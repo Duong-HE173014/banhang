@@ -90,7 +90,7 @@ public class RegisterControl extends HttpServlet {
         String image = request.getParameter("image");
 
         // Set a default role or customize as needed
-        String role = "user";
+        String role = "User";
 
         // Perform additional validation checks
         String validationError = validateRegistrationInput(fullName, email, password, retypePassword, phone, address);

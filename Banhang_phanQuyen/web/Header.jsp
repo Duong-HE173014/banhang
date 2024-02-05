@@ -107,6 +107,9 @@
                                 <a class="nav-link" href="blog">Blog</a>
                             </li> 
                             <li class="nav-item">
+                                <a class="nav-link" href="my-order">My Order</a>
+                            </li> 
+                            <li class="nav-item">
                                 <a class="nav-link" href="logout">Logout</a>
                             </li> 
                             
