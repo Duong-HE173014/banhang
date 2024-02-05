@@ -107,19 +107,20 @@ public class FilterAcc implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        HttpSession session = httpRequest.getSession(false);
+        HttpSession session = httpRequest.getSession();
         String currentPath = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
 
         //đường dẫn không yêu cầu quyền
-        if (Arrays.asList("/home", "/login", "/logout", "/blog","/category","/detail","/postDetail","/register","/verify","/search").contains(currentPath)) {
+        if (Arrays.asList("/home", "/login", "/logout", "/blog","/category","/detail","/postDetail","/register","/verify","/search", "/reset-password", "/new-password").contains(currentPath)) {
             chain.doFilter(request, response);
             return;
         }
-
+        
         //đường dẫn đặc biệt
-        if (Arrays.asList("/userprofile", "/show","/new-password", "/my-order", "/order-details", "change-password").contains(currentPath)) {
+        if (Arrays.asList("/userprofile", "/show","/new-password", "/my-order", "/order-details", "/change-password").contains(currentPath)) {
             if (session != null && session.getAttribute("role") != null) {
                 chain.doFilter(request, response);
+                return;
             } else {
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/login");
             }
