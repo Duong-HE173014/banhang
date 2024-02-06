@@ -15,17 +15,19 @@ public class FeedBack {
     private int RatedStar;
     private String Feedback;
     private String Images;
+    private String UpdatedDate;
 
     public FeedBack() {
     }
 
-    public FeedBack(int FeedbackID, int UserID, int ProductID, int RatedStar, String Feedback, String Images) {
+    public FeedBack(int FeedbackID, int UserID, int ProductID, int RatedStar, String Feedback, String Images, String UpdatedDate) {
         this.FeedbackID = FeedbackID;
         this.UserID = UserID;
         this.ProductID = ProductID;
         this.RatedStar = RatedStar;
         this.Feedback = Feedback;
         this.Images = Images;
+        this.UpdatedDate = UpdatedDate;
     }
 
     public int getFeedbackID() {
@@ -76,10 +78,20 @@ public class FeedBack {
         this.Images = Images;
     }
 
+    public String getUpdatedDate() {
+        return UpdatedDate;
+    }
+
+    public void setUpdatedDate(String UpdatedDate) {
+        this.UpdatedDate = UpdatedDate;
+    }
+
     @Override
     public String toString() {
-        return "FeedBack{" + "FeedbackID=" + FeedbackID + ", UserID=" + UserID + ", ProductID=" + ProductID + ", RatedStar=" + RatedStar + ", Feedback=" + Feedback + ", Images=" + Images + '}';
+        return "FeedBack{" + "FeedbackID=" + FeedbackID + ", UserID=" + UserID + ", ProductID=" + ProductID + ", RatedStar=" + RatedStar + ", Feedback=" + Feedback + ", Images=" + Images + ", UpdatedDate=" + UpdatedDate + '}';
     }
+
+    
     
     
 }
