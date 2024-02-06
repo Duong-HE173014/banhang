@@ -62,7 +62,8 @@ public class UserDAO {
                         rs.getBoolean("Gender"),
                         rs.getString("Address"),
                         rs.getString("Phone"),
-                        rs.getString("image")
+                        rs.getString("image"),
+                        rs.getString("updatedDate")
                 );
             }
         } catch (SQLException e) {
@@ -87,7 +88,8 @@ public class UserDAO {
                         rs.getBoolean("Gender"),
                         rs.getString("Address"),
                         rs.getString("Phone"),
-                        rs.getString("image")
+                        rs.getString("image"),
+                        rs.getString("updatedDate")
                 );
             }
         } catch (SQLException e) {
@@ -163,7 +165,8 @@ public class UserDAO {
                         rs.getBoolean("Gender"),
                         rs.getString("Address"),
                         rs.getString("Phone"),
-                        rs.getString("image")
+                        rs.getString("image"),
+                        rs.getString("updatedDate")
                 );
             }
         } catch (SQLException e) {
