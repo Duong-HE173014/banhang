@@ -110,7 +110,7 @@ public class MKTDAO {
                 Product p = new Product(rs.getInt("rs.getInt"), 
                         rs.getString("Title"), 
                         rs.getInt("CategoryID"), 
-                        rs.getDate("UpdatedDate"), 
+                        rs.getString("UpdatedDate"), 
                         rs.getString("Image"), 
                         rs.getString("BriefInfo"), 
                         rs.getString("Description"), 
@@ -139,16 +139,16 @@ public class MKTDAO {
             ps.setDate(2, end);
             rs = ps.executeQuery();
             while (rs.next()) {
-                User p = new User(rs.getInt("UserID"), 
-                        rs.getString("FullName"), 
-                        rs.getString("Password"), 
-                        rs.getString("Role"), 
-                        rs.getString("Email"), 
-                        rs.getDate("UpdatedDate"), 
-                        rs.getBoolean("Gender"), 
-                        rs.getString("Phone"), 
-                        rs.getString("Image"), 
-                        rs.getString("Address"));
+                User p = new User(rs.getInt("userID"), 
+                        rs.getString("fullName"), 
+                        rs.getString("email"), 
+                        rs.getString("password"), 
+                        rs.getString("role"), 
+                        rs.getBoolean("gender"), 
+                        rs.getString("address"), 
+                        rs.getString("phone"), 
+                        rs.getString("image"), 
+                        rs.getString("updatedDate"));
                 list.add(p);
             }
         } catch (Exception e) {
@@ -176,7 +176,7 @@ public class MKTDAO {
                         rs.getInt("UserID"), 
                         rs.getInt("ProductID"), 
                         rs.getInt("RatedStar"), 
-                        rs.getDate("UpdatedDate"), 
+                        rs.getString("UpdatedDate"), 
                         rs.getString("Feedback"), 
                         rs.getString("Images"));
                 list.add(p);
