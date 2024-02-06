@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.Date;
+
 /**
  *
  * @author Admin
@@ -13,16 +15,16 @@ public class Post {
     private int postID;
     private String pTitle;
     private String postAuthor;
-    private String postUpdatedDate;
+    private Date postUpdatedDate;
     private int categoryID;
     private String postThumbnail;
     private String postBriefInfo;
-    private String Details;
+    private String postDetails;
 
     public Post() {
     }
 
-    public Post(int postID, String pTitle, String postAuthor, String postUpdatedDate, int categoryID, String postThumbnail, String postBriefInfo, String Details) {
+    public Post(int postID, String pTitle, String postAuthor, Date postUpdatedDate, int categoryID, String postThumbnail, String postBriefInfo, String postDetails) {
         this.postID = postID;
         this.pTitle = pTitle;
         this.postAuthor = postAuthor;
@@ -30,15 +32,7 @@ public class Post {
         this.categoryID = categoryID;
         this.postThumbnail = postThumbnail;
         this.postBriefInfo = postBriefInfo;
-        this.Details = Details;
-    }
-
-    public Post(int postID, String pTitle, String postAuthor, String postThumbnail, String postBriefInfo) {
-        this.postID = postID;
-        this.pTitle = pTitle;
-        this.postAuthor = postAuthor;
-        this.postThumbnail = postThumbnail;
-        this.postBriefInfo = postBriefInfo;
+        this.postDetails = postDetails;
     }
 
     public int getPostID() {
@@ -65,11 +59,11 @@ public class Post {
         this.postAuthor = postAuthor;
     }
 
-    public String getPostUpdatedDate() {
+    public Date getPostUpdatedDate() {
         return postUpdatedDate;
     }
 
-    public void setPostUpdatedDate(String postUpdatedDate) {
+    public void setPostUpdatedDate(Date postUpdatedDate) {
         this.postUpdatedDate = postUpdatedDate;
     }
 
@@ -97,17 +91,19 @@ public class Post {
         this.postBriefInfo = postBriefInfo;
     }
 
-    public String getDetails() {
-        return Details;
+    public String getPostDetails() {
+        return postDetails;
     }
 
-    public void setDetails(String Details) {
-        this.Details = Details;
+    public void setPostDetails(String postDetails) {
+        this.postDetails = postDetails;
     }
 
     @Override
     public String toString() {
-        return "Post{" + "postID=" + postID + ", pTitle=" + pTitle + ", postAuthor=" + postAuthor + ", postUpdatedDate=" + postUpdatedDate + ", categoryID=" + categoryID + ", postThumbnail=" + postThumbnail + ", postBriefInfo=" + postBriefInfo + ", Details=" + Details + '}';
+        return "Post{" + "postID=" + postID + ", pTitle=" + pTitle + ", postAuthor=" + postAuthor + ", postUpdatedDate=" + postUpdatedDate + ", categoryID=" + categoryID + ", postThumbnail=" + postThumbnail + ", postBriefInfo=" + postBriefInfo + ", postDetails=" + postDetails + '}';
     }
-          
+    
+    
+   
 }
