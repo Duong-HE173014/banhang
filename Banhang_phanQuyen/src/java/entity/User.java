@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.Date;
+
 public class User {
 
     private int userID;
@@ -15,11 +17,12 @@ public class User {
     private String address;
     private String phone;
     private String image;
+    private String updatedDate;
 
     public User() {
     }
 
-    public User(int userID, String fullName, String email, String password, String role, boolean gender, String address, String phone, String image) {
+    public User(int userID, String fullName, String email, String password, String role, boolean gender, String address, String phone, String image, String updatedDate) {
         this.userID = userID;
         this.fullName = fullName;
         this.email = email;
@@ -29,6 +32,7 @@ public class User {
         this.address = address;
         this.phone = phone;
         this.image = image;
+        this.updatedDate = updatedDate;
     }
 
     public int getUserID() {
@@ -103,9 +107,21 @@ public class User {
         this.image = image;
     }
 
+    public String getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(String updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "userID=" + userID + ", fullName=" + fullName + ", email=" + email + ", password=" + password + ", role=" + role + ", gender=" + gender + ", address=" + address + ", phone=" + phone + ", image=" + image + '}';
+        return "User{" + "userID=" + userID + ", fullName=" + fullName + ", email=" + email + ", password=" + password + ", role=" + role + ", gender=" + gender + ", address=" + address + ", phone=" + phone + ", image=" + image + ", updatedDate=" + updatedDate + '}';
     }
+ 
+    
+
+    
 
 }
