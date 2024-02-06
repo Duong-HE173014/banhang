@@ -8,7 +8,6 @@ package control;
 import dao.BlogDAO;
 import entity.Post;
 import entity.PostCategories;
-import entity.Slider;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,15 +16,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Set;
-import java.util.Vector;
 
 /**
  *
- * @author Admin
+ * @author Hi
  */
-@WebServlet(name="Blog", urlPatterns={"/blog"})
-public class BlogControl extends HttpServlet {
+@WebServlet(name="BlogSearch", urlPatterns={"/blogsearch"})
+public class BlogSearch extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,17 +34,15 @@ public class BlogControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        String txtSearch = request.getParameter("txt");
         BlogDAO dao = new BlogDAO();
-        List<Post> list = dao.getAllPost();
-        List<PostCategories> listpC = dao.getAllPostCategories(); 
+        List<Post> list = dao.getPostByTitle(txtSearch);
+        List<PostCategories> listpC = dao.getAllPostCategories();
         
         request.setAttribute("listPo", list);
         request.setAttribute("listpC", listpC);
         request.getRequestDispatcher("Blog.jsp").forward(request, response);
-        
-        
-        
-         
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
