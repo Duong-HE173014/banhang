@@ -88,6 +88,7 @@ public class RegisterControl extends HttpServlet {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         String image = request.getParameter("image");
+        String updatedDate = request.getParameter("updatedDate");
 
         // Set a default role or customize as needed
         String role = "User";
@@ -130,7 +131,7 @@ public class RegisterControl extends HttpServlet {
             sendEmail(email, "Verify email", "Click here to verify: " + verifyLink);
             System.out.println(otp);
             // Set register info session
-            User user = new User(0, fullName, email, password, role, gender, address, phone, image);
+            User user = new User(0, fullName, email, password, role, gender, address, phone, image, updatedDate);
             request.getSession().setAttribute("verify_" + email, user);
             request.getSession().setAttribute("verify_otp_" + email, otp);
 
