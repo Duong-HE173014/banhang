@@ -18,91 +18,11 @@
         <!------ Include the above in your HEAD tag ---------->
     </head>
     <body>
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="home">Shop</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+        <jsp:include page="Header.jsp"></jsp:include>
 
-                <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-                    <ul class="navbar-nav m-auto">
-                        <%-- <%if(acc != null){%> 
-
-                    <%if(acc.getIsSale() == 1){%> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="managerOrder">Manager Order</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="managerPro">Manager Product</a>    <%-- sản phẩm người đó bán --%>     
-                        </li>
-
-                        <%--                  <%}%>
-                                        <%if(acc.getIsAdmin() == 1){%>  
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="managerAcc">Manager Account</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="adDashboard">Dashboard</a> 
-                                        </li>
-
-                    <%}%>
-                    <%if(acc.getIsMKT() == 1){%>  
-                    <li class="nav-item">
-                        <a class="nav-link" href="postList">Post list</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="mktDashboard">Dashboard</a> 
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="productList">All Product</a> <%-- tất cả sản phẩm --%> 
-                        <%--          </li>
-                                 <li class="nav-item">
-                                     <a class="nav-link" href="customerList">Customer List</a>
-                                 </li>
-                                 <li class="nav-item">
-                                     <a class="nav-link" href="feedList">Feed List</a>
-                                 </li>
-
-                    <%}%>
-                    <%if(acc.getIsSaleManager() == 1){%> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="manager">Manager All Product</a> <%-- tất cả sản phẩm --%> 
-                        <%--         </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="smdashboard">Dashboard</a> 
-                                </li>
-                                <%}%>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Welcome: <%=acc.getUser()%></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="blog">Blog</a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout">Logout</a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="feedBack">Feed Back</a>
-                    </li>
-                    <%}%>       
-                    <%if(acc == null){%> --%>  
-                        <li class="nav-item">
-                            <a class="nav-link" href="blog">Blog</a>
-                        </li> 
-                        <li class="nav-item">
-                            <a class="nav-link" href="login">Login</a>
-                        </li>                                       
-                        <%-- <%}%>--%> 
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <div class="container">
-            <div class="main-body">
-                <div class="row">
+            <div class="container">
+                <div class="main-body">
+                    <div class="row">
 
                     <c:if test="${param.successcp ne null}">
                         <div class="alert alert-success" role="alert">
@@ -125,8 +45,8 @@
                                                 <div class="d-flex flex-column align-items-center text-center">
                                                     <img src="${user.image}" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
                                                     <div class="mb-3" style="display: flex">
-                                                        <h4>Change img:</h4>
-                                                        <input type="url" name="image">
+                                                        <h5>Change img:</h5>
+                                                        <input type="file" name="image">
                                                     </div>
                                                 </div>
                                             </div>
@@ -138,6 +58,22 @@
                                         </div>
                                         <div class="col-sm-9 text-secondary">
                                             <input name="fullname"  type="text" class="form-control" value="${user.fullName}" >
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">Gender</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            <input name="gender"  type="text" class="form-control" value="${user.gender}" >
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">Phone</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            <input name="phone"  type="text" class="form-control" value="${user.phone}" >
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -154,6 +90,14 @@
                                         </div>
                                         <div class="col-sm-9 text-secondary">
                                             <input name="email" type="text" class="form-control" value="${user.email}">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">Address</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            <input name="address"  type="text" class="form-control" value="${user.address}" >
                                         </div>
                                     </div>
 
