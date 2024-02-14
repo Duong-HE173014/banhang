@@ -111,7 +111,7 @@ public class FilterAcc implements Filter {
         String currentPath = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
 
         //đường dẫn không yêu cầu quyền
-        if (Arrays.asList("/cart","/home","/products","/showCart", "/login", "/logout", "/blog","/detail1","/category","/detail","/postDetail","/register","/verify","/search", "/reset-password", "/new-password","/css/style.css").contains(currentPath)) {
+        if (Arrays.asList("/cart","/home","/products","/showCart", "/login", "/logout", "/blog","/detail1","/blogsearch","/blogcategory","/category","/detail","/postDetail","/register","/verify","/search", "/reset-password", "/new-password","/css/style.css").contains(currentPath)) {
             chain.doFilter(request, response);
             return;
         }
