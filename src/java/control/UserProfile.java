@@ -97,7 +97,8 @@ public class UserProfile extends HttpServlet {
             String fullName = request.getParameter("fullname");
             String password = request.getParameter("password");
             String image = request.getParameter("image");
-            
+            String phone = request.getParameter("phone");
+            String address = request.getParameter("address");
             
 
             // Kiểm tra email không thay đổi
@@ -109,6 +110,8 @@ public class UserProfile extends HttpServlet {
             // Update thông tin người dùng
             user.setFullName(fullName);
             user.setPassword(password);
+            user.setPhone(phone);
+            user.setAddress(address);
             
            
 
