@@ -44,13 +44,12 @@ public class CategoryControl extends HttpServlet {
             Vector<Product> list = dao.getAllProductbyCategory(CateID);
             Vector<Category> listC = dao.getAllCategory();
             
-            Vector<Slider> listS = dao.getSlider();
+            
             Product last = dao.getLast();
             Post lastPost = dao.getLastPost();
             request.setAttribute("tag", CateID);
             request.setAttribute("listP", list);
-            request.setAttribute("listC", listC);
-            request.setAttribute("listS", listS);
+            request.setAttribute("listC", listC);          
             request.setAttribute("p", last);
             request.setAttribute("lPost", lastPost);
             request.getRequestDispatcher("ProductList.jsp").forward(request, response);

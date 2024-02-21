@@ -75,6 +75,32 @@ public class DAO {
         }
         return vector;
     }
+    
+    public Vector<Product> get4ProductbyCategory( int categoryId) {
+        Vector<Product> vector = new Vector<Product>();
+        String query =  "SELECT TOP 4 * FROM Products " +
+                   "WHERE CategoryID = ? " +
+                   "ORDER BY ProductID DESC";
+        try {
+            conn = new DBContext().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, categoryId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                vector.add(new Product(rs.getString(1),
+                        rs.getString(2),
+                        rs.getInt(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getDouble(8),
+                        rs.getDouble(9)));
+            }
+        } catch (Exception e) {
+        }
+        return vector;
+    }
 
     public Vector<Product> get5Product(){
         Vector<Product> vector = new Vector<Product>();
@@ -326,28 +352,23 @@ public Vector<Product> get5New() {
         return vector;
     }
     
-        public static void main(String[] args) {
-                DAO dao = new DAO();
-//                Vector<Slider> list = dao.getSlider();
-//                for(Slider pd : list){
-//                    System.out.println(pd);
-//                }
-                    System.out.println(dao.get5Product());
-            }
 //public static void main(String[] args) {
-//    DAO dao = new DAO(); // Tạo một đối tượng DAO
+//        DAO dao = new DAO(); // Tạo một đối tượng DAO để gọi hàm get4ProductbyCategory
+//        int categoryId = 3; // Thay categoryId bằng categoryId bạn muốn kiểm tra
 //
-//    // Gọi phương thức getProductByID() từ DAO với một id cụ thể
-//    String productId = "6"; // Thay "yourProductId" bằng một id cụ thể
-//    Product product = dao.getProductByID(productId);
+//        // Gọi hàm get4ProductbyCategory
+//        Vector<Product> products = dao.get4ProductbyCategory(categoryId);
 //
-//    // In ra thông tin của sản phẩm có id tương ứng
-//    if (product != null) {
-//        System.out.println("Thông tin sản phẩm có ID " + productId + ":");
-//        System.out.println(product.toString());
-//    } else {
-//        System.out.println("Không có sản phẩm nào có ID " + productId + ".");
+//        // Kiểm tra xem products có dữ liệu hay không
+//        if (products.isEmpty()) {
+//            System.out.println("Không có dữ liệu sản phẩm cho categoryId: " + categoryId);
+//        } else {
+//            System.out.println("Có dữ liệu sản phẩm cho categoryId: " + categoryId);
+//            // In thông tin của các sản phẩm
+//            for (Product product : products) {
+//                System.out.println(product);
+//            }
+//        }
 //    }
-//}
     }
 

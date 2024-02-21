@@ -84,8 +84,11 @@ body {
     margin-bottom: 0.5em;
 }
 
-.col {
+.colP {
     display: flex;
+    align-items: center;
+}
+.colPN {
     align-items: center;
 }
 
