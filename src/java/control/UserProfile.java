@@ -87,49 +87,7 @@ public class UserProfile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        
-        
-
-        if (user != null) {
-            String fullName = request.getParameter("fullname");
-            String password = request.getParameter("password");
-            String image = request.getParameter("image");
-            
-            
-
-            // Kiểm tra email không thay đổi
-            if (!user.getEmail().equals(request.getParameter("email"))) {
-                request.setAttribute("error", "You cannot change the email address.");
-                doGet(request, response);       
-            }
-
-            // Update thông tin người dùng
-            user.setFullName(fullName);
-            user.setPassword(password);
-            
-           
-
-            UserProfileDAO userProfileDAO = new UserProfileDAO();
-            boolean updateImageResult = userProfileDAO.updateUserImage(user.getEmail(), image);
-            boolean result = userProfileDAO.updateUser(user);
-
-            if (result && updateImageResult) {
-                // Cập nhật thông tin trong phiên làm việc
-                session.setAttribute("user", user);
-
-                // Chuyển hướng đến trang UserProfile.jsp để hiển thị thông tin mới
-                doGet(request, response);
-            } else {
-                // Xử lý trường hợp lỗi khi cập nhật
-                request.setAttribute("error", "Error occurred while updating user profile. Please try again later.");
-                doGet(request, response);
-            }
-        } else {
-            response.sendRedirect("login.jsp");
-        }
+            processRequest(request, response);
     }
 
     /**
