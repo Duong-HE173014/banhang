@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -74,8 +75,9 @@ public class LoginControl extends HttpServlet {
         if (user != null) {
             // Login successful
             String role = user.getRole();
-            request.getSession().setAttribute("role", role);
-            request.getSession().setAttribute("user", user);
+            HttpSession session = request.getSession();
+            session.setAttribute("role", role);
+            session.setAttribute("user", user);
             if ("Admin".equals(role)) {
                 response.sendRedirect("admin"); 
             } else if ("SaleManager".equals(role)) {
@@ -83,7 +85,7 @@ public class LoginControl extends HttpServlet {
             } else if("Saler".equals(role)){
                 response.sendRedirect("salerHome"); 
             } else if("Marketing".equals(role)){
-                response.sendRedirect("marketingHome"); 
+                response.sendRedirect("mktdashboard"); 
             }else {
                 response.sendRedirect("home"); 
             }

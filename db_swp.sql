@@ -242,28 +242,49 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
+CREATE TABLE Status (
+    StatusID INT PRIMARY KEY,
+    StatusName NVARCHAR(50) NULL
+);
+
+-- Thêm dữ liệu vào bảng Status
+INSERT INTO Status (StatusID, StatusName) VALUES (1, 'Vip'), (2, 'normal');
+
+
 /****** Object:  Table [dbo].[Users]    Script Date: 1/23/2024 8:13:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Users](
- [UserID] [int] IDENTITY(1,1) NOT NULL,
- [Image][nvarchar](255) NULL,
- [FullName] [nvarchar](255) NULL,
- [Email] [nvarchar](255) NULL,
- [Password] [nvarchar](255) NULL,
- [UpdatedDate] [datetime] NULL,
- [Role] [nvarchar](50) NULL,
- [Gender] [bit] NULL,
- [Address] [nvarchar](255) NULL,
- [Phone] [nvarchar](20) NULL,
-PRIMARY KEY CLUSTERED 
-(
- [UserID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+    [UserID] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [Image] [nvarchar](255) NULL,
+    [FullName] [nvarchar](255) NULL,
+    [Email] [nvarchar](255) NULL,
+    [Password] [nvarchar](255) NULL,
+    [UpdatedDate] [datetime] NULL,
+    [Role] [nvarchar](50) NULL,
+    [Gender] [bit] NULL,
+    [Address] [nvarchar](255) NULL,
+    [Phone] [nvarchar](20) NULL,
+    [Note] [nvarchar](255) NULL,
+    [StatusID] [int] NULL,
+    CONSTRAINT [FK_Users_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status]([StatusID])
+);
 GO
+CREATE TABLE CustomerStatusHistory (
+    HistoryID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT,
+    OldStatusID INT,
+    NewStatusID INT,
+    ChangedDate DATETIME,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (OldStatusID) REFERENCES Status(StatusID),
+    FOREIGN KEY (NewStatusID) REFERENCES Status(StatusID)
+);
+GO
+
 SET IDENTITY_INSERT [dbo].[Cart] ON 
 GO
 INSERT [dbo].[Cart] ([CartID], [UserID], [ProductID], [Quantity]) VALUES (1, 1, 1, 2)
@@ -625,6 +646,15 @@ INSERT [dbo].[Users] ([UserID], [FullName],UpdatedDate, [Email], [Password], [Ro
 GO
 INSERT [dbo].[Users] ([UserID], [FullName],UpdatedDate, [Email], [Password], [Role]) VALUES (3, N'Bob Johnson',GETDATE(), N'bob.johnson@example.com', N'securepass', N'User')
 GO
+INSERT [dbo].[Users] ([UserID], [FullName],UpdatedDate, [Email], [Password], [Role]) VALUES (4, N'Vuong Dai Duong',GETDATE(), N'duong@gmail.com', N'duong123456', N'Marketing')
+GO
+INSERT [dbo].[Users] ([UserID], [FullName],UpdatedDate, [Email], [Password], [Role], [Gender], [Address], [Phone], [Note]) VALUES (5, N'Nguyen Văn U',GETDATE(), N'vanu@gmail.com', N'duong123456', N'Saler',2,N'123 Marketing Street', N'0123456789', N'Note for Vuong Dai Duong')
+GO
+INSERT [dbo].[Users] ([UserID], [FullName],UpdatedDate, [Email], [Password], [Role]) VALUES (6, N'Nguyen Văn B',GETDATE(), N'vanb@gmail.com', N'duong123456', N'SaleManager')
+GO
+INSERT INTO [dbo].[Users] ([UserID], [FullName], [UpdatedDate], [Email], [Password], [Role], [Gender], [Address], [Phone], [Note], [StatusID])
+VALUES (7, N'Vuong Dai Duong', GETDATE(), N'duongtata@gmail.com', N'duong123456', N'User', 1, N'123 Marketing Street', N'0123456789', N'Note for Vuong Dai Duong', 1);
+VALUES (8, N'Nguyen Van A', GETDATE(), N'vana@gmail.com', N'password123', N'User', 1, N'456 Main Street', N'0987654321', N'Note for Nguyen Van A', 2);
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 ALTER TABLE [dbo].[Cart]  WITH CHECK ADD FOREIGN KEY([ProductID])
@@ -658,8 +688,7 @@ USE [master]
 GO
 ALTER DATABASE [SWP_Online_Shop] SET  READ_WRITE 
 GO
-ALTER TABLE [dbo].[Users]
-ADD [Image] [nvarchar](225) NULL;
+
 
 -- Inserting data into the Posts table
 INSERT INTO [dbo].[Posts] ([Title], [Author], [UpdatedDate], [CategoryID], [Thumbnail], [BriefInfo], [Details])
@@ -668,27 +697,19 @@ VALUES
 ('Bad Book', 'Author2', GETDATE(), 2, 'Thumbnail2.jpg', 'Brief info for post 2', 'Details for post 2'),
 ('Nice Book', 'Duong', GETDATE(), 1, 'https://4.bp.blogspot.com/-FsDjAqJ68RU/W_DjLneJ-5I/AAAAAAAAKWg/snIpOl6i4vkmUceUJ-sbVynNbhHBh21ZACLcBGAs/s1600/hinh-anh-sach-hoa-dep-nghe-thuat-%2B%252823%2529.jpg', 'Nice book of the year', 'Details for post 3');
 
-use SWP_Online_Shop
+
 INSERT INTO [SWP_Online_Shop].[dbo].[Sliders] ([Title], [Image], [Backlink])
 VALUES
 ('Slider 1', 'https://bookbuy.vn/Res/Images/Album/ffd62e0e-02fb-4e7a-96fe-42ed8966c89b.png?w=920&h=420&mode=crop', 'https://bookbuy.vn/Res/Images/Album/ffd62e0e-02fb-4e7a-96fe-42ed8966c89b.png?w=920&h=420&mode=crop'),
 ('Slider 2', 'https://bookbuy.vn/Res/Images/Album/efefae23-5cb2-42e9-8d4f-59ca99d500af.png?w=920&h=420&mode=crop', 'https://bookbuy.vn/Res/Images/Album/efefae23-5cb2-42e9-8d4f-59ca99d500af.png?w=920&h=420&mode=crop');
 
+use SWP_Online_Shop
+SELECT * 
+FROM Users
+INSERT INTO CustomerStatusHistory (UserID, OldStatusID, NewStatusID, ChangedDate) 
+VALUES (7, 1, 1, GETDATE());
+select *from CustomerStatusHistory
+SELECT OldStatusID, NewStatusID, ChangedDate FROM CustomerStatusHistory "                         
+                            + "WHERE UserID = '7'
 
-
-
-select * from Categories;
-
-Select * from Products 
---ORDER BY UpdatedDate DESC;
-
---Select * from Products
---Where CategoryID = 3
-
---Select * from Products
---where [Title] like '%Minh%';
-
---select COUNT(*) from Products
-
---select * from Users
 

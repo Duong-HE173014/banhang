@@ -101,3 +101,13 @@ body {
     margin: auto; /* Căn giữa theo chiều ngang */
     
 }
+ #carouselExample {
+        width: 800px; /* Điều chỉnh độ rộng của slider */
+        height: 400px; /* Điều chỉnh chiều cao của slider */
+        margin: auto; /* Căn giữa slider */
+    }
+
+    #carouselExample .carousel-inner .carousel-item img {
+        max-width: 100%; /* Đảm bảo hình ảnh trong slider không vượt quá chiều rộng của slider */
+        max-height: 100%; /* Đảm bảo hình ảnh trong slider không vượt quá chiều cao của slider */
+    }

@@ -26,6 +26,11 @@
         <script src="js/script.js"></script>
         <!------ Include the above in your HEAD tag ---------->
         <style>
+            #carouselExample .carousel-inner .carousel-item img {
+                width: 1700px; /* Đảm bảo hình ảnh chiếm toàn bộ chiều rộng của slider */
+                height: 430px; /* Điều chỉnh chiều cao của hình ảnh trong slider */
+                object-fit: cover; /* Đảm bảo hình ảnh không bị biến dạng khi thay đổi kích thước */
+            }
             .pagination {
                 display: flex;
                 margin-left: 20px;
@@ -61,7 +66,6 @@
                     Map<Integer, List<Product>> productMap = (Map<Integer, List<Product>>)request.getAttribute("productMap");
             %>    
             <jsp:include page="Header.jsp"></jsp:include>    
-
                 <!--end of menu-->
                 <div id="carouselExample" class="carousel slide mt-4">
                     <div class="carousel-inner">
@@ -155,10 +159,10 @@
                     <% for (Category cat : listC) { %>
                     <div class="category mt-4 mb-3">
                         <div class="d-flex mb-2">
-                        <h3><%= cat.getCategoryName() %></h3>
-                        <li class="nav-item ms-auto <%=cat.getCategoryId()==tag?"active":""%>">
-                            <a class="text-decoration-none text-uppercase fw-bold" href="category?categoryId=<%=cat.getCategoryId()%>">Xem Thêm</a>
-                        </li>
+                            <h3><%= cat.getCategoryName() %></h3>
+                            <li class="nav-item ms-auto <%=cat.getCategoryId()==tag?"active":""%>">
+                                <a class="text-decoration-none text-uppercase fw-bold" href="category?categoryId=<%=cat.getCategoryId()%>">Xem Thêm</a>
+                            </li>
                         </div>
                         <div class="row text-center">                            
                             <% List<Product> productList = productMap.get(cat.getCategoryId()); %>                           

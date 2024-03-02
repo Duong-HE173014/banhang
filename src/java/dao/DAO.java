@@ -12,6 +12,7 @@ import entity.Slider;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -27,6 +28,21 @@ public class DAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
+    public ResultSet getResultSet(String sql) {
+        ResultSet rs = null;
+        Statement state;
+        try {
+            conn = new DBContext().getConnection();
+            state = conn.createStatement(
+                    ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+            rs = state.executeQuery(sql);
+        } catch (Exception e) {
+            Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return rs;
+    }
+    
     public Vector<Product> getAllProduct() {
         Vector<Product> vector = new Vector<Product>();
         String query = "SELECT *\n"
@@ -51,7 +67,8 @@ public class DAO {
         }
         return vector;
     }
-    public Vector<Product> getAllProductbyCategory( int categoryId) {
+
+    public Vector<Product> getAllProductbyCategory(int categoryId) {
         Vector<Product> vector = new Vector<Product>();
         String query = "Select * from Products\n"
                 + "Where CategoryID = ?";
@@ -75,12 +92,12 @@ public class DAO {
         }
         return vector;
     }
-    
-    public Vector<Product> get4ProductbyCategory( int categoryId) {
+
+    public Vector<Product> get4ProductbyCategory(int categoryId) {
         Vector<Product> vector = new Vector<Product>();
-        String query =  "SELECT TOP 4 * FROM Products " +
-                   "WHERE CategoryID = ? " +
-                   "ORDER BY ProductID DESC";
+        String query = "SELECT TOP 4 * FROM Products "
+                + "WHERE CategoryID = ? "
+                + "ORDER BY ProductID DESC";
         try {
             conn = new DBContext().getConnection();//mo ket noi voi sql
             ps = conn.prepareStatement(query);
@@ -102,7 +119,7 @@ public class DAO {
         return vector;
     }
 
-    public Vector<Product> get5Product(){
+    public Vector<Product> get5Product() {
         Vector<Product> vector = new Vector<Product>();
         String query = "SELECT TOP 5 * FROM Products ORDER BY NEWID();";
         try {
@@ -122,8 +139,9 @@ public class DAO {
             }
         } catch (Exception e) {
         }
-        return vector; 
+        return vector;
     }
+
     public Vector<Category> getAllCategory() {
         Vector<Category> vector = new Vector<Category>();
         String query = "select * from Categories";
@@ -165,7 +183,8 @@ public class DAO {
         }
         return null;
     }
-public Vector<Product> get5New() {
+
+    public Vector<Product> get5New() {
         Vector<Product> vector = new Vector<Product>();
         String query = "select top 4 * from Products\n"
                 + " order by ProductID desc";
@@ -213,6 +232,7 @@ public Vector<Product> get5New() {
         }
         return vector;
     }
+
     public Product getProductByID(String id) {
         String query = "select * from Products\n"
                 + "where ProductID = ?";
@@ -276,15 +296,15 @@ public Vector<Product> get5New() {
         }
         return null;
     }
-    
-    public Vector<Product> getProductbySearch( String txtSearch) {
+
+    public Vector<Product> getProductbySearch(String txtSearch) {
         Vector<Product> vector = new Vector<Product>();
         String query = "Select * from Products\n"
                 + "where [Title] like ?";
         try {
             conn = new DBContext().getConnection();//mo ket noi voi sql
             ps = conn.prepareStatement(query);
-            ps.setString(1, "%"+ txtSearch+"%");//Câu lệnh like của sql có phần % bao quanh gọi là chứa
+            ps.setString(1, "%" + txtSearch + "%");//Câu lệnh like của sql có phần % bao quanh gọi là chứa
             rs = ps.executeQuery();
             while (rs.next()) {
                 vector.add(new Product(rs.getString(1),
@@ -301,23 +321,23 @@ public Vector<Product> get5New() {
         }
         return vector;
     }
-    
+
     //dem so luong sp trong database:
-    public int getTotalProducts(){
+    public int getTotalProducts() {
         String query = "select COUNT(*) from Products";
-        try{
+        try {
             conn = new DBContext().getConnection();//mo ket noi voi sql
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 return rs.getInt(1);
             }
-        }catch(Exception e){
-            
+        } catch (Exception e) {
+
         }
         return 0;
     }
-    
+
     public Vector<Product> pagingProduct(int index) {
         Vector<Product> vector = new Vector<Product>();
         String query = "Select * from Products\n"
@@ -326,7 +346,7 @@ public Vector<Product> get5New() {
         try {
             conn = new DBContext().getConnection();//mo ket noi voi sql
             ps = conn.prepareStatement(query);
-            ps.setInt(1, (index-1)*12);
+            ps.setInt(1, (index - 1) * 12);
             rs = ps.executeQuery();
             while (rs.next()) {
                 vector.add(new Product(rs.getString(1),
@@ -342,8 +362,8 @@ public Vector<Product> get5New() {
         } catch (Exception e) {
         }
         return vector;
-    } 
-    
+    }
+
     public Vector<Product> getListByPage(Vector<Product> list, int start, int end) {
         Vector<Product> vector = new Vector<>();
         for (int i = start; i < end; i++) {
@@ -351,7 +371,7 @@ public Vector<Product> get5New() {
         }
         return vector;
     }
-    
+
 //public static void main(String[] args) {
 //        DAO dao = new DAO(); // Tạo một đối tượng DAO để gọi hàm get4ProductbyCategory
 //        int categoryId = 3; // Thay categoryId bằng categoryId bạn muốn kiểm tra
@@ -370,5 +390,4 @@ public Vector<Product> get5New() {
 //            }
 //        }
 //    }
-    }
-
+}

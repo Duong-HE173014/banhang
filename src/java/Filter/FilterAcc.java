@@ -111,13 +111,13 @@ public class FilterAcc implements Filter {
         String currentPath = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
 
         //đường dẫn không yêu cầu quyền
-        if (Arrays.asList("/cart","/home","/products","/showCart", "/login", "/logout", "/blog","/detail1","/category","/detail","/postDetail","/register","/verify","/search", "/reset-password", "/new-password","/css/style.css","/js/script.js").contains(currentPath)) {
+        if (Arrays.asList("/cart","/home","/products","/showCart", "/login", "/logout", "/blog","/detail1","/category","/detail","/postDetail","/register","/verify","/search", "/reset-password", "/new-password","/css/style.css","/js/script.js","/orderListControl").contains(currentPath)) {
             chain.doFilter(request, response);
             return;
         }
         
         //đường dẫn đặc biệt
-        if (Arrays.asList("/userprofile","/new-password", "/my-order", "/order-details", "/change-password", "/checkout").contains(currentPath)) {
+        if (Arrays.asList("/userprofile","/new-password", "/my-order", "/order-details", "/change-password", "/checkout","/css/menu.css").contains(currentPath)) {
             if (session != null && session.getAttribute("role") != null) {
                 chain.doFilter(request, response);
                 return;
@@ -131,15 +131,15 @@ public class FilterAcc implements Filter {
             String role = (String) session.getAttribute("role");
 
             //kiểm tra xem người dùng có quyền truy cập không
-            if ("Admin".equals(role) && currentPath.startsWith("/admin/")) {
+            if ("Admin".equals(role) && currentPath.startsWith("/admin")) {
                 chain.doFilter(request, response);
-            } else if ("SaleManager".equals(role) && currentPath.startsWith("/salemanager/")) {
+            } else if ("SaleManager".equals(role) && currentPath.startsWith("/salemanager")) {
                 chain.doFilter(request, response);
-            } else if ("Saler".equals(role) && currentPath.startsWith("/saler/")) {
+            } else if ("Saler".equals(role) && currentPath.startsWith("/saler")) {
                 chain.doFilter(request, response);
-            } else if ("Marketing".equals(role) && currentPath.startsWith("/mkt/")) {
+            } else if ("Marketing".equals(role) && currentPath.startsWith("/mkt")) {
                 chain.doFilter(request, response);
-            } else if ("User".equals(role) && currentPath.startsWith("/user/")) {
+            } else if ("User".equals(role) && currentPath.startsWith("/user")) {
                 chain.doFilter(request, response);
             } else {
                 // Nếu không phải là các vai trò đã xác định
