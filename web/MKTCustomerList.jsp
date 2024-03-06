@@ -18,7 +18,7 @@
         <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <link href="css/style.css" rel="stylesheet" type="text/css"/>
-        <script src="js/script.js"></script>
+        
         <script>
             function sortTable(columnIndex, sortOrder) {
                 var table, rows, switching, i, x, y, shouldSwitch;

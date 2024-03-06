@@ -130,8 +130,8 @@ public class OrderDAO {
         }
         return orders;
     }
-    
-    public List<Order> getOrders( int pageSize, int pageNumber) {
+
+    public List<Order> getOrders(int pageSize, int pageNumber) {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM Orders ORDER BY OrderDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
         try {
@@ -158,7 +158,7 @@ public class OrderDAO {
         }
         return orders;
     }
- 
+
     public List<Order> SearchOrders(String txt) {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM [Orders] "
@@ -166,7 +166,7 @@ public class OrderDAO {
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, "%" + txt + "%");
-            ps.setString(2, "%" + txt + "%");        
+            ps.setString(2, "%" + txt + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
                 Order order = new Order(
@@ -187,15 +187,42 @@ public class OrderDAO {
         }
         return orders;
     }
-    
-    public List<Order> SearchOrdersByDate(String txt) {
+
+    public List<Order> SearchOrdersByDate(String startDate, String endDate) {
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT * FROM [Orders] "
+                + "WHERE OrderDate >= ? AND OrderDate <= ?";
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setString(1, startDate);
+            ps.setString(2, endDate);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order(
+                        rs.getInt("OrderID"),
+                        rs.getInt("UserID"),
+                        rs.getTimestamp("OrderDate"),
+                        rs.getDouble("TotalCost"),
+                        rs.getString("Status"),
+                        rs.getString("ReceiverFullName"),
+                        rs.getString("ReceiverEmail"),
+                        rs.getString("ReceiverMobile"),
+                        rs.getString("ReceiverAddress")
+                );
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+    public List<Order> SearchByStatus(String Status) {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM [Orders] "
                 + "WHERE [OrderID] like ? or [ReceiverFullName] like ?";
         try {
             ps = conn.prepareStatement(query);
-            ps.setString(1, "%" + txt + "%");
-            ps.setString(2, "%" + txt + "%");        
             rs = ps.executeQuery();
             while (rs.next()) {
                 Order order = new Order(
@@ -216,7 +243,5 @@ public class OrderDAO {
         }
         return orders;
     }
-    
-
 
 }

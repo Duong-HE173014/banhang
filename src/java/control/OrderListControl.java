@@ -50,7 +50,7 @@ public class OrderListControl extends HttpServlet {
             int page = pageString == null ? 1 : Integer.parseInt(pageString);
             List<Order> orderList = new OrderDAO().getOrders(pageSize, page);
             if (orderList.isEmpty() && page != 1) {
-                response.sendRedirect("my-order");
+                response.sendRedirect("salerOrderListControl");
                 return;
             }
             request.setAttribute("orderList", orderList);
@@ -71,9 +71,9 @@ public class OrderListControl extends HttpServlet {
             String startDate = request.getParameter("startDate");
             String endDate = request.getParameter("endDate");
             OrderDAO dao = new OrderDAO();
+            List<Order> listByDate = dao.SearchOrdersByDate(startDate, endDate);
             
-            
-            
+            request.setAttribute("orderList", listByDate);
             request.getRequestDispatcher("OrderList.jsp").forward(request, response);
         }
     }
