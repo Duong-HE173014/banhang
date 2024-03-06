@@ -21,10 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Arrays;
 
-/**
- *
- * @author Admin
- */
+
 @WebFilter(filterName = "FilterAcc", urlPatterns = {"/*"})
 public class FilterAcc implements Filter {
 
@@ -117,7 +114,7 @@ public class FilterAcc implements Filter {
         }
         
         //đường dẫn đặc biệt
-        if (Arrays.asList("/userprofile","/updateprofile","/uploadprofile", "/show","/new-password", "/my-order", "/order-details", "/change-password").contains(currentPath)) {
+        if (Arrays.asList("/userprofile", "/show","/new-password", "/my-order", "/order-details", "/change-password").contains(currentPath)) {
             if (session != null && session.getAttribute("role") != null) {
                 chain.doFilter(request, response);
                 return;
