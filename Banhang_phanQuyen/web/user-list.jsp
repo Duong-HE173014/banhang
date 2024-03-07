@@ -61,7 +61,6 @@
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
 
-
             <table id="userTable" class="table table-striped">
                 <thead>
                     <tr>

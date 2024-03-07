@@ -164,8 +164,8 @@
                 $('#settingTable').DataTable({
                     "paging": false,
                     "lengthChange": false,
-                    "searching": false,
-                    "ordering": false,
+                    "searching": true,
+                    "ordering": true,
                     "info": false,
                     "autoWidth": false
                 });
