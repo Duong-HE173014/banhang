@@ -26,7 +26,6 @@
             img{
                 width: 200px;
                 height: 120px;
-            }
         </style>
     <body>
         <%
@@ -52,7 +51,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-6">
-                                <a href="#addEmployeeModal"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Product</span></a> 						
+                                <a href="#addEmployeeModal"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Product</span></a> 			
                             </div>
                         </div>
                     </div>
@@ -190,6 +189,6 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section>                    
     </body>
 </html>

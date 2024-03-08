@@ -6,6 +6,7 @@ package control;
 
 import dao.DAO;
 import dao.OrderDAO;
+import entity.Cart;
 import entity.Category;
 import entity.Post;
 import entity.Product;
@@ -44,7 +45,7 @@ public class CheckOutControl extends HttpServlet {
 // Lấy đối tượng HttpSession từ request
             HttpSession session = request.getSession();
             // Lấy đối tượng giỏ hàng từ session
-            Vector<Product> cart = (Vector<Product>) session.getAttribute("cart");
+            Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
             //b1: get data from dao
             DAO dao = new DAO();
             Vector<Product> listP = new Vector<>();
@@ -75,8 +76,8 @@ public class CheckOutControl extends HttpServlet {
                 double totalCostOfProducts = 0; // Tổng thành tiền của các sản phẩm
                 double shipFeeRate = 0.05; // Tỷ lệ phí ship (5%)
                 double shipFee = 0;
-                for (Product product : cart) {
-                    totalCostOfProducts += product.getSalePrice() * product.getQuantity();
+                for (Cart product : cart) {
+                    totalCostOfProducts += product.getProducts().getSalePrice() * product.getQuantity();
                 }
                 // Tính phí ship
                 shipFee = totalCostOfProducts * shipFeeRate;

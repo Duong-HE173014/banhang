@@ -5,6 +5,7 @@
 package control;
 
 import dao.DAO;
+import entity.Cart;
 import entity.Category;
 import entity.Post;
 import entity.Product;
@@ -55,7 +56,7 @@ public class HomeControl extends HttpServlet {
        
 
             DAO dao = new DAO();
-            Vector<Product> cart = (Vector<Product>) session.getAttribute("cart");
+            Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
             if (cart == null) {
                 cart = new Vector<>();
                 session.setAttribute("cart", cart);

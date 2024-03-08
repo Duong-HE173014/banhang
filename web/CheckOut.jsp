@@ -9,6 +9,7 @@
 <%@page import="entity.Product" %>
 <%@page import="entity.Category" %>
 <%@page import="entity.User"%>
+<%@page import="entity.Cart"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -90,20 +91,20 @@
     if(shipFeeObj != null) {
         shipFee = (double) shipFeeObj;
     }
-    Vector<Product> cart = (Vector<Product>) session.getAttribute("cart"); // Lấy thông tin giỏ hàng từ session
+    Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart"); // Lấy thông tin giỏ hàng từ session
 
     if (cart != null && !cart.isEmpty()) { // Kiểm tra xem giỏ hàng có dữ liệu hay không
-        for (Product items : cart) { // Duyệt qua từng sản phẩm trong giỏ hàng
-        totalCostOfProducts += items.getSalePrice() * items.getQuantity();
+        for (Cart items : cart) { // Duyệt qua từng sản phẩm trong giỏ hàng
+        totalCostOfProducts += items.getProducts().getSalePrice() * items.getQuantity();
 
                                         %>
                                         <ul class="list-group mb-3">
                                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                                 <div>
-                                                    <h6 class="my-0"><%= items.getTitle() %></h6>
-                                                    <small class="text-muted"><%= items.getSalePrice() %>VND x <%= items.getQuantity() %></small>
+                                                    <h6 class="my-0"><%= items.getProducts().getTitle() %></h6>
+                                                    <small class="text-muted"><%= items.getProducts().getSalePrice() %>VND x <%= items.getQuantity() %></small>
                                                 </div>
-                                                <span class="text-muted"><%= items.getSalePrice() * items.getQuantity() %>VND</span>
+                                                <span class="text-muted"><%= items.getProducts().getSalePrice() * items.getQuantity() %>VND</span>
                                             </li>
                                             <%
                                                                                             }
