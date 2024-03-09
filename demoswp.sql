@@ -1,5 +1,4 @@
-﻿USE [master]
-GO
+﻿
 /****** Object:  Database [SWP_Online_Shop]    Script Date: 1/16/2024 3:55:04 PM ******/
 CREATE DATABASE [SWP_Online_Shop]
 GO
@@ -188,6 +187,20 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
+/****** Object:  Table [dbo].[PostCategories]    Script Date: 1/16/2024 3:55:11 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PostCategories](
+	[PostCategoryID] [int] IDENTITY(1,1) NOT NULL,
+	[PostCategoryName] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PostCategoryID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
 /****** Object:  Table [dbo].[Products]    Script Date: 1/16/2024 3:55:11 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -201,9 +214,12 @@ CREATE TABLE [dbo].[Products](
 	[Image] [nvarchar](255) NULL,
 	[BriefInfo] [nvarchar](max) NULL,
 	[Description] [nvarchar](max) NULL,
+	[AttachedImages] NVARCHAR(MAX) NULL,
 	[Price] [decimal](10, 2) NULL,
 	[SalePrice] [decimal](10, 2) NULL,
 	[Quantity][int] NULL,
+	[Featured] BIT NULL,
+    [Status] NVARCHAR(50) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[ProductID] ASC
@@ -648,13 +664,10 @@ INSERT [dbo].[Users] ([UserID], [FullName],UpdatedDate, [Email], [Password], [Ro
 GO
 INSERT [dbo].[Users] ([UserID], [FullName],UpdatedDate, [Email], [Password], [Role]) VALUES (4, N'Vuong Dai Duong',GETDATE(), N'duong@gmail.com', N'duong123456', N'Marketing')
 GO
-INSERT [dbo].[Users] ([UserID], [FullName],UpdatedDate, [Email], [Password], [Role], [Gender], [Address], [Phone], [Note]) VALUES (5, N'Nguyen Văn U',GETDATE(), N'vanu@gmail.com', N'duong123456', N'Saler',2,N'123 Marketing Street', N'0123456789', N'Note for Vuong Dai Duong')
-GO
-INSERT [dbo].[Users] ([UserID], [FullName],UpdatedDate, [Email], [Password], [Role]) VALUES (6, N'Nguyen Văn B',GETDATE(), N'vanb@gmail.com', N'duong123456', N'SaleManager')
+INSERT [dbo].[Users] ([UserID], [FullName],UpdatedDate, [Email], [Password], [Role]) VALUES (5, N'Vuong Dai Duong',GETDATE(), N'duongsale@gmail.com', N'duong123456', N'SaleManager')
 GO
 INSERT INTO [dbo].[Users] ([UserID], [FullName], [UpdatedDate], [Email], [Password], [Role], [Gender], [Address], [Phone], [Note], [StatusID])
-VALUES (7, N'Vuong Dai Duong', GETDATE(), N'duongtata@gmail.com', N'duong123456', N'User', 1, N'123 Marketing Street', N'0123456789', N'Note for Vuong Dai Duong', 1);
-VALUES (8, N'Nguyen Van A', GETDATE(), N'vana@gmail.com', N'password123', N'User', 1, N'456 Main Street', N'0987654321', N'Note for Nguyen Van A', 2);
+VALUES (6, N'Vuong Dai Duong', GETDATE(), N'duongtata@gmail.com', N'duong123456', N'User', 1, N'123 Marketing Street', N'0123456789', N'Note for Vuong Dai Duong', 1);
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 ALTER TABLE [dbo].[Cart]  WITH CHECK ADD FOREIGN KEY([ProductID])
@@ -684,18 +697,202 @@ GO
 ALTER TABLE [dbo].[Products]  WITH CHECK ADD FOREIGN KEY([CategoryID])
 REFERENCES [dbo].[Categories] ([CategoryID])
 GO
-USE [master]
+ALTER TABLE [dbo].[Posts]  WITH CHECK ADD FOREIGN KEY([CategoryID])
+REFERENCES [dbo].[PostCategories] ([PostCategoryID])
+GO
+ALTER TABLE dbo.Products
+ADD CONSTRAINT DF_UpdatedDate DEFAULT GETDATE() FOR UpdatedDate;
 GO
 ALTER DATABASE [SWP_Online_Shop] SET  READ_WRITE 
 GO
-
-
--- Inserting data into the Posts table
+SET IDENTITY_INSERT [dbo].[PostCategories] ON 
+GO
+INSERT [dbo].[PostCategories] ([PostCategoryID], [PostCategoryName]) VALUES (1, N'Sách Hay')
+GO
+INSERT [dbo].[PostCategories] ([PostCategoryID], [PostCategoryName]) VALUES (2, N'Hướng Dẫn')
+GO
+INSERT [dbo].[PostCategories] ([PostCategoryID], [PostCategoryName]) VALUES (3, N'Giới thiệu sách')
+GO
+SET IDENTITY_INSERT [dbo].[PostCategories] OFF
+GO
 INSERT INTO [dbo].[Posts] ([Title], [Author], [UpdatedDate], [CategoryID], [Thumbnail], [BriefInfo], [Details])
 VALUES
-('Good Book', 'Author1', GETDATE(), 1, 'Thumbnail1.jpg', 'Brief info for post 1', 'Details for post 1'),
-('Bad Book', 'Author2', GETDATE(), 2, 'Thumbnail2.jpg', 'Brief info for post 2', 'Details for post 2'),
-('Nice Book', 'Duong', GETDATE(), 1, 'https://4.bp.blogspot.com/-FsDjAqJ68RU/W_DjLneJ-5I/AAAAAAAAKWg/snIpOl6i4vkmUceUJ-sbVynNbhHBh21ZACLcBGAs/s1600/hinh-anh-sach-hoa-dep-nghe-thuat-%2B%252823%2529.jpg', 'Nice book of the year', 'Details for post 3');
+(N'Giới thiệu sách:Đường Mây Qua Sống', 'John Doe', GETDATE(), 3, N'https://product.hstatic.net/200000408481/product/ae1de58e13484228b75a62bbc1fbe666_2e665c2f9666450898e2f94acf568bb8_1024x1024.jpg', 
+N'Đường Mây Qua Sống là một cuốn sách tâm lý tinh thần đầy cảm động, đã chinh phục hàng triệu độc giả trên khắp thế giới. Tác phẩm này của Mitch Albom là một hành trình sâu sắc vào tâm hồn con người, đưa ra những triết lý về tình yêu, sự đau khổ và ý nghĩa của cuộc sống.',
+N'Cuốn sách bắt đầu với câu chuyện của Morrie Schwartz, một giáo sư già sắp qua đời vì mắc bệnh ALS, và Mitch Albom, cựu học trò của ông. Mitch, sau khi tình cờ nghe tin về sự suy giảm sức khỏe của giáo sư, quyết định thăm ông và tìm hiểu thêm về những bài học cuộc đời mà ông đã trải qua. Trong suốt quá trình gặp gỡ hàng tuần giữa Mitch và Morrie, cuốn sách khám phá sâu hơn về những giá trị cốt lõi của cuộc sống, như tình bạn, gia đình, lòng nhân từ, và ý nghĩa thực sự của thành công. Mitch ghi lại những lời khuyên và sự sáng tỏ của Morrie, tạo nên một cuốn sách đầy cảm xúc và ý nghĩa. Đường Mây Qua Sống không chỉ là một cuốn sách, mà là một bài học về cách sống hạnh phúc và ý nghĩa, và làm thế nào để đối mặt với sự chết một cách ý nghĩa và tự tin. Cuốn sách này sẽ khiến bạn cười, khóc, và suy ngẫm về những giá trị đích thực trong cuộc sống.'),
+
+(N'Bảo Quản Sách: Bí Quyết Giữ Gìn Kho Tàng Tri Thức', 'John Doe', GETDATE(), 3, N'https://cdnnews.mogi.vn/news/wp-content/uploads/2023/08/29162131/cach-bao-quan-sach.jpg', 
+N'Trong thời đại số hóa ngày nay, sách vẫn là một phần quan trọng trong cuộc sống của chúng ta. Tuy nhiên, việc bảo quản sách đôi khi trở thành một thách thức, đặc biệt đối với những người yêu sách có sở thích sưu tầm và sở hữu một tập hồ sơ đa dạng.',
+N'1. Chọn Đúng Vị Trí:
+Sách nên được đặt trong một môi trường có độ ẩm và nhiệt độ ổn định để tránh ảnh hưởng của hơi nước và nhiệt độ cao.
+Tránh đặt sách ở những nơi tiếp xúc trực tiếp với ánh nắng mặt trời để tránh bị phai màu và hư hỏng.
+2. Sử Dụng Phụ Kiện Bảo Quản:
+Bìa sách, túi nilon, hoặc hộp sách có thể giúp bảo vệ sách khỏi bụi, ẩm, và hư hỏng từ va chạm.
+Sử dụng giá đỡ sách hoặc kệ sách để tránh sách bị cong và biến dạng.
+3. Vệ Sinh Định Kỳ:
+Làm sạch sách định kỳ để loại bỏ bụi và cặn bẩn.
+Sử dụng cọ mềm và khăn mềm để vệ sinh bề mặt của sách mà không làm hỏng trang bìa hoặc trang sách.
+4. Sử Dụng Chất Liệu Bảo Quản:
+Sử dụng túi hoặc hộp bảo quản có chất liệu pH cân bằng để giữ cho sách không bị ẩm và hữu ích trong việc bảo vệ sách khỏi sự tác động của vi khuẩn và nấm mốc.
+5. Sửa Chữa Kịp Thời:
+Khi phát hiện ra sách bị hỏng, hãy sửa chữa ngay lập tức để tránh tình trạng hỏng nặng hơn.
+Sử dụng keo dán sách và băng dính mà không gây hại cho sách.
+Kết Luận:
+Bảo quản sách không chỉ giúp bảo vệ và kéo dài tuổi thọ của chúng mà còn giữ cho kho tàng tri thức của bạn luôn được bảo toàn và trở nên đẹp mắt hơn. Bằng cách tuân thủ những bí quyết và chiến lược bảo quản sách trên, bạn có thể tự tin sở hữu một thư viện sách ấn tượng và đảm bảo rằng mỗi cuốn sách trong tay bạn đều được trân trọng và giữ gìn tốt nhất.
+'),
+
+(N'Những Cuốn Sách Tâm Lý Hay Nhất để Hiểu Về Bản Thân', 'Jane Smith', GETDATE(), 3, N'https://vuilen11.com/wp-content/uploads/2021/09/thumnail-bai-viet-blog-6.png', 
+N'Trong cuộc hành trình khám phá bản thân, sách có thể là người bạn đồng hành đáng tin cậy nhất. Có rất nhiều cuốn sách tâm lý mang lại sự thấu hiểu sâu sắc về tâm trí và tâm hồn con người. ',
+N'Trong cuộc hành trình khám phá bản thân, sách có thể là người bạn đồng hành đáng tin cậy nhất. Có rất nhiều cuốn sách tâm lý mang lại sự thấu hiểu sâu sắc về tâm trí và tâm hồn con người. Dưới đây là một số cuốn sách tâm lý phổ biến nhất và đáng đọc nhất để bạn có thể hiểu rõ hơn về chính mình và xây dựng một cuộc sống ý nghĩa hơn.
+1. "Đừng Sợ Mất Mát: Làm Thế Nào Để Sống Sau Một Sự Thay Đổi" của Susan Jeffers:
+Cuốn sách này giúp bạn hiểu rõ hơn về cảm xúc của mình khi đối mặt với sự thay đổi và mất mát trong cuộc sống.
+Susan Jeffers cung cấp những kỹ thuật và chiến lược để vượt qua nỗi sợ hãi và lo lắng, giúp bạn tự tin hơn và đối mặt với cuộc sống một cách mạnh mẽ hơn.
+2. "Sức Mạnh của Ngôn Từ Tốt" của Dale Carnegie:
+Cuốn sách này không chỉ là một hướng dẫn về cách giao tiếp hiệu quả mà còn là một cuộc hành trình để khám phá sức mạnh của từ ngữ và ý thức về bản thân.
+Dale Carnegie chia sẻ những nguyên tắc và kỹ thuật để xây dựng mối quan hệ tốt hơn, tự tin hơn và thành công hơn trong cuộc sống.
+3. "Bí Mật Tư Duy Triệu Phú" của T. Harv Eker:
+Cuốn sách này đưa ra cái nhìn mới mẻ về mối liên kết giữa tư duy và thành công tài chính.
+T. Harv Eker giới thiệu các nguyên tắc và chiến lược để thay đổi tư duy và tạo ra một cuộc sống giàu có và thành công.
+4. "Sức Mạnh của Thói Quen" của Charles Duhigg:
+Cuốn sách này khám phá sâu sắc về cơ chế hoạt động của thói quen và cách chúng có thể ảnh hưởng đến cuộc sống của chúng ta.
+Charles Duhigg cung cấp những chiến lược và kỹ thuật để thay đổi thói quen và tạo ra một cuộc sống đầy ý nghĩa và thành công.
+Conclusion:
+Những cuốn sách này không chỉ là nguồn kiến thức mà còn là hướng dẫn và nguồn cảm hứng để bạn có thể hiểu rõ hơn về bản thân và xây dựng một cuộc sống ý nghĩa hơn. Hãy dành thời gian để đọc và suy ngẫm về những thông điệp sâu sắc mà chúng mang lại, và bạn sẽ khám phá ra nhiều điều mới mẻ về chính mình.'),
+
+(N'Chính Sách Tiền Tệ Thế Kỷ 21: Hiểu Biết và Thách Thức', 'Bob Johnson', GETDATE(), 3, N'https://www.netabooks.vn/Data/Sites/1/Product/70821/chinh-sach-tien-te-the-ky-21.jpg', 
+N'Sách Chính Sách Tiền Tệ Thế Kỷ 21 là một tác phẩm quan trọng, khám phá sâu sắc về thế giới của tiền tệ và chính sách kinh tế trong thế kỷ mới.',
+N'Sách Chính Sách Tiền Tệ Thế Kỷ 21 là một tác phẩm quan trọng, khám phá sâu sắc về thế giới của tiền tệ và chính sách kinh tế trong thế kỷ mới. Tác giả của cuốn sách không chỉ phân tích mà còn đưa ra những nhận định đầy cảm quan về tình hình kinh tế thế giới và những thách thức mà chúng ta phải đối mặt. Dưới đây là một số điểm nổi bật được đề cập trong cuốn sách này.
+
+1. Phân Tích Chi Tiết về Hệ Thống Tài Chính Toàn Cầu:
+
+Cuốn sách phân tích một cách tổng thể về cấu trúc và hoạt động của hệ thống tài chính toàn cầu, bao gồm vai trò của các tổ chức tài chính quốc tế như IMF và Ngân hàng Thế giới.
+2. Đánh Giá Tác Động của Chính Sách Tiền Tệ:
+
+Tác giả đi sâu vào tác động của các quyết định chính sách tiền tệ đối với nền kinh tế và thị trường tài chính toàn cầu. Những biến động và thách thức mà chính sách tiền tệ gây ra đối với các quốc gia được phân tích một cách kỹ lưỡng.
+3. Nhấn Mạnh Về Sự Đa Dạng và Thay Đổi:
+
+Cuốn sách nhấn mạnh về sự đa dạng của các chính sách tiền tệ trên toàn cầu và cách mà chúng thay đổi theo thời gian và tình hình kinh tế.
+4. Phân Biệt giữa Chính Sách Tiền Tệ và Chính Sách Tài Chính:
+
+Tác giả giúp độc giả hiểu rõ hơn về sự khác biệt giữa chính sách tiền tệ và chính sách tài chính, và tầm quan trọng của việc cân nhắc cả hai trong quản lý kinh tế hiện đại.
+5. Đề Xuất Giải Pháp và Phát Triển Kịch Bản Tương Lai:
+
+Cuối cùng, cuốn sách không chỉ phân tích mà còn đề xuất các giải pháp và kịch bản tương lai để giải quyết những thách thức đang đối mặt với chính sách tiền tệ thế kỷ 21.
+Conclusion:
+Chính Sách Tiền Tệ Thế Kỷ 21 là một cuốn sách không thể thiếu đối với những ai quan tâm đến tài chính và kinh tế toàn cầu. Với những phân tích sâu sắc và những ý kiến đầy cảm quan, cuốn sách này là một nguồn tài liệu quý giá cho những người muốn hiểu sâu hơn về thế giới của tiền tệ và chính sách kinh tế.'),
+
+(N'10 Mẹo Hay Hỗ Trợ Việc Đọc Sách của Trẻ', 'Bob Johnson', GETDATE(), 2, N'https://monkeymedia.vcdn.com.vn/upload/web/storage_web/26-09-2023_16:35:55_ren-luyen-thoi-quen-doc-sach-cho-tre-0.jpg', 
+N'Việc khuyến khích trẻ em đọc sách từ nhỏ không chỉ giúp phát triển kỹ năng ngôn ngữ mà còn tạo ra thói quen học tập tích cực.',
+N'Việc khuyến khích trẻ em đọc sách từ nhỏ không chỉ giúp phát triển kỹ năng ngôn ngữ mà còn tạo ra thói quen học tập tích cực. Dưới đây là 10 mẹo hay để hỗ trợ việc đọc sách của trẻ một cách hiệu quả và thú vị.
+
+1. Tạo Một Góc Đọc Riêng:
+
+Dành một góc nhỏ trong nhà cho việc đọc sách của trẻ, với các đồ chơi và sách được sắp xếp gọn gàng và thu hút.
+2. Lập Lịch Trình Đọc Sách Hàng Ngày:
+
+Thiết lập một lịch trình đọc sách hàng ngày cho trẻ, tạo thói quen đọc vào các thời điểm cố định trong ngày.
+3. Chọn Sách Phù Hợp với Sở Thích và Sở Trường:
+
+Chọn những cuốn sách phù hợp với sở thích và sở trường của trẻ để tạo động lực và hứng thú cho việc đọc.
+4. Đọc Cùng Trẻ:
+
+Thể hiện tình yêu thương và sự quan tâm bằng cách đọc sách cùng trẻ, tạo ra một trải nghiệm học tập và gắn kết gia đình.
+5. Sử Dụng Hình Ảnh và Màu Sắc Sống Động:
+
+Chọn sách có hình ảnh và màu sắc sáng tạo và sống động để thu hút sự chú ý của trẻ.
+6. Tạo Trò Chơi và Hoạt Động Kết Hợp với Sách:
+
+Tạo ra các trò chơi và hoạt động liên quan đến nội dung của sách để tăng cường hiểu biết và tạo ra trải nghiệm học tập thú vị.
+7. Khuyến Khích Tư Duy Sáng Tạo và Tưởng Tượng:
+
+Khuyến khích trẻ phát triển tư duy sáng tạo và tưởng tượng thông qua việc đọc sách và suy nghĩ về câu chuyện.
+8. Sử Dụng Đèn Pin Đọc Ban Đêm:
+
+Cung cấp đèn pin cho trẻ để đọc sách vào ban đêm, tạo điều kiện thuận lợi và tạo ra thói quen đọc trước khi đi ngủ.
+9. Tạo Phần Thưởng Khi Đọc Sách:
+
+Tạo ra hệ thống phần thưởng nhỏ khi trẻ hoàn thành việc đọc sách, khuyến khích sự cố gắng và đam mê trong việc học tập.
+10. Mở Rộng Trải Nghiệm Đọc Sách Bằng Tham Gia Các Hoạt Động Xã Hội:
+
+Khuyến khích trẻ tham gia các hoạt động xã hội liên quan đến việc đọc sách, như tham gia câu lạc bộ đọc sách của trường hoặc thư viện địa phương.'
+),
+
+(N'15 Mẹo Đơn Giản Giúp Bạn Tìm Động Lực để Đọc Sách Hiệu Quả', 'John Doe', GETDATE(), 2, N'https://chamdocsach.com/wp-content/uploads/2022/08/dong-luc-de-doc-sach-1.png', 
+N'Việc tìm động lực để đọc sách có thể trở thành một thách thức đối với nhiều người, nhưng với những mẹo đơn giản dưới đây, bạn có thể kích thích sự ham muốn và hiệu suất đọc sách của mình một cách hiệu quả.',
+N'Việc tìm động lực để đọc sách có thể trở thành một thách thức đối với nhiều người, nhưng với những mẹo đơn giản dưới đây, bạn có thể kích thích sự ham muốn và hiệu suất đọc sách của mình một cách hiệu quả.
+
+1. Thiết Lập Mục Tiêu Đọc Sách:
+
+Đặt ra mục tiêu cụ thể về việc đọc sách, chẳng hạn như số lượng sách bạn muốn đọc trong một tháng hoặc một năm.
+2. Tìm Sách Về Chủ Đề Bạn Quan Tâm:
+
+Chọn những cuốn sách liên quan đến chủ đề hoặc lĩnh vực mà bạn quan tâm, điều này giúp tăng sự hứng thú và động lực khi đọc.
+3. Đọc Ở Môi Trường Thuận Lợi:
+
+Tìm một môi trường đọc sách yên tĩnh và thoải mái để tập trung, như trong phòng riêng của bạn hoặc trong một quán cà phê yên bình.
+4. Thiết Lập Lịch Trình Đọc Sách Cố Định:
+
+Xác định các khoảng thời gian cố định trong ngày để dành cho việc đọc sách, giúp bạn duy trì thói quen và tạo ra một lịch trình hợp lý.
+5. Sử Dụng Công Nghệ:
+
+Sử dụng các ứng dụng đọc sách trên điện thoại hoặc máy tính để tiện lợi hóa quá trình đọc và tạo sự linh hoạt trong việc tiếp cận sách.
+6. Thực Hiện Ghi Chú và Tóm Tắt:
+
+Ghi chú và tóm tắt những ý chính trong cuốn sách để giúp bạn tóm tắt kiến thức và nhớ lâu hơn.
+7. Tham Gia Nhóm Đọc Sách:
+
+Tham gia các nhóm đọc sách trực tuyến hoặc offline để chia sẻ ý kiến, trao đổi và tạo động lực với những người đam mê đọc sách khác.
+8. Tạo Phần Thưởng Cho Bản Thân:
+
+Đặt ra các phần thưởng nhỏ cho bản thân sau khi hoàn thành việc đọc một cuốn sách, như đi ăn ngoại ô hoặc xem một bộ phim yêu thích.
+9. Đọc Theo Nhóm Chủ Đề:
+
+Chọn một chủ đề cụ thể và đọc nhiều cuốn sách liên quan đến chủ đề đó để tạo ra sự liên kết và sự đồng nhất trong việc học hỏi.
+10. Xem Xét Lợi Ích Từ Việc Đọc Sách:
+
+Tìm hiểu và nhận biết lợi ích mà việc đọc sách mang lại cho cuộc sống của bạn, từ việc mở rộng kiến thức đến việc giảm căng thẳng và cải thiện tư duy.
+11. Tạo Danh Sách Sách Muốn Đọc:
+
+Tạo danh sách các cuốn sách mà bạn muốn đọc và đặt ra mục tiêu hoàn thành danh sách đó trong một khoảng thời gian nhất định.
+12. Đọc Một Lúc Nhỏ, Nhưng Thường Xuyên:
+
+Thay vì cố gắng đọc một cuốn sách toàn bộ trong một lần, hãy chia nhỏ việc đọc thành các phần nhỏ và đọc thường xuyên để duy trì sự hứng thú và động lực.
+13. Tạo Khoảng Thời Gian Riêng Cho Việc Đọc Sách:
+
+Đặt ra quy tắc không sử dụng điện thoại hoặc máy tính trong một khoảng thời gian nhất định mỗi ngày để tập trung vào việc đọc sách.
+14. Kết Nối với Cộng Đồng Đọc Sách:
+
+Theo dõi các tác giả, nhà xuất bản, và cộng đồng đọc sách trên mạng xã hội để cập nhật thông tin mới nhất về sách và tạo sự động viên từ cộng đồng đam mê sách.
+15. Tự Phát Triển và Thay Đổi:
+
+Cuối cùng, hãy nhớ rằng việc tìm động lực để đọc sách là một quá trình phát triển và thay đổi. Hãy linh hoạt và sẵn lòng thay đổi cách tiếp cận và phương pháp đọc của bạn khi cần thiết để duy trì sự hứng thú và động lực.'
+),
+
+(N'Top Những Quyển Sách Hay Dành Cho Phái Nữ', 'Jane Smith', GETDATE(), 1, N'https://storage.googleapis.com/ops-shopee-files-live/live/shopee-blog/2022/08/3ccc16e1-16.08.2022-recovered-02-scaled.jpg', 
+N'Đọc sách không chỉ là một sở thích tuyệt vời mà còn là một cách tuyệt diệu để mở rộng kiến thức, nâng cao sự thấu hiểu và tìm kiếm cảm hứng trong cuộc sống. Đối với phái nữ, có vô số cuốn sách thú vị và sâu sắc mà họ có thể khám phá.',
+N'Đọc sách không chỉ là một sở thích tuyệt vời mà còn là một cách tuyệt diệu để mở rộng kiến thức, nâng cao sự thấu hiểu và tìm kiếm cảm hứng trong cuộc sống. Đối với phái nữ, có vô số cuốn sách thú vị và sâu sắc mà họ có thể khám phá. Dưới đây là danh sách "Top Những Quyển Sách Hay Dành Cho Phái Nữ" mà chắc chắn sẽ làm cho bạn say mê và suy ngẫm:
+
+"Đừng Ngần Ngại Khéo Sắc" - Sheryl Sandberg và Adam Grant: Cuốn sách này cung cấp những lời khuyên quý báu và chiến lược thực tiễn để phụ nữ vượt qua những rào cản và tự tin bước lên con đường thành công.
+
+"Người Phụ Nữ Nghĩ Gì Khi Chịu Áp Lực" - Lisa Damour: Tác giả Lisa Damour giúp phái nữ hiểu rõ hơn về cách quản lý cảm xúc, tâm trạng và áp lực trong cuộc sống hàng ngày.
+
+"Giới Tính" - Gina Rippon: Cuốn sách này là một cuộc thách thức về các giới kiến thức truyền thống, khám phá sự linh hoạt của não bộ và tạo ra một cái nhìn mới mẻ về sự khác biệt giới tính.
+
+"Đừng Nói Ta Hãy Yêu" - Emma McLaughlin và Nicola Kraus: Một cuốn tiểu thuyết hấp dẫn với câu chuyện về tình bạn, tình yêu và sự tự chủ, làm nổi bật những giá trị quan trọng mà mỗi phụ nữ cần biết.
+
+"Hạnh Phúc Là Sự Lựa Chọn" - Paul Dolan: Tác giả Paul Dolan giúp phái nữ hiểu rõ hơn về những yếu tố thực sự làm cho cuộc sống trở nên hạnh phúc và đưa ra những gợi ý để tạo ra sự hài lòng và thành công trong cuộc sống.
+
+"Nữ Lực - Dấu Ấn Màu Hồng" - Sheryl Sandberg: Sheryl Sandberg chia sẻ những câu chuyện cảm động và chiến lược tinh tế để nâng cao sự tự tin và khích lệ phụ nữ hiện đại.
+
+"Chân Lý về Đàn Ông" - DeVon Franklin và Meagan Good: Cuốn sách này không chỉ là một lời khuyên về mối quan hệ, mà còn là một hướng dẫn thú vị và chiêm nghiệm về sự hiểu biết về đàn ông và tình yêu.
+
+"Cách Mạng Châu  u" - Slavenka Drakulić: Một cuốn sách đầy tranh cãi về vấn đề nữ quyền, chứng minh sức mạnh và sự kiên định của phụ nữ trong cuộc sống và xã hội.
+
+"Thiết Kế Cuộc Sống của Bạn" - Rachel Hollis: Rachel Hollis truyền cảm hứng và động viên phụ nữ để đặt mục tiêu và theo đuổi đam mê của mình trong cuốn sách này.
+
+"Người Đàn Bà Mất Gia Đình" - Lisa Wingate: Một câu chuyện đầy cảm xúc và ý nghĩa về tình yêu, sự hy sinh và sức mạnh của gia đình, mang lại sự ngẫm nghĩ và cảm xúc sâu sắc cho độc giả.'
+);
+GO
 
 
 INSERT INTO [SWP_Online_Shop].[dbo].[Sliders] ([Title], [Image], [Backlink])
@@ -703,13 +900,28 @@ VALUES
 ('Slider 1', 'https://bookbuy.vn/Res/Images/Album/ffd62e0e-02fb-4e7a-96fe-42ed8966c89b.png?w=920&h=420&mode=crop', 'https://bookbuy.vn/Res/Images/Album/ffd62e0e-02fb-4e7a-96fe-42ed8966c89b.png?w=920&h=420&mode=crop'),
 ('Slider 2', 'https://bookbuy.vn/Res/Images/Album/efefae23-5cb2-42e9-8d4f-59ca99d500af.png?w=920&h=420&mode=crop', 'https://bookbuy.vn/Res/Images/Album/efefae23-5cb2-42e9-8d4f-59ca99d500af.png?w=920&h=420&mode=crop');
 
-use SWP_Online_Shop
-SELECT * 
-FROM Users
-INSERT INTO CustomerStatusHistory (UserID, OldStatusID, NewStatusID, ChangedDate) 
-VALUES (7, 1, 1, GETDATE());
-select *from CustomerStatusHistory
-SELECT OldStatusID, NewStatusID, ChangedDate FROM CustomerStatusHistory "                         
-                            + "WHERE UserID = '7'
+Use SWP_Online_Shop
 
+SELECT 
+    o.OrderID,
+    o.OrderDate,
+    o.TotalCost,
+    o.Status,
+    o.ReceiverFullName,
+    o.ReceiverEmail,
+    o.ReceiverMobile,
+    o.ReceiverAddress,
+    od.ProductID,
+    p.Title AS ProductTitle,
+    od.Quantity
+FROM 
+    Orders o
+INNER JOIN 
+    OrderDetails od ON o.OrderID = od.OrderID
+INNER JOIN 
+    Products p ON od.ProductID = p.ProductID
+WHERE 
+
+    od.OrderID = '1';
+	UPDATE Users SET StatusID = ? WHERE UserID = ?"
 

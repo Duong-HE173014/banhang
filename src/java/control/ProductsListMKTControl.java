@@ -4,10 +4,10 @@
  */
 package control;
 
-import dao.UserDAO;
-import dao.UserProfileDAO;
-import entity.User;
-import jakarta.servlet.RequestDispatcher;
+import dao.DAO;
+import dao.ProductsDAO;
+import entity.Category;
+import entity.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,15 +15,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Vector;
 
 /**
  *
  * @author Hi
  */
-@WebServlet(name = "UserProfile", urlPatterns = {"/userprofile"})
-public class UserProfile extends HttpServlet {
+@WebServlet(name = "ProductsListControl", urlPatterns = {"/mktproductlist"})
+public class ProductsListMKTControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,8 +37,7 @@ public class UserProfile extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("UserProfile.jsp");
-        dispatcher.forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -53,25 +52,36 @@ public class UserProfile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-
-        if (user != null) {
-            UserDAO userProfileDAO = new UserDAO();
-            User userProfile = userProfileDAO.getUserByFullname(user.getFullName());
-
-            if (userProfile != null) {
-                request.setAttribute("userProfile", userProfile);
-                request.getRequestDispatcher("UserProfile.jsp").forward(request, response);
-            } else {
-                request.setAttribute("error", "Error occurred while fetching user profile. Please try again later.");
-                request.getRequestDispatcher("UserProfile.jsp").forward(request, response);
-            }
+        ProductsDAO dao = new ProductsDAO();
+        DAO d = new DAO();
+ 
+        String cid = request.getParameter("cid");
+        if (cid != null) {
+            Vector<Product> list = d.getAllProductbyCategory(Integer.parseInt(cid));
+            request.setAttribute("listPL", list);
         } else {
-            response.sendRedirect("Login.jsp");
+            List<Product> list = dao.getProduct();
+            request.setAttribute("listPL", list);
         }
+        
+        String indexPage = request.getParameter("index");
+        if(indexPage == null){
+            indexPage = "1";
+        }
+        int index = Integer.parseInt(indexPage);
+        int count = dao.getTotalProducts();
+        int endPage = count/10;
+        if(count % 3 != 0){
+            endPage++;
+        }
+        List<Product> l = dao.pagingProdct(index);
+        
+        List<Category> listCC = dao.getallCategory();
+        
+        request.setAttribute("listCC", listCC);
+        request.setAttribute("endP", endPage);
+        request.setAttribute("listpr", l);
+        request.getRequestDispatcher("ProductsListMKT.jsp").forward(request, response);
     }
 
     /**
@@ -85,7 +95,7 @@ public class UserProfile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            processRequest(request, response);
+        processRequest(request, response);
     }
 
     /**

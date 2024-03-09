@@ -54,7 +54,7 @@
                                 <div class="card bg-primary text-white mb-4">
                                     <div class="card-body">Posts <span>${requestScope.tpost}</span></div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <a class="small text-white stretched-link" href="mktpostlist">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
@@ -63,7 +63,7 @@
                                 <div class="card bg-warning text-white mb-4">
                                     <div class="card-body">Products <span>${requestScope.tproduct}</span></div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <a class="small text-white stretched-link" href="mktproductlist">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>

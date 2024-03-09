@@ -42,7 +42,7 @@ public class DAO {
         }
         return rs;
     }
-    
+
     public Vector<Product> getAllProduct() {
         Vector<Product> vector = new Vector<Product>();
         String query = "SELECT *\n"
@@ -56,12 +56,16 @@ public class DAO {
                 vector.add(new Product(rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3),
-                        rs.getString(4),
+                        rs.getDate(4),
                         rs.getString(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getDouble(8),
-                        rs.getDouble(9)));
+                        rs.getString(8),
+                        rs.getDouble(9),
+                        rs.getDouble(10),
+                        rs.getInt(11),
+                        rs.getBoolean(12),
+                        rs.getString(13)));
             }
         } catch (Exception e) {
         }
@@ -81,12 +85,16 @@ public class DAO {
                 vector.add(new Product(rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3),
-                        rs.getString(4),
+                        rs.getDate(4),
                         rs.getString(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getDouble(8),
-                        rs.getDouble(9)));
+                        rs.getString(8),
+                        rs.getDouble(9),
+                        rs.getDouble(10),
+                        rs.getInt(11),
+                        rs.getBoolean(12),
+                        rs.getString(13)));
             }
         } catch (Exception e) {
         }
@@ -107,12 +115,16 @@ public class DAO {
                 vector.add(new Product(rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3),
-                        rs.getString(4),
+                        rs.getDate(4),
                         rs.getString(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getDouble(8),
-                        rs.getDouble(9)));
+                        rs.getString(8),
+                        rs.getDouble(9),
+                        rs.getDouble(10),
+                        rs.getInt(11),
+                        rs.getBoolean(12),
+                        rs.getString(13)));
             }
         } catch (Exception e) {
         }
@@ -130,12 +142,16 @@ public class DAO {
                 vector.add(new Product(rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3),
-                        rs.getString(4),
+                        rs.getDate(4),
                         rs.getString(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getDouble(8),
-                        rs.getDouble(9)));
+                        rs.getString(8),
+                        rs.getDouble(9),
+                        rs.getDouble(10),
+                        rs.getInt(11),
+                        rs.getBoolean(12),
+                        rs.getString(13)));
             }
         } catch (Exception e) {
         }
@@ -171,13 +187,16 @@ public class DAO {
                 return new Product(rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3),
-                        rs.getString(4),
+                        rs.getDate(4),
                         rs.getString(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getDouble(8),
-                        rs.getDouble(9)
-                );
+                        rs.getString(8),
+                        rs.getDouble(9),
+                        rs.getDouble(10),
+                        rs.getInt(11),
+                        rs.getBoolean(12),
+                        rs.getString(13));
             }
         } catch (Exception e) {
         }
@@ -196,13 +215,16 @@ public class DAO {
                 vector.add(new Product(rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3),
-                        rs.getString(4),
+                        rs.getDate(4),
                         rs.getString(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getDouble(8),
-                        rs.getDouble(9)
-                ));
+                        rs.getString(8),
+                        rs.getDouble(9),
+                        rs.getDouble(10),
+                        rs.getInt(11),
+                        rs.getBoolean(12),
+                        rs.getString(13)));
             }
         } catch (Exception e) {
         }
@@ -220,13 +242,16 @@ public class DAO {
                 vector.add(new Product(rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3),
-                        rs.getString(4),
+                        rs.getDate(4),
                         rs.getString(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getDouble(8),
-                        rs.getDouble(9)
-                ));
+                        rs.getString(8),
+                        rs.getDouble(9),
+                        rs.getDouble(10),
+                        rs.getInt(11),
+                        rs.getBoolean(12),
+                        rs.getString(13)));
             }
         } catch (Exception e) {
         }
@@ -245,12 +270,16 @@ public class DAO {
                 return new Product(rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3),
-                        rs.getString(4),
+                        rs.getDate(4),
                         rs.getString(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getDouble(8),
-                        rs.getDouble(9));
+                        rs.getString(8),
+                        rs.getDouble(9),
+                        rs.getDouble(10),
+                        rs.getInt(11),
+                        rs.getBoolean(12),
+                        rs.getString(13));
             }
         } catch (Exception e) {
         }
@@ -310,12 +339,16 @@ public class DAO {
                 vector.add(new Product(rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3),
-                        rs.getString(4),
+                        rs.getDate(4),
                         rs.getString(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getDouble(8),
-                        rs.getDouble(9)));
+                        rs.getString(8),
+                        rs.getDouble(9),
+                        rs.getDouble(10),
+                        rs.getInt(11),
+                        rs.getBoolean(12),
+                        rs.getString(13)));
             }
         } catch (Exception e) {
         }
@@ -352,12 +385,16 @@ public class DAO {
                 vector.add(new Product(rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3),
-                        rs.getString(4),
+                        rs.getDate(4),
                         rs.getString(5),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getDouble(8),
-                        rs.getDouble(9)));
+                        rs.getString(8),
+                        rs.getDouble(9),
+                        rs.getDouble(10),
+                        rs.getInt(11),
+                        rs.getBoolean(12),
+                        rs.getString(13)));
             }
         } catch (Exception e) {
         }
@@ -372,22 +409,86 @@ public class DAO {
         return vector;
     }
 
-//public static void main(String[] args) {
-//        DAO dao = new DAO(); // Tạo một đối tượng DAO để gọi hàm get4ProductbyCategory
-//        int categoryId = 3; // Thay categoryId bằng categoryId bạn muốn kiểm tra
-//
-//        // Gọi hàm get4ProductbyCategory
-//        Vector<Product> products = dao.get4ProductbyCategory(categoryId);
-//
-//        // Kiểm tra xem products có dữ liệu hay không
-//        if (products.isEmpty()) {
-//            System.out.println("Không có dữ liệu sản phẩm cho categoryId: " + categoryId);
-//        } else {
-//            System.out.println("Có dữ liệu sản phẩm cho categoryId: " + categoryId);
-//            // In thông tin của các sản phẩm
-//            for (Product product : products) {
-//                System.out.println(product);
-//            }
-//        }
-//    }
+    public void addProduct(Product product) {
+        String query = "INSERT INTO Products (Title, CategoryID, "
+                + "UpdatedDate, Image, BriefInfo, "
+                + "Description, AttachedImages, Price, "
+                + "SalePrice, Quantity, Featured, Status) "
+                + "VALUES (?, ?, Current_timestamp, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            conn = new DBContext().getConnection();
+
+            try (PreparedStatement ps = conn.prepareStatement(query)) {
+                ps.setString(1, product.getTitle());
+                ps.setInt(2, product.getCategoryID());
+                ps.setString(3, product.getImage());
+                ps.setString(4, product.getBriefInfo());
+                ps.setString(5, product.getDescription());
+                ps.setString(6, product.getAttachedImages());
+                ps.setDouble(7, product.getPrice());
+                ps.setDouble(8, product.getSalePrice());
+                ps.setInt(9, product.getQuantity());
+                ps.setBoolean(10, product.getFeatured());
+                ps.setString(11, product.getStatus());
+                ps.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editProduct(Product product) {
+        String query = "Update Products \n"
+                + "set CategoryID =?, [Title] =?,\n"
+                + "[BriefInfo]=?, [Image]=?, [AttachedImages]=?,\n"
+                + "[Description]=?, [Quantity]=?,\n"
+                + "[Price]=?,[SalePrice]=?,[Featured]=?,\n"
+                + "[Status]=? where ProductID = ?";
+        try {
+            conn = new DBContext().getConnection();
+
+            try (PreparedStatement ps = conn.prepareStatement(query)) {
+                ps.setString(1, product.getTitle());
+                ps.setInt(2, product.getCategoryID());
+                ps.setString(3, product.getImage());
+                ps.setString(4, product.getBriefInfo());
+                ps.setString(5, product.getDescription());
+                ps.setString(6, product.getAttachedImages());
+                ps.setDouble(7, product.getPrice());
+                ps.setDouble(8, product.getSalePrice());
+                ps.setInt(9, product.getQuantity());
+                ps.setBoolean(10, product.getFeatured());
+                ps.setString(11, product.getStatus());
+                ps.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+    }
+
+    public static void main(String[] args) {
+        DAO dao = new DAO();
+
+        // Gọi hàm getAllProduct() để lấy danh sách sản phẩm
+        Vector<Product> products = dao.getAllProduct();
+
+        // In ra thông tin của từng sản phẩm trong danh sách
+        for (Product product : products) {
+            System.out.println("Product ID: " + product.getProductID());
+            System.out.println("Title: " + product.getTitle());
+            System.out.println("Category ID: " + product.getCategoryID());
+            System.out.println("Updated Date: " + product.getUpdatedDate());
+            System.out.println("Image: " + product.getImage());
+            System.out.println("Brief Info: " + product.getBriefInfo());
+            System.out.println("Description: " + product.getDescription());
+            System.out.println("Attached Images: " + product.getAttachedImages());
+            System.out.println("Price: " + product.getPrice());
+            System.out.println("Sale Price: " + product.getSalePrice());
+            System.out.println("Quantity: " + product.getQuantity());
+            System.out.println("Featured: " + product.getFeatured());
+            System.out.println("Status: " + product.getStatus());
+            System.out.println("---------------------------------------------");
+        }
+    }
 }

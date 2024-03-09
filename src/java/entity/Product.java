@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Date;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -12,19 +14,53 @@ package entity;
 public class Product {
     private String productID;
     private String title;
-    private int categoryID;
-    private String updatedDate;
+    private Integer categoryID; // Sử dụng Integer để cho phép giá trị null
+    private Date updatedDate; // Sử dụng Date của Java
     private String image;
     private String briefInfo;
-    private String description;  
-    private double price;   
-    private double salePrice;
-    private int quantity = 1;
+    private String description;
+    private String attachedImages;
+    private Double price; // Sử dụng Double để cho phép giá trị null
+    private Double salePrice; // Tương tự, sử dụng Double để cho phép giá trị null
+    private Integer quantity; // Sử dụng Integer để cho phép giá trị null
+    private Boolean featured; // Sử dụng Boolean để cho phép giá trị null
+    private String status = "";
 
     public Product() {
     }
 
-    public Product(String productID, String title, int categoryID, String updatedDate, String image, String briefInfo, String description, double price, double salePrice) {
+    public Product(String   productID, String title, Integer categoryID, Date updatedDate, String image, String briefInfo, String description, String attachedImages, Double price, Double salePrice, Integer quantity, Boolean featured, String status) {
+        this.productID = productID;
+        this.title = title;
+        this.categoryID = categoryID;
+        this.updatedDate = updatedDate;
+        this.image = image;
+        this.briefInfo = briefInfo;
+        this.description = description;
+        this.attachedImages = attachedImages;
+        this.price = price;
+        this.salePrice = salePrice;
+        this.quantity = quantity;
+        this.featured = featured;
+        this.status = status;
+    }
+
+    public Product(String productID, String title, Integer categoryID, String image, String briefInfo, String description, String attachedImages, Double price, Double salePrice, Integer quantity, Boolean featured, String status) {
+        this.productID = productID;
+        this.title = title;
+        this.categoryID = categoryID;
+        this.image = image;
+        this.briefInfo = briefInfo;
+        this.description = description;
+        this.attachedImages = attachedImages;
+        this.price = price;
+        this.salePrice = salePrice;
+        this.quantity = quantity;
+        this.featured = featured;
+        this.status = status;
+    }
+
+    public Product(String productID, String title, Integer categoryID, Date updatedDate, String image, String briefInfo, String description, Double price, Double salePrice) {
         this.productID = productID;
         this.title = title;
         this.categoryID = categoryID;
@@ -36,7 +72,7 @@ public class Product {
         this.salePrice = salePrice;
     }
 
-    public Product(String productID, String title, String image, String briefInfo, double price, double salePrice) {
+    public Product(String productID, String title, String image, String briefInfo, Double price, Double salePrice) {
         this.productID = productID;
         this.title = title;
         this.image = image;
@@ -45,7 +81,7 @@ public class Product {
         this.salePrice = salePrice;
     }
 
-    public Product(String productID, String title, String updatedDate, String image, String description, double price, double salePrice) {
+    public Product(String productID, String title, Date updatedDate, String image, String description, Double price, Double salePrice) {
         this.productID = productID;
         this.title = title;
         this.updatedDate = updatedDate;
@@ -53,6 +89,19 @@ public class Product {
         this.description = description;
         this.price = price;
         this.salePrice = salePrice;
+    }
+
+    public Product(String title, Integer categoryID, String image, String briefInfo, String description, String attachedImages, Double price, Double salePrice, Boolean featured, String status) {
+        this.title = title;
+        this.categoryID = categoryID;
+        this.image = image;
+        this.briefInfo = briefInfo;
+        this.description = description;
+        this.attachedImages = attachedImages;
+        this.price = price;
+        this.salePrice = salePrice;
+        this.featured = featured;
+        this.status = status;
     }
 
     public String getProductID() {
@@ -71,19 +120,19 @@ public class Product {
         this.title = title;
     }
 
-    public int getCategoryID() {
+    public Integer getCategoryID() {
         return categoryID;
     }
 
-    public void setCategoryID(int categoryID) {
+    public void setCategoryID(Integer categoryID) {
         this.categoryID = categoryID;
     }
 
-    public String getUpdatedDate() {
+    public Date getUpdatedDate() {
         return updatedDate;
     }
 
-    public void setUpdatedDate(String updatedDate) {
+    public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
     }
 
@@ -111,34 +160,60 @@ public class Product {
         this.description = description;
     }
 
-    public double getPrice() {
+    public String getAttachedImages() {
+        return attachedImages;
+    }
+
+    public void setAttachedImages(String attachedImages) {
+        this.attachedImages = attachedImages;
+    }
+
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public double getSalePrice() {
+    public Double getSalePrice() {
         return salePrice;
     }
 
-    public void setSalePrice(double salePrice) {
+    public void setSalePrice(Double salePrice) {
         this.salePrice = salePrice;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" + "productID=" + productID + ", title=" + title + ", categoryID=" + categoryID + ", updatedDate=" + updatedDate + ", image=" + image + ", briefInfo=" + briefInfo + ", description=" + description + ", price=" + price + ", salePrice=" + salePrice + '}';
+    public Boolean getFeatured() {
+        return featured;
     }
 
-   
+    public void setFeatured(Boolean featured) {
+        this.featured = featured;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String[] getAttachedImage() {
+    if (attachedImages != null && !attachedImages.isEmpty()) {
+        // Split the attachedImages string by comma and trim each URL
+        return attachedImages.split("\\s*,\\s*");
+    } else {
+        return new String[0]; // Return an empty array if attachedImages is null or empty
+    }
+}
 }

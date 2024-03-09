@@ -4,7 +4,6 @@
  */
 package control;
 
-import dao.UserDAO;
 import dao.UserProfileDAO;
 import entity.User;
 import jakarta.servlet.RequestDispatcher;
@@ -16,14 +15,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  *
  * @author Hi
  */
-@WebServlet(name = "UserProfile", urlPatterns = {"/userprofile"})
-public class UserProfile extends HttpServlet {
+@WebServlet(name = "UpdateProfileControl", urlPatterns = {"/updateprofile"})
+public class UpdateProfileControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,11 +35,10 @@ public class UserProfile extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("UserProfile.jsp");
-        dispatcher.forward(request, response);
+        
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -54,24 +51,6 @@ public class UserProfile extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-
-        if (user != null) {
-            UserDAO userProfileDAO = new UserDAO();
-            User userProfile = userProfileDAO.getUserByFullname(user.getFullName());
-
-            if (userProfile != null) {
-                request.setAttribute("userProfile", userProfile);
-                request.getRequestDispatcher("UserProfile.jsp").forward(request, response);
-            } else {
-                request.setAttribute("error", "Error occurred while fetching user profile. Please try again later.");
-                request.getRequestDispatcher("UserProfile.jsp").forward(request, response);
-            }
-        } else {
-            response.sendRedirect("Login.jsp");
-        }
     }
 
     /**
@@ -85,7 +64,43 @@ public class UserProfile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            processRequest(request, response);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        
+        if (user != null) {
+            String fullName = request.getParameter("fullname");
+            String password = request.getParameter("password");
+            String image = request.getParameter("image");
+            String phone = request.getParameter("phone");
+            String address = request.getParameter("address");
+
+            if (!user.getEmail().equals(request.getParameter("email"))) {
+                request.setAttribute("error", "You cannot change the email address.");
+                doGet(request, response);
+            }
+
+            user.setFullName(fullName);
+            user.setPassword(password);
+            user.setPhone(phone);
+            user.setAddress(address);
+
+            UserProfileDAO userProfileDAO = new UserProfileDAO();
+            boolean updateImageResult = userProfileDAO.updateUserImage(user.getEmail(), image);
+            boolean result = userProfileDAO.updateUser(user);
+            if (result && updateImageResult) {
+                // Cập nhật thông tin trong phiên làm việc
+                session.setAttribute("user", user);
+
+                // Chuyển hướng đến trang UserProfile.jsp để hiển thị thông tin mới
+                request.getRequestDispatcher("UserProfile.jsp").forward(request, response);
+            } else {
+                // Xử lý trường hợp lỗi khi cập nhật
+                request.setAttribute("error", "Error occurred while updating user profile. Please try again later.");
+                request.getRequestDispatcher("UserProfile.jsp").forward(request, response);
+            }
+        } else {
+            response.sendRedirect("login.jsp");
+        }
     }
 
     /**

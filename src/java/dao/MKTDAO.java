@@ -111,15 +111,19 @@ public class MKTDAO {
             ps.setDate(2, end);
             rs = ps.executeQuery();
             while (rs.next()) {
-                Product p = new Product(rs.getString("rs.getString"),
-                        rs.getString("Title"),
-                        rs.getInt("CategoryID"),
-                        rs.getString("UpdatedDate"),
-                        rs.getString("Image"),
-                        rs.getString("BriefInfo"),
-                        rs.getString("Description"),
-                        rs.getDouble("Price"),
-                        rs.getDouble("SalePrice"));
+                Product p = new Product(rs.getString(1),
+                        rs.getString(2),
+                        rs.getInt(3),
+                        rs.getDate(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getDouble(9),
+                        rs.getDouble(10),
+                        rs.getInt(11),
+                        rs.getBoolean(12),
+                        rs.getString(13));
                 list.add(p);
             }
         } catch (Exception e) {

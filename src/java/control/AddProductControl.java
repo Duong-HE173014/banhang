@@ -4,10 +4,9 @@
  */
 package control;
 
-import dao.UserDAO;
-import dao.UserProfileDAO;
-import entity.User;
-import jakarta.servlet.RequestDispatcher;
+import dao.DAO;
+import entity.Category;
+import entity.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,15 +14,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.List;
+import java.util.Vector;
+
 
 /**
  *
- * @author Hi
+ * @author pc
  */
-@WebServlet(name = "UserProfile", urlPatterns = {"/userprofile"})
-public class UserProfile extends HttpServlet {
+@WebServlet(name = "AddProductControl", urlPatterns = {"/mktaddproduct"})
+public class AddProductControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,8 +36,27 @@ public class UserProfile extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("UserProfile.jsp");
-        dispatcher.forward(request, response);
+        request.setCharacterEncoding("UTF-8");
+        String cate = request.getParameter("category");
+        String title = request.getParameter("title");
+        String briefInfo = request.getParameter("briefInfo");
+        String image = request.getParameter("image");
+        String Attached_Image = request.getParameter("Attached_Image");
+        String description = request.getParameter("description");
+        String quantity = request.getParameter("quantity");
+        String price = request.getParameter("price");
+        String salePrice = request.getParameter("salePrice");
+        String featured_raw = request.getParameter("featured");
+        String status = request.getParameter("status");
+        boolean featured = Boolean.parseBoolean(featured_raw);
+       
+        Product p = new Product(title,Integer.parseInt(cate),image, briefInfo, description,Attached_Image, Double.parseDouble(price), Double.parseDouble(salePrice), featured, status);
+        DAO d = new DAO();
+        d.addProduct(p);
+        Vector<Category> listC = d.getAllCategory();
+        
+        request.setAttribute("listC", listC);
+        request.getRequestDispatcher("ProductListMKT.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -53,25 +71,6 @@ public class UserProfile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-
-        if (user != null) {
-            UserDAO userProfileDAO = new UserDAO();
-            User userProfile = userProfileDAO.getUserByFullname(user.getFullName());
-
-            if (userProfile != null) {
-                request.setAttribute("userProfile", userProfile);
-                request.getRequestDispatcher("UserProfile.jsp").forward(request, response);
-            } else {
-                request.setAttribute("error", "Error occurred while fetching user profile. Please try again later.");
-                request.getRequestDispatcher("UserProfile.jsp").forward(request, response);
-            }
-        } else {
-            response.sendRedirect("Login.jsp");
-        }
     }
 
     /**
@@ -85,7 +84,6 @@ public class UserProfile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            processRequest(request, response);
     }
 
     /**

@@ -48,13 +48,15 @@ public class UserProfileDAO {
     }
 
     public boolean updateUser(User user) {
-        String query = "UPDATE Users SET FullName=?, Password=? WHERE Email=?";
+        String query = "UPDATE Users SET FullName=?, Password=?, Phone=?, Address=? WHERE Email=?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getPassword());
-            ps.setString(3, user.getEmail());
+            ps.setString(3, user.getPhone());
+            ps.setString(4, user.getAddress());
+            ps.setString(5, user.getEmail());
             int result = ps.executeUpdate();
             return result > 0;
         } catch (Exception e) {

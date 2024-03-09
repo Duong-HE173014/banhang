@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author Admin
  */
-@WebServlet(name = "OrderListControl", urlPatterns = {"/salerOrderListControl"})
+@WebServlet(name = "OrderListControl", urlPatterns = {"/salemanagerOrderListControl"})
 public class OrderListControl extends HttpServlet {
 
     /**
@@ -50,7 +50,7 @@ public class OrderListControl extends HttpServlet {
             int page = pageString == null ? 1 : Integer.parseInt(pageString);
             List<Order> orderList = new OrderDAO().getOrders(pageSize, page);
             if (orderList.isEmpty() && page != 1) {
-                response.sendRedirect("salerOrderListControl");
+                response.sendRedirect("salemanagerOrderListControl");
                 return;
             }
             request.setAttribute("orderList", orderList);
@@ -75,7 +75,7 @@ public class OrderListControl extends HttpServlet {
             
             request.setAttribute("orderList", listByDate);
             request.getRequestDispatcher("OrderList.jsp").forward(request, response);
-        }
+              }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
