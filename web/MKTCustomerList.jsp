@@ -31,16 +31,16 @@
 
                     for (i = 1; i < (rows.length - 1); i++) {
                         shouldSwitch = false;
-                        x = rows[i].getElementsByTagName("TD")[columnIndex - 1]; // Điều chỉnh chỉ số cột
-                        y = rows[i + 1].getElementsByTagName("TD")[columnIndex - 1]; // Điều chỉnh chỉ số cột
+                        x = rows[i].getElementsByTagName("TD")[columnIndex].innerText.trim().toLowerCase();
+                        y = rows[i + 1].getElementsByTagName("TD")[columnIndex].innerText.trim().toLowerCase();
 
                         if (sortOrder === 'asc') {
-                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            if (x > y) {
                                 shouldSwitch = true;
                                 break;
                             }
                         } else if (sortOrder === 'desc') {
-                            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            if (x < y) {
                                 shouldSwitch = true;
                                 break;
                             }
@@ -119,7 +119,7 @@
                         </div>
                         <div class="col-sm-4">
                             <label for="sortByEmail">Arrange By Email:</label>
-                            <select id="sortByEmail" onchange="sortTable(2, this.value)">
+                            <select id="sortByEmail" onchange="sortTable(3, this.value)">
                                 <option value="asc">Ascending</option>
                                 <option value="desc">Descending</option>
                             </select>

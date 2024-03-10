@@ -31,6 +31,7 @@
     %>
     <section class="home-section">
         <div class="container small-container"> 
+            <form action="salemanagerOrderEdit" method="post">
         <div class="modal-header">
             <h5 class="modal-title" id="productModalLabel">Order Information</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -38,20 +39,20 @@
             </button>
         </div>
         <div class="modal-body">
-            <div class="form-group mb-3"> <!-- Thêm class mb-3 để tạo khoảng cách dưới của phần tử -->
-                <label class="mb-1">Order ID</label> <!-- Thêm class mb-1 để tạo khoảng cách dưới của nhãn -->
+            <div class="form-group mb-3"> 
+                <label class="mb-1">Order ID</label> 
                 <input value="<%=detail.getInt(1)%>" name="id" type="text" class="form-control form-control-sm" readonly required>
             </div>
-            <label class="mb-2">Detail</label> <!-- Thêm class mb-2 để tạo khoảng cách dưới của nhãn -->
+            <label class="mb-2">Detail</label> 
             <div class="table-responsive">
-                <table class="table table-sm"> <!-- Thêm class table-sm để làm cho bảng nhỏ hơn -->
+                <table class="table table-sm"> 
                     <thead>
                         <tr>
                             <th scope="col" class="border-0 bg-light">
-                                <div class="py-1 text-uppercase">Product</div> <!-- Thêm class py-1 để tạo khoảng cách dưới của phần tử -->
+                                <div class="py-1 text-uppercase">Product</div>
                             </th>
                             <th scope="col" class="border-0 bg-light">
-                                <div class="py-1 text-uppercase">Receiver Name</div> <!-- Thêm class py-1 để tạo khoảng cách dưới của phần tử -->
+                                <div class="py-1 text-uppercase">Receiver Name</div> 
                             </th>
                         </tr>
                     </thead>
@@ -60,21 +61,21 @@
                             <td class="align-middle"><strong><%=detail.getString(10)%></strong></td>
                             <td class="align-middle"><strong><%=detail.getString(5)%></strong></td>
                         </tr>
-                        <!-- Add additional rows for other order details if needed -->
+                        
                     </tbody>
                 </table>
             </div>
-            <div class="form-group mb-3"> <!-- Thêm class mb-3 để tạo khoảng cách dưới của phần tử -->
-                <label class="mb-1">Order Date</label> <!-- Thêm class mb-1 để tạo khoảng cách dưới của nhãn -->
+            <div class="form-group mb-3"> 
+                <label class="mb-1">Order Date</label> 
                 <textarea name="date" class="form-control form-control-sm" readonly required><%=detail.getString(2)%></textarea>
             </div>
-            <div class="form-group mb-3"> <!-- Thêm class mb-3 để tạo khoảng cách dưới của phần tử -->
-                <label class="mb-1">Total Cost</label> <!-- Thêm class mb-1 để tạo khoảng cách dưới của nhãn -->
+            <div class="form-group mb-3">
+                <label class="mb-1">Total Cost</label> 
                 <textarea name="total" class="form-control form-control-sm" readonly required><%=detail.getString(3)%> $</textarea>
             </div>
-            <div class="form-group mb-3"> <!-- Thêm class mb-3 để tạo khoảng cách dưới của phần tử -->
-                <label class="mb-1">Status</label> <!-- Thêm class mb-1 để tạo khoảng cách dưới của nhãn -->
-                <select name="status" class="form-select form-select-sm"> <!-- Thêm class form-select-sm để làm cho dropdown nhỏ hơn -->
+            <div class="form-group mb-3"> 
+                <label class="mb-1">Status</label> 
+                <select name="status" class="form-select form-select-sm"> 
                     <option value="Pending" <%=detail.getString(4).equals("Pending") ? "selected" : ""%>>Pending</option>
                     <option value="Shipped" <%=detail.getString(4).equals("Shipped") ? "selected" : ""%>>Shipped</option>
                     <option value="Delivered" <%=detail.getString(4).equals("Delivered") ? "selected" : ""%>>Delivered</option>
@@ -82,8 +83,9 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" name="submit" class="btn btn-sm btn-success">Edit</button> <!-- Thêm class btn-sm để làm cho nút nhỏ hơn -->
+            <button type="submit" name="submit" class="btn btn-sm btn-success">Edit</button> 
         </div>
+                </form>
         </div>
     </section>
     <%

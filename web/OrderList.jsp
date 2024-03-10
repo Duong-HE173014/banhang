@@ -53,7 +53,7 @@
 
                     <div class="row">
                         <div class="col-sm-8">
-                            <form action="salerOrderListControl" method="post" id="dateRangeForm">
+                            <form action="salemanagerOrderListControl" method="post" id="dateRangeForm">
                                 FILTER BY DATE:
                                 <label for="startDate"></label>
                                 <input type="date" id="startDate" name="startDate">
@@ -65,7 +65,7 @@
                         </div>
                         <div class="col-sm-4">                                                     
                             <span>
-                                <form action="salerOrderListControl" method="post" class="form-inline my-2 my-lg-0">
+                                <form action="salemanagerOrderListControl" method="post" class="form-inline my-2 my-lg-0">
                                     <input type="hidden" name="go" value="searchOrder">
                                     <div class="input-group input-group-sm">
                                         <td><input value ="<%=txtS%>"  name="txt" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="Search..."></td>
