@@ -76,8 +76,8 @@
                             <img class="img-fluid" src="${p.image}" />
                             <a class="nav-link" href="detail?pid=${p.productID}"> <h5 class="card-title">${p.title}</h5></a>
                             <p class="card-text">${p.briefInfo}</p>
-                            <del class="bloc_left_price">${p.price}</del>
-                            <h3 class="bloc_left_price">${p.salePrice}</h3>
+                            <del class="bloc_left_price">${p.price}VND</del>
+                            <h3 class="bloc_left_price">${p.salePrice}VND</h3>
                         </div>
                     </div>
                 </div>
@@ -121,7 +121,7 @@
                                     <%
                                     
                                     discountprice =  item.getProducts().getSalePrice() * item.getQuantity() + discountprice;
-                                    totalprice =  item.getProducts().getSalePrice() * item.getQuantity() + totalprice + discountprice * 5 /100;
+                                    totalprice =  item.getProducts().getSalePrice() * item.getQuantity() + totalprice + discountprice * 5/100;
                                     %>
                                     <h5 style="color: red" class="mb-0"><%=item.getProducts().getSalePrice()%>VND</h5>
                                 </div>                               

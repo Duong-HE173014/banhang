@@ -161,11 +161,15 @@ CREATE TABLE [dbo].[Orders](
 	[ReceiverEmail] [nvarchar](255) NULL,
 	[ReceiverMobile] [nvarchar](20) NULL,
 	[ReceiverAddress] [nvarchar](max) NULL,
+	[ReceiverGender] [int] NULL,
+	[Notes] [nvarchar](max) NULL,
+	[PaymentMethods] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[OrderID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
 GO
 /****** Object:  Table [dbo].[Posts]    Script Date: 1/16/2024 3:55:11 PM ******/
 SET ANSI_NULLS ON
@@ -644,6 +648,10 @@ Cuốn sách "Di Sản Hồ Chí Minh - 52 Câu Chuyện Dưới Cờ Về Chủ
 GO
 SET IDENTITY_INSERT [dbo].[Products] OFF
 GO
+UPDATE Products
+SET Quantity = 20
+WHERE ProductID BETWEEN 1 AND 83;
+GO
 SET IDENTITY_INSERT [dbo].[Settings] ON 
 GO
 INSERT [dbo].[Settings] ([SettingID], [Type], [Value], [Order]) VALUES (1, N'SiteTitle', N'My Online Store', 1)
@@ -904,4 +912,5 @@ VALUES
 Use SWP_Online_Shop
 
 Select * from Products
+
 

@@ -60,8 +60,81 @@
                     </div>
 
                 </div>
-                <div>
+                <div class="col-md-8">
+                    <main role="main">
+                        <div class="container mt-4">
+                            <form class="needs-validation" name="ordercompleted" method="post"
+                                  action="cartcompletion">
+                                <input type="hidden" name="kh_tendangnhap" value="tqc">
 
+                                <div class="py-5 text-center">
+                                    <i class="fa fa-credit-card fa-4x" aria-hidden="true"></i>
+                                    <h2>Successfully!</h2>
+                                    <p class="lead">Bạn đã đặt hàng thành công. Dưới đây là thông tin của bạn.</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8 order-md-1">
+                                        <h4 class="mb-3">Thông tin khách hàng</h4>
+
+                                        <form class="needs-validation" novalidate>
+                                            <div class="row">
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="full_name">Full Name</label>
+                                                    <div></div>
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="gender">Gender</label>
+                                                    
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="email">Email</label>
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="mobile">Mobile</label>
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="address">Address</label>
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="notes">Notes</label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    <div class="col-md-4 order-md-2 mb-4">
+                                        <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="text-muted">Đơn hàng:</span>
+                                        </h4>
+                                       
+                                        <ul class="list-group mb-3">
+                                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                                <div>
+                                                    <h6 class="my-0"><%= items.getProducts().getTitle() %></h6>
+                                                    <small class="text-muted"><%= items.getProducts().getSalePrice() %>VND x <%= items.getQuantity() %></small>
+                                                </div>
+                                                <span class="text-muted"><%= items.getProducts().getSalePrice() * items.getQuantity() %>VND</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <div>Shipping Fee(5%):</div>
+                                                <span><%= shipFee %>VND</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <div>Tổng thành tiền</div>
+                                                <strong><%= totalCost %>VND</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+
+                                        <h4 class="mb-3">Hình thức thanh toán</h4>
+                                        <div></div>
+                                        <hr class="mb-4">
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit" name="btnDatHang">Đặt hàng</button>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

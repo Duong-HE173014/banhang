@@ -84,8 +84,8 @@
                                     <td>${o.productID}</td>
                                     <td>${o.title}</td>
                                     <td><img src="${o.image}"></td>
-                                    <td><del class="num">${o.price}</del></td>
-                                    <td>${o.salePrice}</td>
+                                    <td><del class="num">${o.price}VND</del></td>
+                                    <td>${o.salePrice}VND</td>
                                     <td>
                                         <a href="mkteditproduct?productID=${o.productID}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                         <a href="deleteproductsmkt?productID=${o.productID}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>

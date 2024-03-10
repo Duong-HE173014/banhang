@@ -109,13 +109,13 @@
 
                 <!-- Form group cho list price -->
                 <div class="form-group">
-                    <label for="listPrice">List Price:</label>
+                    <label for="listPrice">List Price (VND):</label>
                     <input type="number" name="listPrice" id="listPrice" value="<%= details.getPrice() %>">
                 </div>
 
                 <!-- Form group cho sale price -->
                 <div class="form-group">
-                    <label for="salePrice">Sale Price:</label>
+                    <label for="salePrice">Sale Price (VND):</label>
                     <input type="number" name="salePrice" id="salePrice" value="<%= details.getSalePrice() %>">
                 </div>
 

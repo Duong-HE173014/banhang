@@ -118,11 +118,10 @@
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div>Tổng thành tiền</div>
-                                                <strong><%= totalCost %>VND</strong>
+                                                <span name="total"><%= totalCost %>VND</span>
                                             </li>
                                         </ul>
-
-
+                                            <input hidden="" name="total" type="text" value="<%= totalCost %>">
                                         <div class="input-group">
                                             <input type="text" class="form-control" placeholder="Mã khuyến mãi">
                                             <div class="input-group-append">
@@ -133,7 +132,7 @@
                                     </div>
                                     <div class="col-md-8 order-md-1">
                                         <h4 class="mb-3">Thông tin khách hàng</h4>
-
+                                        <input type="hidden" name="uid" value="${uid}">
                                         <form class="needs-validation" novalidate>
                                             <div class="row">
                                                 <%
@@ -157,8 +156,8 @@
                                                     <label for="gender">Gender</label>
                                                     <select name="gender" class="custom-select d-block w-100" id="gender" required>
                                                         <option value="">Choose...</option>
-                                                        <option <%= gender ? "selected" : "" %>>Male</option>
-                                                        <option <%= !gender ? "selected" : "" %>>Female</option>
+                                                        <option value="1" <%= gender ? "selected" : "" %>>Male</option>
+                                                        <option value="0" <%= !gender ? "selected" : "" %>>Female</option>
                                                     </select>
                                                     <div class="invalid-feedback">
                                                         Please select a valid gender.
@@ -232,7 +231,7 @@
                                                 %>
                                                 <div class="col-md-12 mb-3">
                                                     <label for="notes">Notes</label>
-                                                    <textarea class="form-control" id="notes" placeholder="Enter any notes"></textarea>
+                                                    <textarea name="notes" class="form-control" id="notes" placeholder="Enter any notes"></textarea>
                                                 </div>
                                             </div>
                                         </form>
@@ -242,12 +241,12 @@
                                         <div class="d-block my-3">
                                             <div class="custom-control custom-radio">
                                                 <input id="httt-2" name="httt_ma" type="radio" class="custom-control-input" required=""
-                                                       value="2">
+                                                       value="1">
                                                 <label class="custom-control-label" for="httt-2">Chuyển khoản</label>
                                             </div>
                                             <div class="custom-control custom-radio">
                                                 <input id="httt-3" name="httt_ma" type="radio" class="custom-control-input" required=""
-                                                       value="3">
+                                                       value="2">
                                                 <label class="custom-control-label" for="httt-3">Ship COD</label>
                                             </div>
                                         </div>

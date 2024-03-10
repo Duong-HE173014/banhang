@@ -60,13 +60,14 @@ public class CheckOutControl extends HttpServlet {
                 String mobile = user.getPhone();
                 String address = user.getAddress();
                 // Đưa thông tin người dùng vào request để hiển thị trên trang JSP
+                request.setAttribute("uid",user.getUserID() );
                 request.setAttribute("fullName", fullName);
                 request.setAttribute("gender", gender);
                 request.setAttribute("email", email);
                 request.setAttribute("mobile", mobile);
                 request.setAttribute("address", address);
             } else {
-                
+
             }
 
             // Thực hiện xử lý dữ liệu của giỏ hàng (nếu cần)
@@ -90,7 +91,6 @@ public class CheckOutControl extends HttpServlet {
 //                request.setAttribute("shipFee", shipFee);
 //                request.setAttribute("totalCost", totalCost);
 //            }
-
             request.setAttribute("tag", 0);
             request.setAttribute("listP", listP);
             request.setAttribute("listC", listC);
