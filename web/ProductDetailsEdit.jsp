@@ -43,18 +43,18 @@
         <%
     Product details = (Product) request.getAttribute("details");
     Vector<Category> listC = (Vector<Category>) request.getAttribute("listC");
-%>
+        %>
 
         <h1 style="text-align: center">Edit Product Detail</h1>
-<% if (details != null) { %>
-        <div style="text-align: center;float:left; width: 50%;">
+        <% if (details != null) { %>
+        <div style="text-align: center;float:left; width: 40%;">
             <!-- Hiển thị ảnh sản phẩm ở giữa -->
-            <img src="<%= details.getImage() %>" alt="Thumbnail" width="200">
+            <img src="<%= details.getImage() %>" alt="Thumbnail" width="300">
         </div>
 
-        <div style="display: inline-block; float:left; width: 50%; vertical-align: middle;">
+        <div style="display: inline-block; float:left; width: 50%; vertical-align: middle; margin-left: 5px;">
             <!-- Hiển thị các trường thông tin sản phẩm -->
-            <form action="mkteditproduct" method="post" enctype="multipart/form-data">
+            <form action="mkteditproduct" method="post" >
 
                 <!-- Form group cho category -->
                 <div class="form-group">
@@ -78,14 +78,20 @@
                     <textarea name="briefInfo" id="briefInfo" style="flex: 1;"><%= details.getBriefInfo() %></textarea>
                 </div>
 
+                <!-- Form group cho thumbnail -->
+                <div class="form-group">
+                    <label for="thumbnail" style="width: 150px;">Thumbnail:</label>
+                    <textarea name="thumbnail" id="thumbnail" style="flex: 1;"><%= details.getImage() %></textarea>
+                </div>
+                
                 <!-- Form group cho attached images -->
                 <div class="form-group">
                     <label for="attachedImages">Attached Images:</label>
                     <% String[] attachedImages = details.getAttachedImage();
                     if (attachedImages != null) {
-                        for (String image : attachedImages) { %>
-                    <img src="<%= image %>" alt="Attached Image" width="100"><br>
-                    <% }
+                    %>
+                    <textarea name="image" id="image" style="flex: 1;"><%= details.getAttachedImages() %></textarea>
+                    <% 
             } %>
                 </div>
 
@@ -117,8 +123,8 @@
                 <div class="form-group">
                     <label>Feature:</label>
                     <div>
-                        <input type="radio" name="featured" value="true" <%= details.getFeatured() ? "checked" : "" %>On>
-                        <input type="radio" name="featured" value="false" <%= !details.getFeatured() ? "checked" : "" %>Off>
+                        <input type="radio" name="featured" value="true" <%= details.getFeatured() ? "checked" : "" %>>On
+                        <input type="radio" name="featured" value="false" <%= !details.getFeatured() ? "checked" : "" %>>Off
                     </div>
                 </div>
 
@@ -137,15 +143,18 @@
                         <option value="Sold Out" <%= (details.getStatus() != null && details.getStatus().equals("Sold Out")) ? "selected" : "" %>>Sold Out</option>
                     </select>
                 </div>
+                    <input hidden="" type="text" name="productID" id="productID" value="<%= details.getProductID() %>">
+                  
                 <!-- Button để submit form -->
                 <div class="form">
+                    <input type="submit" value="Back to the Product List" style="text-align: center; padding: 5px; margin-right: 5px; display: inline-block;" href="mktproductlist">
                     <input type="submit" value="Save" style="text-align: center; padding: 5px; margin-right: 5px; display: inline-block;">
                     <input type="reset" value="Reset" style="text-align: center; padding: 5px; display: inline-block;">
                 </div>
             </form>
         </div>
-<% } else { %>
-    <p>Không tìm thấy thông tin sản phẩm</p>
-<% } %>
+        <% } else { %>
+        <p>Không tìm thấy thông tin sản phẩm</p>
+        <% } %>
     </body>
 </html>

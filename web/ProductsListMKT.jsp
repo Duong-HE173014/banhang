@@ -159,8 +159,8 @@
                                 <div class="form-group">
                                     <label>Feature:</label>
                                     <div>
-                                        <input type="radio" name="featured" value="true" >Yes
-                                        <input type="radio" name="featured" value="false" >No
+                                        <input type="radio" name="featured" value="true" >On
+                                        <input type="radio" name="featured" value="false" >Off
                                     </div>
                                 </div>
 

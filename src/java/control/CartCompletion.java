@@ -4,7 +4,10 @@
  */
 package control;
 
+import dao.DAO;
 import dao.UserDAO;
+import entity.Category;
+import entity.Product;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Vector;
 
 /**
  *
@@ -34,9 +38,9 @@ public class CartCompletion extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-
-        }
+//        try (PrintWriter out = response.getWriter()) {
+//
+//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -79,6 +83,15 @@ public class CartCompletion extends HttpServlet {
         user.setAddress(address);
         UserDAO udao = new UserDAO();
         udao.updateUserCheckOut(user);
+        DAO dao = new DAO();
+        Vector<Product> listP = new Vector<>();
+        Vector<Category> listC = dao.getAllCategory();
+        Product last = dao.getLast();
+
+        request.setAttribute("tag", 0);
+        request.setAttribute("listP", listP);
+        request.setAttribute("listC", listC);
+        request.setAttribute("p", last);
         // Kiểm tra xem số lượng sản phẩm trong giỏ hàng có vượt quá số lượng sản phẩm có sẵn trong kho không
         boolean productsAvailableInStock = checkProductsAvailabilityInStock(request); // Phương thức này trả về true nếu tất cả sản phẩm trong giỏ hàng có sẵn trong kho
 
@@ -99,6 +112,7 @@ public class CartCompletion extends HttpServlet {
             }
         }
     }
+
     // Kiểm tra số lượng sản phẩm trong giỏ hàng có vượt quá số lượng sản phẩm có sẵn trong kho không
     private boolean checkProductsAvailabilityInStock(HttpServletRequest request) {
         // Viết mã kiểm tra số lượng sản phẩm trong giỏ hàng so với số lượng sản phẩm có sẵn trong kho ở đây
@@ -106,7 +120,7 @@ public class CartCompletion extends HttpServlet {
         return true;
     }
 
-        // Giả định phương thức này kiểm tra các lỗi kỹ thuật trong quá trình hoàn thành đơn hàng
+    // Giả định phương thức này kiểm tra các lỗi kỹ thuật trong quá trình hoàn thành đơn hàng
     private boolean checkForTechnicalError() {
         // Viết mã kiểm tra lỗi kỹ thuật ở đây (ví dụ: kiểm tra cơ sở dữ liệu, kiểm tra kết nối, ...)
         // Ví dụ: giả định lỗi kỹ thuật xảy ra ngẫu nhiên

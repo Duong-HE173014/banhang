@@ -61,7 +61,7 @@
                         <div class="container mt-4">
                             <form class="needs-validation" name="frmthanhtoan" method="post"
                                   action="cartcompletion">
-                                <input type="hidden" name="kh_tendangnhap" value="dnpcuong">
+                                <input type="hidden" name="kh_tendangnhap" value="tqc">
 
                                 <div class="py-5 text-center">
                                     <i class="fa fa-credit-card fa-4x" aria-hidden="true"></i>
@@ -240,11 +240,6 @@
                                         <h4 class="mb-3">Hình thức thanh toán</h4>
 
                                         <div class="d-block my-3">
-                                            <div class="custom-control custom-radio">
-                                                <input id="httt-1" name="httt_ma" type="radio" class="custom-control-input" required=""
-                                                       value="1">
-                                                <label class="custom-control-label" for="httt-1">Tiền mặt</label>
-                                            </div>
                                             <div class="custom-control custom-radio">
                                                 <input id="httt-2" name="httt_ma" type="radio" class="custom-control-input" required=""
                                                        value="2">
