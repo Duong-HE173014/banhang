@@ -184,9 +184,10 @@ public class MKTDAO {
                         rs.getInt("UserID"),
                         rs.getInt("ProductID"),
                         rs.getInt("RatedStar"),
-                        rs.getString("UpdatedDate"),
                         rs.getString("Feedback"),
-                        rs.getString("Images"));
+                        rs.getString("Images"),
+                        rs.getDate("UpdatedDate"),
+                        rs.getString("Title"));
                 list.add(p);
             }
         } catch (Exception e) {
