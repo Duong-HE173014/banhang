@@ -21,10 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Arrays;
 
-/**
- *
- * @author Admin
- */
+
 @WebFilter(filterName = "FilterAcc", urlPatterns = {"/*"})
 public class FilterAcc implements Filter {
 

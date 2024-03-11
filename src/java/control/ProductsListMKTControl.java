@@ -5,9 +5,9 @@
 package control;
 
 import dao.DAO;
-import dao.OrderDAO;
-import entity.Order;
-import entity.User;
+import dao.ProductsDAO;
+import entity.Category;
+import entity.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,15 +15,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.ResultSet;
 import java.util.List;
+import java.util.Vector;
 
 /**
  *
- * @author Admin
+ * @author Hi
  */
-@WebServlet(name = "OrderListControl", urlPatterns = {"/salemanagerOrderListControl"})
-public class OrderListControl extends HttpServlet {
+@WebServlet(name = "ProductsListControl", urlPatterns = {"/mktproductlist"})
+public class ProductsListMKTControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,48 +34,10 @@ public class OrderListControl extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final int pageSize = 5;
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String service = request.getParameter("go");
 
-        if (service == null) {
-            service = "showManagerOrder";
-        }
-
-        if (service.equals("showManagerOrder")) {
-            String pageString = request.getParameter("page");
-            int page = pageString == null ? 1 : Integer.parseInt(pageString);
-            List<Order> orderList = new OrderDAO().getOrders(pageSize, page);
-            if (orderList.isEmpty() && page != 1) {
-                response.sendRedirect("salemanagerOrderListControl");
-                return;
-            }
-            request.setAttribute("orderList", orderList);
-            request.setAttribute("page", page);
-            request.getRequestDispatcher("OrderList.jsp").forward(request, response);
-        }
-        if (service.equals("searchOrder")) {
-            request.setCharacterEncoding("UTF-8");
-            String txt = request.getParameter("txt");
-            OrderDAO dao = new OrderDAO();
-            List<Order> list = dao.SearchOrders(txt);
-            request.setAttribute("txtS", txt);
-            request.setAttribute("orderList", list);
-            request.getRequestDispatcher("OrderList.jsp").forward(request, response);
-        }
-        if (service.equals("dateOrder")) {
-            request.setCharacterEncoding("UTF-8");
-            String startDate = request.getParameter("startDate");
-            String endDate = request.getParameter("endDate");
-            OrderDAO dao = new OrderDAO();
-            List<Order> listByDate = dao.SearchOrdersByDate(startDate, endDate);
-            
-            request.setAttribute("orderList", listByDate);
-            request.getRequestDispatcher("OrderList.jsp").forward(request, response);
-              }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -90,7 +52,36 @@ public class OrderListControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        ProductsDAO dao = new ProductsDAO();
+        DAO d = new DAO();
+ 
+        String cid = request.getParameter("cid");
+        if (cid != null) {
+            Vector<Product> list = d.getAllProductbyCategory(Integer.parseInt(cid));
+            request.setAttribute("listPL", list);
+        } else {
+            List<Product> list = dao.getProduct();
+            request.setAttribute("listPL", list);
+        }
+        
+        String indexPage = request.getParameter("index");
+        if(indexPage == null){
+            indexPage = "1";
+        }
+        int index = Integer.parseInt(indexPage);
+        int count = dao.getTotalProducts();
+        int endPage = count/10;
+        if(count % 3 != 0){
+            endPage++;
+        }
+        List<Product> l = dao.pagingProdct(index);
+        
+        List<Category> listCC = dao.getallCategory();
+        
+        request.setAttribute("listCC", listCC);
+        request.setAttribute("endP", endPage);
+        request.setAttribute("listpr", l);
+        request.getRequestDispatcher("ProductsListMKT.jsp").forward(request, response);
     }
 
     /**
