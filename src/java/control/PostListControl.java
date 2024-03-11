@@ -5,11 +5,9 @@
 
 package control;
 
-import dao.DAO;
-import entity.Category;
+import dao.PostListDAO;
 import entity.Post;
-import entity.Product;
-import entity.Slider;
+import entity.PostCategories;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,14 +15,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Vector;
+import java.util.List;
 
 /**
  *
- * @author pc
+ * @author Hi
  */
-@WebServlet(name="CategoryControl", urlPatterns={"/category"})
-public class CategoryControl extends HttpServlet {
+@WebServlet(name="PostListControl", urlPatterns={"/mktpostlist"})
+public class PostListControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -36,24 +34,7 @@ public class CategoryControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            String cateID = request.getParameter("categoryId");
-            int CateID = Integer.parseInt(cateID);
-            DAO dao = new DAO();
-            Vector<Product> list = dao.getAllProductbyCategory(CateID);
-            Vector<Category> listC = dao.getAllCategory();
-            
-            
-            Product last = dao.getLast();
-            Post lastPost = dao.getLastPost();
-            request.setAttribute("tag", CateID);
-            request.setAttribute("listP", list);
-            request.setAttribute("listC", listC);          
-            request.setAttribute("p", last);
-            request.setAttribute("lPost", lastPost);
-            request.getRequestDispatcher("ProductList.jsp").forward(request, response);
-        }
+        
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -67,7 +48,34 @@ public class CategoryControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        PostListDAO dao = new PostListDAO();
+        
+        String postcateid = request.getParameter("postcateID");
+        if (postcateid != null) {
+            List<Post> list = dao.getPostbypostCategoryID(Integer.parseInt(postcateid));
+            request.setAttribute("listPL", list);
+        } else {
+            List<Post> list = dao.getAllPost();
+            request.setAttribute("listPL", list);
+        }
+        String indexPage = request.getParameter("index1");
+        if(indexPage == null){
+            indexPage = "1";
+        }
+        int index1 = Integer.parseInt(indexPage);
+        int count = dao.getTotalPost();
+        int endPage = count/3;
+        if(count % 3 != 0){
+            endPage++;
+        }
+        List<Post> lo = dao.pagingPost(index1);
+        
+        List<PostCategories> listcc = dao.getAllPostCategories();
+        
+        request.setAttribute("listcc", listcc);
+        request.setAttribute("endPo", endPage);
+        request.setAttribute("listpo", lo);
+        request.getRequestDispatcher("PostList.jsp").forward(request, response);
     } 
 
     /** 

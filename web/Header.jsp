@@ -61,52 +61,7 @@
                                 <a class="nav-link" href="products">Products</a>
                             </li>
                             <%if(acc != null){%> 
-                            <%if("Saler".equals(userRole)){%> 
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerOrder">Manager Order</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerPro">Manager Product</a>    <%-- sản phẩm người đó bán --%>     
-                            </li>
-
-                            <%}%>
-                            <%if("Admin".equals(userRole)){%>  
-                            <li class="nav-item">
-                                <a class="nav-link" href="managerAcc">Manager Account</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="adDashboard">Dashboard</a> 
-                            </li>
-
-                            <%}%>
-                            <%if("Marketing".equals(userRole)){%>  
-                            <li class="nav-item">
-                                <a class="nav-link" href="postList">Post list</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="mktDashboard">Dashboard</a> 
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="productList">All Product</a> <%-- tất cả sản phẩm --%> 
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="customerList">Customer List</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="feedList">Feed List</a>
-                            </li>
-
-                            <%}%>
-                            <%if("SaleManager".equals(userRole)){%> 
-                            <li class="nav-item">
-                                <a class="nav-link" href="manager">Manager All Product</a> <%-- tất cả sản phẩm --%> 
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="smdashboard">Dashboard</a> 
-                            </li>
-                            <%}%>
-              
+                            
                             <li class="nav-item">
                                 <a class="nav-link" href="blog">Blog</a>
                             </li> 
@@ -118,6 +73,7 @@
                             </li> 
                             
                             <%}%>
+                            
                             <%if(acc == null){%>
                             <li class="nav-item">
                                 <a class="nav-link" href="blog">Blog</a>

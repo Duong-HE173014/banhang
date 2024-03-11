@@ -6,10 +6,6 @@
 package control;
 
 import dao.DAO;
-import entity.Category;
-import entity.Post;
-import entity.Product;
-import entity.Slider;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,14 +13,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Vector;
+import java.sql.ResultSet;
 
 /**
  *
- * @author pc
+ * @author Admin
  */
-@WebServlet(name="CategoryControl", urlPatterns={"/category"})
-public class CategoryControl extends HttpServlet {
+@WebServlet(name="MKTDetailCustomerControl", urlPatterns={"/mktDetailCustomer"})
+public class MKTDetailCustomerControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,24 +33,30 @@ public class CategoryControl extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            String cateID = request.getParameter("categoryId");
-            int CateID = Integer.parseInt(cateID);
-            DAO dao = new DAO();
-            Vector<Product> list = dao.getAllProductbyCategory(CateID);
-            Vector<Category> listC = dao.getAllCategory();
-            
-            
-            Product last = dao.getLast();
-            Post lastPost = dao.getLastPost();
-            request.setAttribute("tag", CateID);
-            request.setAttribute("listP", list);
-            request.setAttribute("listC", listC);          
-            request.setAttribute("p", last);
-            request.setAttribute("lPost", lastPost);
-            request.getRequestDispatcher("ProductList.jsp").forward(request, response);
+           String cus_id = request.getParameter("cusId");
+                    DAO dao = new DAO();
+                    ResultSet rscus = dao.getResultSet("select* from  Users where UserID=" + cus_id + "");
+                    ResultSet rsdetail = dao.getResultSet("SELECT  UserID,"
+                            + " FullName, \n "                           
+                            + "       Gender, \n"
+                            + "       Email, \n"
+                            + "       Address, \n"
+                            + "       Phone,\n"
+                            + "       Note,\n"
+                            + "       StatusID\n"
+                            + "FROM Users\n"
+                            + "WHERE Role = 'User' \n"
+                            + "      AND UserID = " + cus_id + "");
+                                       
+                    ResultSet rsHistory = dao.getResultSet("SELECT OldStatusID, NewStatusID, ChangedDate FROM CustomerStatusHistory "                         
+                            + "WHERE UserID = " + cus_id);
+
+                    request.setAttribute("rsHistory", rsHistory);
+                    request.setAttribute("cus", rscus);
+                    request.setAttribute("detail", rsdetail);
+                    request.getRequestDispatcher("MKTDetailcus.jsp").forward(request, response);
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 

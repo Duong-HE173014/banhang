@@ -5,6 +5,7 @@
 package control;
 
 import dao.DAO;
+import entity.Cart;
 import entity.Category;
 import entity.Post;
 import entity.Product;
@@ -17,6 +18,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import org.apache.tomcat.jni.SSLContext;
 
@@ -41,22 +46,38 @@ public class HomeControl extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-            //b1: get data from dao
+            List<Integer> categoryIds = new ArrayList<>();
+            categoryIds.add(1);
+            categoryIds.add(2);
+            categoryIds.add(3);
+            categoryIds.add(4);
+            categoryIds.add(5);
+            categoryIds.add(6);
+       
+
             DAO dao = new DAO();
-            Vector<Product> cart = (Vector<Product>) session.getAttribute("cart");
+            Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
             if (cart == null) {
                 cart = new Vector<>();
                 session.setAttribute("cart", cart);
                 int totalQuantity = 0;
                 session.setAttribute("totalQuantity", totalQuantity);
             }
+
+            Map<Integer, List<Product>> productMap = new HashMap<>();
+            for (Integer categoryId : categoryIds) {
+                List<Product> productList = dao.get4ProductbyCategory(categoryId);
+                productMap.put(categoryId, productList);
+            }
+
             Vector<Category> listC = dao.getAllCategory();
             Vector<Slider> listS = dao.getSlider();
             Vector<Product> list5New = dao.get5New();
             Vector<Product> list5Last = dao.get5Last();
             Post lastPost = dao.getLastPost();
+
             
-            //b2: set data to jsp
+            request.setAttribute("productMap", productMap);
             request.setAttribute("tag", 0);
             request.setAttribute("listC", listC);
             request.setAttribute("listS", listS);
@@ -64,7 +85,6 @@ public class HomeControl extends HttpServlet {
             request.setAttribute("5last", list5Last);
             request.setAttribute("lPost", lastPost);
             request.getRequestDispatcher("Home.jsp").forward(request, response);
-
         }
     }
 

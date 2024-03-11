@@ -5,6 +5,7 @@
 package control;
 
 import dao.DAO;
+import entity.Cart;
 import entity.Category;
 import entity.Product;
 import java.io.IOException;
@@ -57,13 +58,14 @@ public class ShowCartControl extends HttpServlet {
             } else {
                 if ("addInMain".equals(service) || "add".equals(service) || "addInDetail".equals(service)) {
                     String id = request.getParameter("id");
-                    Vector<Product> cart = (Vector<Product>) session.getAttribute("cart");
+                    Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
                     boolean isExist = false;
 
                     // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
-                    for (Product product : cart) {
-                        if (product.getProductID().equals(id)) {
-                            product.setQuantity(product.getQuantity() + 1);
+                    for (Cart c : cart) {
+                        if (c.getProducts().getProductID().equals(id)) {
+                            int qua = c.getQuantity() + 1;
+                            c.setQuantity(qua );
                             isExist = true;
                             break;
                         }
@@ -71,11 +73,12 @@ public class ShowCartControl extends HttpServlet {
 
                     // Nếu sản phẩm chưa tồn tại, thêm sản phẩm mới vào giỏ hàng
                     if (!isExist) {
-                        cart.add(dao.getProductByID(id));
+                        Cart ncart = new Cart(dao.getProductByID(id), 1);
+                        cart.add(ncart);
                     }
                         totalQuantity = 0;
-                    for (Product product : cart) {
-                        totalQuantity += product.getQuantity();
+                    for (Cart c : cart) {
+                        totalQuantity += c.getQuantity();
                     }
                     session.setAttribute("totalQuantity", totalQuantity);
                     session.setAttribute("cart", cart);
@@ -90,11 +93,11 @@ public class ShowCartControl extends HttpServlet {
                 }
                 if ("remove".equals(service)) {
                     String id = request.getParameter("id");
-                    Vector<Product> cart = (Vector<Product>) session.getAttribute("cart");
-                    Iterator<Product> iterator = cart.iterator();
+                    Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
+                    Iterator<Cart> iterator = cart.iterator();
                     while (iterator.hasNext()) {
-                        Product item = iterator.next();
-                        if (item.getProductID().equals(id)) {
+                        Cart item = iterator.next();
+                        if (item.getProducts().getProductID().equals(id)) {
                             if (item.getQuantity() > 0) {
                                 item.setQuantity(item.getQuantity() - 1);
                             if(item.getQuantity() ==0){
@@ -105,7 +108,7 @@ public class ShowCartControl extends HttpServlet {
                         }
                     }
                         totalQuantity = 0;
-                    for (Product product : cart) {
+                    for (Cart product : cart) {
                         totalQuantity += product.getQuantity();
                     }
                     session.setAttribute("totalQuantity", totalQuantity);                    
@@ -113,7 +116,7 @@ public class ShowCartControl extends HttpServlet {
                     response.sendRedirect("showCart");
                 }
                 if ("removeAll".equals(service)) {
-                    Vector<Product> cart = (Vector<Product>) session.getAttribute("cart");
+                    Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
                     cart.clear();
                     totalQuantity = 0;
                     session.setAttribute("totalQuantity", totalQuantity);

@@ -7,9 +7,7 @@ package control;
 
 import dao.DAO;
 import entity.Category;
-import entity.Post;
 import entity.Product;
-import entity.Slider;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -23,8 +21,8 @@ import java.util.Vector;
  *
  * @author pc
  */
-@WebServlet(name="CategoryControl", urlPatterns={"/category"})
-public class CategoryControl extends HttpServlet {
+@WebServlet(name="EditProductDetailControl", urlPatterns={"/mkteditproduct"})
+public class EditProductDetailControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,22 +35,17 @@ public class CategoryControl extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            String cateID = request.getParameter("categoryId");
-            int CateID = Integer.parseInt(cateID);
-            DAO dao = new DAO();
-            Vector<Product> list = dao.getAllProductbyCategory(CateID);
-            Vector<Category> listC = dao.getAllCategory();
-            
-            
-            Product last = dao.getLast();
-            Post lastPost = dao.getLastPost();
-            request.setAttribute("tag", CateID);
-            request.setAttribute("listP", list);
-            request.setAttribute("listC", listC);          
-            request.setAttribute("p", last);
-            request.setAttribute("lPost", lastPost);
-            request.getRequestDispatcher("ProductList.jsp").forward(request, response);
+            String pid = request.getParameter("productID");
+        DAO d = new DAO();
+        Product p = d.getProductByID(pid);
+        Vector<Category> listC = d.getAllCategory();
+        if (p != null) {
+            request.setAttribute("details", p);
+            request.setAttribute("listC", listC);
+            request.getRequestDispatcher("ProductDetailsEdit.jsp").forward(request, response);
+        } else {
+            out.println("Không tìm thấy thông tin sản phẩm");
+        }
         }
     } 
 

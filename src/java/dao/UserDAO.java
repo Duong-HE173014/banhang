@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -191,6 +192,28 @@ public class UserDAO {
         return false;
     }
 
+    public boolean updateUserCheckOut(User user) {
+        String query = "UPDATE Users SET FullName=?, email=?, Gender=?, Address=?, Phone=? WHERE UserID=?";
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getEmail());
+            if (user.isGender()) {
+                ps.setInt(3, 1);
+            } else {
+                ps.setInt(3, 0);
+            }
+            ps.setString(4, user.getAddress());
+            ps.setString(5, user.getPhone());
+            ps.setInt(6, user.getUserID());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     // Delete (Delete User)
     public boolean deleteUser(int userID) {
         String query = "DELETE FROM Users WHERE UserID=?";

@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="entity.Post" %>
+<%@page import="entity.Cart" %>
 <%@page import="java.util.Vector" %>
 <%@page import="entity.Product" %>
 <%@page import="entity.Category" %>
@@ -99,32 +100,32 @@
                     double totalprice = 0;
                     double discountprice = 0;
 
-                    Vector<Product> cart = (Vector<Product>) session.getAttribute("cart");
-                    for (Product item : cart) {
+                    Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
+                    for (Cart item : cart) {
                     %>                    
                     <div class="card w-100">
                         <div class="card-body p-4">
                             <div class="row d-flex justify-content-between align-items-center">
                                 <div class="col-md-2 col-lg-2 col-xl-2">
-                                    <img src="<%=item.getImage()%>" class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                    <img src="<%=item.getProducts().getImage()%>" class="img-fluid rounded-3" alt="Cotton T-shirt">
                                 </div>
                                 <div class="col-md-3 col-lg-3 col-xl-3">
-                                    <p class="lead fw-normal mb-2"><%=item.getTitle()%></p>
+                                    <p class="lead fw-normal mb-2"><%=item.getProducts().getTitle()%></p>
                                 </div>
                                 <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                                     <input value="<%= item.getQuantity()%>" type="number" class="form-control form-control-sm" readonly>
                                 </div>
 
                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                    <del class="mb-0"><%=item.getPrice()%>VND</del>
+                                    <del class="mb-0"><%=item.getProducts().getPrice()%>VND</del>
                                     <%
-                                    totalprice = totalprice + item.getPrice();
-                                    discountprice = discountprice + item.getSalePrice();
+                                    totalprice =  item.getProducts().getPrice() * item.getQuantity() + totalprice;
+                                    discountprice =  item.getProducts().getSalePrice() * item.getQuantity() + discountprice;
                                     %>
-                                    <h5 style="color: red" class="mb-0"><%=item.getSalePrice()%>VND</h5>
+                                    <h5 style="color: red" class="mb-0"><%=item.getProducts().getSalePrice()%>VND</h5>
                                 </div>                               
                                 <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                    <a href="showCart?go=remove&id=<%=item.getProductID()%>" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                                    <a href="showCart?go=remove&id=<%=item.getProducts().getProductID()%>" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
                                 </div>
                             </div>
                         </div> 

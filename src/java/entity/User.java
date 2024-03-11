@@ -18,21 +18,10 @@ public class User {
     private String phone;
     private String image;
     private String updatedDate;
+    private String note;
+    private int status;
 
     public User() {
-    }
-
-    public User(int userID, String fullName, String email, String password, String role, boolean gender, String address, String phone, String image, String updatedDate) {
-        this.userID = userID;
-        this.fullName = fullName;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.gender = gender;
-        this.address = address;
-        this.phone = phone;
-        this.image = image;
-        this.updatedDate = updatedDate;
     }
 
     public int getUserID() {
@@ -115,13 +104,55 @@ public class User {
         this.updatedDate = updatedDate;
     }
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+
+    public User(int userID, String fullName, String email, String password, String role, boolean gender, String address, String phone, String image, String updatedDate, String note, int status) {
+        this.userID = userID;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.gender = gender;
+        this.address = address;
+        this.phone = phone;
+        this.image = image;
+        this.updatedDate = updatedDate;
+        this.note = note;
+        this.status = status;
+    }
+
+    public User(int userID, String fullName, String email, String password, String role, boolean gender, String address, String phone, String image, String updatedDate) {
+        this.userID = userID;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.gender = gender;
+        this.address = address;
+        this.phone = phone;
+        this.image = image;
+        this.updatedDate = updatedDate;
+
+    }
+
     @Override
     public String toString() {
         return "User{" + "userID=" + userID + ", fullName=" + fullName + ", email=" + email + ", password=" + password + ", role=" + role + ", gender=" + gender + ", address=" + address + ", phone=" + phone + ", image=" + image + ", updatedDate=" + updatedDate + '}';
     }
- 
-    
-
-    
 
 }

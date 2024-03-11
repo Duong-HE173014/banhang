@@ -5,11 +5,7 @@
 
 package control;
 
-import dao.DAO;
-import entity.Category;
-import entity.Post;
-import entity.Product;
-import entity.Slider;
+import dao.ProductsDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,14 +13,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Vector;
 
 /**
  *
- * @author pc
+ * @author Hi
  */
-@WebServlet(name="CategoryControl", urlPatterns={"/category"})
-public class CategoryControl extends HttpServlet {
+@WebServlet(name="DeleteProductsControl", urlPatterns={"/mktdeleteproducts"})
+public class DeleteProductsMKTControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -36,24 +31,10 @@ public class CategoryControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            String cateID = request.getParameter("categoryId");
-            int CateID = Integer.parseInt(cateID);
-            DAO dao = new DAO();
-            Vector<Product> list = dao.getAllProductbyCategory(CateID);
-            Vector<Category> listC = dao.getAllCategory();
-            
-            
-            Product last = dao.getLast();
-            Post lastPost = dao.getLastPost();
-            request.setAttribute("tag", CateID);
-            request.setAttribute("listP", list);
-            request.setAttribute("listC", listC);          
-            request.setAttribute("p", last);
-            request.setAttribute("lPost", lastPost);
-            request.getRequestDispatcher("ProductList.jsp").forward(request, response);
-        }
+        String productID = request.getParameter("productID");
+        ProductsDAO dao = new ProductsDAO();
+        dao.deleteProducts(productID);
+        response.sendRedirect("productlistmkt");
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

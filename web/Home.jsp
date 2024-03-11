@@ -11,7 +11,8 @@
 <%@page import="entity.Category" %>
 <%@page import="entity.Slider" %>
 <%@page import="entity.User" %>
-
+<%@page import="java.util.List" %>
+<%@page import="java.util.Map" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -25,6 +26,11 @@
         <script src="js/script.js"></script>
         <!------ Include the above in your HEAD tag ---------->
         <style>
+            #carouselExample .carousel-inner .carousel-item img {
+                width: 1700px; /* Đảm bảo hình ảnh chiếm toàn bộ chiều rộng của slider */
+                height: 430px; /* Điều chỉnh chiều cao của hình ảnh trong slider */
+                object-fit: cover; /* Đảm bảo hình ảnh không bị biến dạng khi thay đổi kích thước */
+            }
             .pagination {
                 display: flex;
                 margin-left: 20px;
@@ -43,25 +49,26 @@
             }
             .pagination a:hover:not(.active) {
                 background-color: chocolate;
-        </style>
-    </head>
-    <body>
-        <%  
-            int i = 0;
-                User acc = (User) session.getAttribute("user");
-                String userRole = (String) session.getAttribute("role");
-                Post lastPost = (Post)request.getAttribute("lPost");
-                Vector<Slider> listS = (Vector<Slider>)request.getAttribute("listS");               
-                Vector<Category> listC =(Vector<Category>)request.getAttribute("listC");
-                Vector<Product> list5New =(Vector<Product>)request.getAttribute("5new");
-                Vector<Product> list5Last =(Vector<Product>)request.getAttribute("5last");
-                 int tag = (int)request.getAttribute("tag");
-        %>    
-        <jsp:include page="Header.jsp"></jsp:include>    
-
-            <!--end of menu-->
-            <div id="carouselExample" class="carousel slide mt-4">
-                <div class="carousel-inner">
+            </style>
+        </head>
+        <body>
+            <%  
+                int i = 0;
+                    User acc = (User) session.getAttribute("user");
+                    String userRole = (String) session.getAttribute("role");
+                    Post lastPost = (Post)request.getAttribute("lPost");
+                    Vector<Slider> listS = (Vector<Slider>)request.getAttribute("listS");               
+                    Vector<Category> listC =(Vector<Category>)request.getAttribute("listC");
+                    Vector<Product> list5New =(Vector<Product>)request.getAttribute("5new");
+                    Vector<Product> list5Last =(Vector<Product>)request.getAttribute("5last");
+                    int tag = (int)request.getAttribute("tag");
+                    List<Integer> categoryIds = (List<Integer>) request.getAttribute("categoryIds");                   
+                    Map<Integer, List<Product>> productMap = (Map<Integer, List<Product>>)request.getAttribute("productMap");
+            %>    
+            <jsp:include page="Header.jsp"></jsp:include>    
+                <!--end of menu-->
+                <div id="carouselExample" class="carousel slide mt-4">
+                    <div class="carousel-inner">
 
                     <% for (Slider slider : listS) { %>
                     <div class="carousel-item <%=i == 0 ? "active" : "" %>">
@@ -106,70 +113,93 @@
             <!--end of nav-->
 
             <div class="container mt-4" id="mainPage">
-                <div class="col-sm-9 m-auto"> <%-- show sản phẩm --%> 
-                    <div class="row text-center">
-                                            <% for (Product n5 : list5New){%>
-                                            <div class="col-12 col-md-6 col-lg-3">
-                                                <div class="card cardp">
-                                                    <img class="cardp-img-top" src="<%=n5.getImage()%>" alt="Card image cap">
-                                                    <div class="card-body">
-                                                        <p class="cardp-title show_txt"><a class="text-decoration-none" href="detail?pid=<%=n5.getProductID()%>" title="View Product"><%=n5.getTitle()%></a></p>
-                                                        <p class="cardp-text show_txt"><%=n5.getBriefInfo()%></p>
-                                                        <div class="row">                              
-                                                            <div class="col">
-                                                                <del class="cardp-text text-muted me-2"><%=n5.getPrice()%>VND</del> <h2 class="cardp-text" style="color: red"><%=n5.getSalePrice()%>VND</h2> 
-                                                            </div>
-                                                            <div class="col">
-                                                                <a href="showCart?go=addInMain&id=<%=n5.getProductID()%>" class="btn btn-dark btn-block">Add to cart</a>
-                                                            </div>
-                                                        </div>
+                <div class="col-sm-9 m-auto"> <%-- show sản phẩm mới--%>                   
+                    <div class="row mb-3">
+                        <div class="card-body text-dark mb-3">NEW BOOK</div>
+                        <div class="card">              
+                            <div class="row text-center">
+                                <% for (Product n5 : list5New) { %>
+                                <div class="col-12 col-md-6 col-lg-3 mb-3">
+                                    <div class="cardp">
+                                        <img class="cardp-img-top" src="<%=n5.getImage()%>" alt="Card image cap">
+                                        <div class="card-body">
+                                            <p class="cardp-title show_txt"><a class="text-decoration-none" href="detail?pid=<%=n5.getProductID()%>" title="View Product"><%=n5.getTitle()%></a></p>
+                                            <p class="cardp-text show_txt"><%=n5.getBriefInfo()%></p>
+                                            <div class="row">                              
+                                                <div class="colPN">
+                                                    <del class="cardp-text text-muted me-2"><%=n5.getPrice()%>VND</del>
+                                                    <br/>
+                                                    <h3 class="cardp-text" style="color: red"><%=n5.getSalePrice()%>VND</h3> 
+                                                    </div>
+                                                    <div class="colPN">
+                                                        <a href="showCart?go=addInMain&id=<%=n5.getProductID()%>" class="btn btn-dark btn-block">Add to cart</a>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <%}%>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-4 mb-3"> 
+                            <div class="card-header bg-dark text-white text-uppercase">NEW POST</div>
+                            <div class="card-body">                            
+                                <img class="img-fluid" src="${lPost.postThumbnail}" />
+                                <a class="nav-link" href="postDetail"> <h5 class="card-title">${lPost.pTitle}</h5></a>
+                                <p class="card-text">${lPost.postAuthor}</p>
+                                <p class="card-text">${lPost.postBriefInfo}</p>                           
+                            </div>
+                        </div>
+                    </div>
+
+                    <%-- Lặp qua danh sách category --%>
+
+                    <% for (Category cat : listC) { %>
+                    <div class="category mt-4 mb-3">
+                        <div class="d-flex mb-2">
+                            <h3><%= cat.getCategoryName() %></h3>
+                            <li class="nav-item ms-auto <%=cat.getCategoryId()==tag?"active":""%>">
+                                <a class="text-decoration-none text-uppercase fw-bold" href="category?categoryId=<%=cat.getCategoryId()%>">Xem Thêm</a>
+                            </li>
+                        </div>
+                        <div class="row text-center">                            
+                            <% List<Product> productList = productMap.get(cat.getCategoryId()); %>                           
+                            <%-- Lặp qua 4 sản phẩm đầu tiên của danh mục --%>
+                            <% int count = 0; %>
+                            <% for (Product product : productList) { %>
+                            <% if (count >= 4) break; %>
+                            <div class="col-12 col-md-6 col-lg-3 mb-3">
+                                <div class="cardp">
+                                    <img class="cardp-img-top" src="<%= product.getImage() %>" alt="Card image cap">
+                                    <div class="card-body">
+                                        <p class="cardp-title show_txt"><a class="text-decoration-none" href="detail?pid=<%= product.getProductID() %>" title="View Product"><%= product.getTitle() %></a></p>
+                                        <p class="cardp-text show_txt"><%= product.getBriefInfo() %></p>
+                                        <div class="row">
+                                            <div class="colPN">
+                                                <del class="cardp-text text-muted me-2"><%= product.getPrice() %>VND</del> 
+                                                <br>
+                                                <h2 class="cardp-text" style="color: red"><%= product.getSalePrice() %>VND</h2>
+                                            </div>
+                                            <div class="colPN">
+                                                <a href="showCart?go=addInMain&id=<%= product.getProductID() %>" class="btn btn-dark btn-block">Add to cart</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <% count++; %>
+                            <% } %>
+                            <% count = 0; // Reset count for the next category %>
                         </div>
                     </div>
-                </div>
-            </div>
+                    <% } %>
+
+                </div>  
 
 
-
-
-
-
-
-
-
-
-
-            <!-- đáy -->
-            <footer class="text-light">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-3 col-lg-4 col-xl-3">
-                            <h5>About</h5>
-                            <hr class="bg-light mb-2 mt-0 d-inline-block mx-auto w-25">
-                            <p class="mb-0">
-                                liên quan đến sản phẩm
-                            </p>
-                        </div>
-
-                        <div class="col-md-4 col-lg-3 col-xl-3">
-                            <h5>Contact</h5>
-                            <hr class="bg-light mb-2 mt-0 d-inline-block mx-auto w-25">
-                            <ul class="list-unstyled">
-                                <li><i class="fa fa-home mr-2"></i> My Shop</li>
-                                <li><i class="fa fa-envelope mr-2"></i> duongvdhe173014@gmail.com</li>
-                                <li><i class="fa fa-phone mr-2"></i> + 33 12 14 15 16</li>
-                                <li><i class="fa fa-print mr-2"></i> + 33 12 14 15 16</li>
-                            </ul>
-                        </div>             
-                    </div>
-                </div>
-            </footer>
-        </body>
-    </html>
+                <!-- đáy -->
+                <jsp:include page="Footer.jsp"></jsp:include>
+            </body>
+        </html>
