@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -98,7 +100,63 @@ public class UserDAO {
         }
         return null;
     }
-    
+
+    public List<User> getAllPagination(int pageNumber, int pageSize) {
+        List<User> userList = new ArrayList<>();
+        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY UserID) AS RowNum, * FROM Users) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
+        int startIndex = (pageNumber - 1) * pageSize + 1;
+        int endIndex = pageNumber * pageSize;
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, startIndex);
+            ps.setInt(2, endIndex);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setUserID(rs.getInt("UserID"));
+                user.setFullName(rs.getString("FullName"));
+                user.setEmail(rs.getString("Email"));
+                user.setPassword(rs.getString("Password"));
+                user.setRole(rs.getString("Role"));
+                user.setGender(rs.getBoolean("Gender"));
+                user.setAddress(rs.getString("Address"));
+                user.setPhone(rs.getString("Phone"));
+                user.setImage(rs.getString("image"));
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userList;
+    }
+
+    public List<User> getAllUsers() {
+        List<User> userList = new ArrayList<>();
+        String query = "SELECT * FROM Users";
+        try {
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+
+                user.setUserID(rs.getInt("UserID"));
+                user.setFullName(rs.getString("FullName"));
+                user.setEmail(rs.getString("Email"));
+                user.setPassword(rs.getString("Password"));
+                user.setRole(rs.getString("Role"));
+                user.setGender(rs.getBoolean("Gender"));
+                user.setAddress(rs.getString("Address"));
+                user.setPhone(rs.getString("Phone"));
+                user.setImage(rs.getString("image"));
+
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userList;
+    }
+
     public boolean updateUserImage(String email, String imagePath) {
         String query = "UPDATE Users SET Image=? WHERE Email=?";
         try {
@@ -179,18 +237,20 @@ public class UserDAO {
             ps.setString(2, password);
             rs = ps.executeQuery();
             if (rs.next()) {
-                return new User(
-                        rs.getInt("UserID"),
-                        rs.getString("FullName"),
-                        rs.getString("Email"),
-                        rs.getString("Password"),
-                        rs.getString("Role"),
-                        rs.getBoolean("Gender"),
-                        rs.getString("Address"),
-                        rs.getString("Phone"),
-                        rs.getString("image"),
-                        rs.getString("updatedDate")
-                );
+
+                User user = new User();
+
+                user.setUserID(rs.getInt("UserID"));
+                user.setFullName(rs.getString("FullName"));
+                user.setEmail(rs.getString("Email"));
+                user.setPassword(rs.getString("Password"));
+                user.setRole(rs.getString("Role"));
+                user.setGender(rs.getBoolean("Gender"));
+                user.setAddress(rs.getString("Address"));
+                user.setPhone(rs.getString("Phone"));
+                user.setImage(rs.getString("image"));
+
+                return user;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -198,8 +258,49 @@ public class UserDAO {
         return null;
     }
 
-    Vector<User> getListUserRole() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<User> getFilteredUsers(String fullName, String email, String role, String gender, int pageNumber, int pageSize) {
+        List<User> filteredUserList = new ArrayList<>();
+        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY UserID) AS RowNum FROM Users WHERE 1=1";
+        // Add filter conditions
+        if (fullName != null && !fullName.isEmpty()) {
+            query += " AND FullName LIKE '%" + fullName + "%'";
+        }
+        if (email != null && !email.isEmpty()) {
+            query += " AND Email LIKE '%" + email + "%'";
+        }
+        if (role != null && !role.isEmpty()) {
+            query += " AND Role = '" + role + "'";
+        }
+        if (gender != null && !gender.isEmpty()) {
+            query += " AND Gender = " + Boolean.parseBoolean(gender);
+        }
+        // Add pagination
+        query += ") AS SubQuery WHERE RowNum BETWEEN ? AND ?";
+        int startIndex = (pageNumber - 1) * pageSize + 1;
+        int endIndex = pageNumber * pageSize;
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, startIndex);
+            ps.setInt(2, endIndex);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setUserID(rs.getInt("UserID"));
+                user.setFullName(rs.getString("FullName"));
+                user.setEmail(rs.getString("Email"));
+                user.setPassword(rs.getString("Password"));
+                user.setRole(rs.getString("Role"));
+                user.setGender(rs.getBoolean("Gender"));
+                user.setAddress(rs.getString("Address"));
+                user.setPhone(rs.getString("Phone"));
+                user.setImage(rs.getString("image"));
+                user.setUpdatedDate(rs.getString("updatedDate"));
+                filteredUserList.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return filteredUserList;
     }
 
 }

@@ -6,12 +6,12 @@ import java.util.Date;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 /**
  *
  * @author Admin
  */
 public class Product {
+
     private String productID;
     private String title;
     private Integer categoryID; // Sử dụng Integer để cho phép giá trị null
@@ -29,7 +29,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String   productID, String title, Integer categoryID, Date updatedDate, String image, String briefInfo, String description, String attachedImages, Double price, Double salePrice, Integer quantity, Boolean featured, String status) {
+    public Product(String productID, String title, Integer categoryID, Date updatedDate, String image, String briefInfo, String description, String attachedImages, Double price, Double salePrice, Integer quantity, Boolean featured, String status) {
         this.productID = productID;
         this.title = title;
         this.categoryID = categoryID;
@@ -209,11 +209,17 @@ public class Product {
     }
 
     public String[] getAttachedImage() {
-    if (attachedImages != null && !attachedImages.isEmpty()) {
-        // Split the attachedImages string by comma and trim each URL
-        return attachedImages.split("\\s*,\\s*");
-    } else {
-        return new String[0]; // Return an empty array if attachedImages is null or empty
+        if (attachedImages != null && !attachedImages.isEmpty()) {
+            // Split the attachedImages string by comma and trim each URL
+            return attachedImages.split("\\s*,\\s*");
+        } else {
+            return new String[0]; // Return an empty array if attachedImages is null or empty
+        }
     }
-}
+
+    @Override
+    public String toString() {
+        return "Product{" + "productID=" + productID + ", title=" + title + ", categoryID=" + categoryID + ", updatedDate=" + updatedDate + ", image=" + image + ", briefInfo=" + briefInfo + ", description=" + description + ", attachedImages=" + attachedImages + ", price=" + price + ", salePrice=" + salePrice + ", quantity=" + quantity + ", featured=" + featured + ", status=" + status + '}';
+    }
+    
 }

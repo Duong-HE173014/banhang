@@ -13,7 +13,7 @@ import java.util.List;
  * @author lvhn1
  */
 public class Order {
-    
+
     private int orderId;
     private int userId;
     private Date orderDate;
@@ -23,6 +23,9 @@ public class Order {
     private String receiverEmail;
     private String receiverMobile;
     private String receiverAddress;
+    private int receiverGender;
+    private String notes;
+    private int paymentMethods;
 
     public Order() {
     }
@@ -37,6 +40,18 @@ public class Order {
         this.receiverEmail = receiverEmail;
         this.receiverMobile = receiverMobile;
         this.receiverAddress = receiverAddress;
+    }
+
+    public Order(int userId, double totalCost, String receiverFullName, String receiverEmail, String receiverMobile, String receiverAddress, int receiverGender, String notes, int paymentMethods) {
+        this.userId = userId;
+        this.totalCost = totalCost;
+        this.receiverFullName = receiverFullName;
+        this.receiverEmail = receiverEmail;
+        this.receiverMobile = receiverMobile;
+        this.receiverAddress = receiverAddress;
+        this.receiverGender = receiverGender;
+        this.notes = notes;
+        this.paymentMethods = paymentMethods;
     }
 
     public int getOrderId() {
@@ -110,18 +125,42 @@ public class Order {
     public void setReceiverAddress(String receiverAddress) {
         this.receiverAddress = receiverAddress;
     }
-    
+
     private List<OrderDetail> orderDetailList;
 
     public List<OrderDetail> getOrderDetailList() {
-        if (orderDetailList==null) orderDetailList = new OrderDetailDAO().getOrderDetailsByOrderID(orderId);
+        if (orderDetailList == null) {
+            orderDetailList = new OrderDetailDAO().getOrderDetailsByOrderID(orderId);
+        }
         return orderDetailList;
     }
 
     public void setOrderDetailList(List<OrderDetail> orderDetailList) {
         this.orderDetailList = orderDetailList;
     }
-    
-    
-    
+
+    public int getReceiverGender() {
+        return receiverGender;
+    }
+
+    public void setReceiverGender(int receiverGender) {
+        this.receiverGender = receiverGender;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public int getPaymentMethods() {
+        return paymentMethods;
+    }
+
+    public void setPaymentMethods(int paymentMethods) {
+        this.paymentMethods = paymentMethods;
+    }
+
 }

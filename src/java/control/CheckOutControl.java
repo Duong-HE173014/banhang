@@ -60,37 +60,37 @@ public class CheckOutControl extends HttpServlet {
                 String mobile = user.getPhone();
                 String address = user.getAddress();
                 // Đưa thông tin người dùng vào request để hiển thị trên trang JSP
+                request.setAttribute("uid",user.getUserID() );
                 request.setAttribute("fullName", fullName);
                 request.setAttribute("gender", gender);
                 request.setAttribute("email", email);
                 request.setAttribute("mobile", mobile);
                 request.setAttribute("address", address);
             } else {
-                
+
             }
 
             // Thực hiện xử lý dữ liệu của giỏ hàng (nếu cần)
-            if (cart != null) {
-                // Ví dụ: tính tổng tiền của giỏ hàng
-                double totalCost = 0;
-                double totalCostOfProducts = 0; // Tổng thành tiền của các sản phẩm
-                double shipFeeRate = 0.05; // Tỷ lệ phí ship (5%)
-                double shipFee = 0;
-                for (Cart product : cart) {
-                    totalCostOfProducts += product.getProducts().getSalePrice() * product.getQuantity();
-                }
-                // Tính phí ship
-                shipFee = totalCostOfProducts * shipFeeRate;
-
-                // Tổng thành tiền của giỏ hàng
-                totalCost = totalCostOfProducts + shipFee;
-                // Đưa dữ liệu của giỏ hàng vào request để chuyển đến trang JSP
-                request.setAttribute("cart", cart);
-                request.setAttribute("totalCostOfProducts", totalCostOfProducts);
-                request.setAttribute("shipFee", shipFee);
-                request.setAttribute("totalCost", totalCost);
-            }
-
+//            if (cart != null) {
+//                // Ví dụ: tính tổng tiền của giỏ hàng
+//                double totalCost = 0;
+//                double totalCostOfProducts = 0; // Tổng thành tiền của các sản phẩm
+//                double shipFeeRate = 0.05; // Tỷ lệ phí ship (5%)
+//                double shipFee = 0;
+//                for (Cart product : cart) {
+//                    totalCostOfProducts += product.getProducts().getSalePrice() * product.getQuantity();
+//                }
+//                // Tính phí ship
+//                shipFee = totalCostOfProducts * shipFeeRate;
+//
+//                // Tổng thành tiền của giỏ hàng
+//                totalCost = totalCostOfProducts + shipFee;
+//                // Đưa dữ liệu của giỏ hàng vào request để chuyển đến trang JSP
+//                request.setAttribute("cart", cart);
+//                request.setAttribute("totalCostOfProducts", totalCostOfProducts);
+//                request.setAttribute("shipFee", shipFee);
+//                request.setAttribute("totalCost", totalCost);
+//            }
             request.setAttribute("tag", 0);
             request.setAttribute("listP", listP);
             request.setAttribute("listC", listC);

@@ -2,6 +2,7 @@ package dao;
 
 import context.DBContext;
 import entity.Order;
+import entity.OrderDetail;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -130,8 +131,8 @@ public class OrderDAO {
         }
         return orders;
     }
-    
-    public List<Order> getOrders( int pageSize, int pageNumber) {
+
+    public List<Order> getOrders(int pageSize, int pageNumber) {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM Orders ORDER BY OrderDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
         try {
@@ -158,7 +159,7 @@ public class OrderDAO {
         }
         return orders;
     }
- 
+
     public List<Order> SearchOrders(String txt) {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM [Orders] "
@@ -166,7 +167,7 @@ public class OrderDAO {
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, "%" + txt + "%");
-            ps.setString(2, "%" + txt + "%");        
+            ps.setString(2, "%" + txt + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
                 Order order = new Order(
@@ -187,7 +188,7 @@ public class OrderDAO {
         }
         return orders;
     }
-    
+
     public List<Order> SearchOrdersByDate(String startDate, String endDate) {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM [Orders] "
@@ -217,28 +218,68 @@ public class OrderDAO {
         return orders;
     }
 
-    public boolean updateOrderStatus(int orderId, String newStatus) throws Exception  {
-        boolean success = false;
-        String updateOrderQuery = "UPDATE Orders SET Status = ? WHERE OrderID = ?";
-        
-        try (Connection conn = new DBContext().getConnection();
-             PreparedStatement updateOrderPs = conn.prepareStatement(updateOrderQuery)) {
-            
-            // Cập nhật trạng thái mới của đơn hàng
-            updateOrderPs.setString(1, newStatus);
-            updateOrderPs.setInt(2, orderId);
-            int rowsUpdated = updateOrderPs.executeUpdate();
-            
-            if (rowsUpdated > 0) {
-                success = true;
+    public Order createOrder(Order o) throws SQLException {
+        String query = "INSERT INTO [dbo].[Orders]\n"
+                + "           ([UserID],[OrderDate],[TotalCost],[Status]\n"
+                + "           ,[ReceiverFullName],[ReceiverEmail],[ReceiverMobile]\n"
+                + "           ,[ReceiverAddress],[ReceiverGender],[Notes],[PaymentMethods])\n"
+                + "     VALUES (?,GETDATE(),?,'Pending',?,?,?,?,?,?,?)";
+
+        try {
+            ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, o.getUserId());
+            ps.setDouble(2, o.getTotalCost());
+            ps.setString(3, o.getReceiverFullName());
+            ps.setString(4, o.getReceiverEmail());
+            ps.setString(5, o.getReceiverMobile());
+            ps.setString(6, o.getReceiverAddress());
+            ps.setInt(7, o.getReceiverGender());
+            ps.setString(8, o.getNotes());
+            ps.setInt(9, o.getPaymentMethods());
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    int orderId = rs.getInt(1);
+                    o.setOrderId(orderId); // Assuming there's a setter for OrderID in Order class
+                    return o;
+                }
             }
-            
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
-        return success;
+
+        return null;
     }
 
+    public boolean createOrderDetails(OrderDetail o) {
+        String query = "INSERT INTO [dbo].[OrderDetails]\n"
+                + "           ([OrderID],[ProductID],[Thumbnail]\n"
+                + "           ,[ProductName],[UnitPrice]\n"
+                + "           ,[Quantity],[TotalCost])\n"
+                + "     VALUES (?,?,?,?,?,?,?)";
 
+        try {
+            ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, o.getOrderId());
+            ps.setInt(2, o.getProductId());
+            ps.setString(3, o.getThumbnail());
+            ps.setString(4, o.getProductName());
+            ps.setDouble(5, o.getUnitPrice());
+            ps.setInt(6, o.getQuantity());
+            ps.setDouble(7, o.getTotalCost());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Order o = new Order(0, 0,
+                "", "",
+                "", "", 0, "", 0);
+//        Order b = createOrder(o);
+    }
 }

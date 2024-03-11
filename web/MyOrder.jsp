@@ -32,13 +32,13 @@
         </style>
     </head>
     <body>
+        <jsp:include page="Header.jsp"></jsp:include>
+            <div class="row">
 
-        <div class="row">
-
-            <div class="col-sm-3">
-                <div class="card bg-light mb-2">
-                    <div class="card-header bg-dark text-white text-uppercase"><i class="fa fa-list"></i> Categories</div>
-                    <ul class="list-group category_block">
+                <div class="col-sm-3">
+                    <div class="card bg-light mb-2">
+                        <div class="card-header bg-dark text-white text-uppercase"><i class="fa fa-list"></i> Categories</div>
+                        <ul class="list-group category_block">
                         <c:forEach var="category" items="${categoryList}">
                             <li class="list-group-item text-white>"><a class="text-decoration-none" href="category?categoryId=${category.categoryId}">${category.categoryName}</a></li>
                             </c:forEach>
@@ -80,7 +80,7 @@
                                 <td>${order.totalCost}</td>
                                 <td>
                                     <c:if test="order.orderDetailList.size>0">${order.orderDetailList.get(0).product.title}</c:if>
-                                    <br>
+                                        <br>
                                     ${order.orderDetailList.size()} Products
                                 </td>
                                 <td>${order.receiverFullName}</td>
@@ -119,7 +119,8 @@
             </div>
 
         </div>
-
+        <!-- đáy -->
+        <jsp:include page="Footer.jsp"></jsp:include>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>

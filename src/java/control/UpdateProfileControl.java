@@ -92,11 +92,13 @@ public class UpdateProfileControl extends HttpServlet {
                 session.setAttribute("user", user);
 
                 // Chuyển hướng đến trang UserProfile.jsp để hiển thị thông tin mới
-                request.getRequestDispatcher("UserProfile.jsp").forward(request, response);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("UserProfile.jsp");
+                dispatcher.forward(request, response);
             } else {
                 // Xử lý trường hợp lỗi khi cập nhật
                 request.setAttribute("error", "Error occurred while updating user profile. Please try again later.");
-                request.getRequestDispatcher("UserProfile.jsp").forward(request, response);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("userProfile.jsp");
+                dispatcher.forward(request, response);
             }
         } else {
             response.sendRedirect("login.jsp");

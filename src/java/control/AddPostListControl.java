@@ -2,12 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+
 package control;
 
-import dao.DAO;
-import dao.ProductsDAO;
-import entity.Category;
-import entity.Product;
+import dao.PostListDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,35 +13,39 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Vector;
 
 /**
  *
  * @author Hi
  */
-@WebServlet(name = "ProductsListControl", urlPatterns = {"/mktproductlist"})
-public class ProductsListMKTControl extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
+@WebServlet(name="AddPostListControl", urlPatterns={"/mktaddpostlist"})
+public class AddPostListControl extends HttpServlet {
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-    }
+        String pTitle = request.getParameter("pTitle");
+        String postAuthor = request.getParameter("postAuthor");
+        String postThumbnail = request.getParameter("postThumbnail");
+        String postBriefInfo = request.getParameter("postBriefInfo");
+        String postDetails = request.getParameter("postDetails");
+        String categoryID = request.getParameter("categoryID");
+        
+        PostListDAO dao = new PostListDAO();
+        dao.insentPost(pTitle, postAuthor, postDetails, categoryID, postThumbnail, postBriefInfo, postDetails);
+        response.sendRedirect("mktpostlist");
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    /** 
      * Handles the HTTP <code>GET</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -51,42 +53,12 @@ public class ProductsListMKTControl extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        ProductsDAO dao = new ProductsDAO();
-        DAO d = new DAO();
- 
-        String cid = request.getParameter("cid");
-        if (cid != null) {
-            Vector<Product> list = d.getAllProductbyCategory(Integer.parseInt(cid));
-            request.setAttribute("listPL", list);
-        } else {
-            List<Product> list = dao.getProduct();
-            request.setAttribute("listPL", list);
-        }
-        
-        String indexPage = request.getParameter("index");
-        if(indexPage == null){
-            indexPage = "1";
-        }
-        int index = Integer.parseInt(indexPage);
-        int count = dao.getTotalProducts();
-        int endPage = count/10;
-        if(count % 3 != 0){
-            endPage++;
-        }
-        List<Product> l = dao.pagingProdct(index);
-        
-        List<Category> listCC = dao.getallCategory();
-        
-        request.setAttribute("listCC", listCC);
-        request.setAttribute("endP", endPage);
-        request.setAttribute("listpr", l);
-        request.getRequestDispatcher("ProductsListMKT.jsp").forward(request, response);
-    }
+    throws ServletException, IOException {
+        processRequest(request, response);
+    } 
 
-    /**
+    /** 
      * Handles the HTTP <code>POST</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -94,13 +66,12 @@ public class ProductsListMKTControl extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
+    /** 
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override

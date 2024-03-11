@@ -5,7 +5,8 @@
 
 package control;
 
-import dao.PostListDAO;
+import dao.FeedBackDAO;
+import entity.FeedBack;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,13 +14,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
  * @author Hi
  */
-@WebServlet(name="AddPostControl", urlPatterns={"/mktaddpost"})
-public class AddPostControl extends HttpServlet {
+@WebServlet(name="MKTFeedBackList", urlPatterns={"/mktfeedbacklist"})
+public class MKTFeedBack extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,16 +33,11 @@ public class AddPostControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String pTitle = request.getParameter("pTitle");
-        String postAuthor = request.getParameter("postAuthor");
-        String postThumbnail = request.getParameter("postThumbnail");
-        String postBriefInfo = request.getParameter("postBriefInfo");
-        String postDetails = request.getParameter("postDetails");
-        String categoryID = request.getParameter("categoryID");
+        FeedBackDAO dao = new FeedBackDAO();
+        List<FeedBack> list = dao.getAllFeedBack();
         
-        PostListDAO dao = new PostListDAO();
-        dao.insentPost(pTitle, postAuthor, postDetails, categoryID, postThumbnail, postBriefInfo, postDetails);
-        response.sendRedirect("mktpostlist");
+        request.setAttribute("listF", list);
+        request.getRequestDispatcher("FeedbackList.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
