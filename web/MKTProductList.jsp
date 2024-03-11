@@ -1,7 +1,7 @@
 <%-- 
-    Document   : ManagerProduct
-    Created on : Dec 28, 2020, 5:19:02 PM
-    Author     : trinh
+    Document   : MKTProductList
+    Created on : Mar 11, 2024, 7:25:22 AM
+    Author     : Hi
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -32,7 +32,7 @@
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h2>Post List</h2>
+                            <h2>Product List</h2>
                         </div>
                         <div class="col-sm-6">
                             <a href="#addEmployeeModal"  class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Product</span></a>					
@@ -42,39 +42,29 @@
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>
-                                <span class="custom-checkbox">
-                                    <input type="checkbox" id="selectAll">
-                                    <label for="selectAll"></label>
-                                </span>
-                            </th>
                             <th>ID</th>
                             <th>Name</th>
                             <th>Image</th>
-                            <th>Author</th>
                             <th>Brief Info</th>
+                            <th>Price</th>
+                            <th>Sale Price</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach items="${listpo}" var="o">
                             <tr>
+                                <td>${o.productID}</td>
+                                <td>${o.title}</td>
                                 <td>
-                                    <span class="custom-checkbox">
-                                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                                        <label for="checkbox1"></label>
-                                    </span>
+                                    <img src="${o.image}">
                                 </td>
-                                <td>${o.postID}</td>
-                                <td>${o.pTitle}</td>
+                                <td>${o.briefInfo}</td>
+                                <td><del>${o.price}</del></td>
+                                <td>${o.salePrice}</td>
                                 <td>
-                                    <img src="${o.postThumbnail}">
-                                </td>
-                                <td>${o.postAuthor}</td>
-                                <td>${o.postBriefInfo}</td>
-                                <td>
-                                    <a href="mktloadpost?postID=${o.postID}"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="mktdeletepost?postID=${o.postID}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    <a href="#"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                    <a href="mktdeleteproduct?productID=${o.productID}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -84,8 +74,8 @@
                     <c:set var="page" value="${requestScope.page}" /> 
                     <div class="pagination" style="display: flex; flex-wrap: wrap;">
                         <h5 style="margin-right: 5px;">Page: </h5>
-                        <c:forEach begin="${1}" end="${endPo}" var="i">
-                            <a href="mktpostlist?index1=${i}" style="display: inline-block; margin-right: 5px; margin-bottom: 5px;"><h5>${i}</h5></a>
+                        <c:forEach begin="${1}" end="${endP}" var="i">
+                            <a href="mktproductlist?index=${i}" style="display: inline-block; margin-right: 5px; margin-bottom: 5px;"><h5>${i}</h5></a>
                                 </c:forEach>
                     </div>
                 </div>
@@ -97,36 +87,40 @@
         <div id="addEmployeeModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="mktaddpostlist" method="post">
+                    <form action="mktaddproduct" method="post">
                         <div class="modal-header">						
-                            <h4 class="modal-title">Add Post</h4>  
+                            <h4 class="modal-title">Add Product</h4>  
                         </div>
                         <div class="modal-body">					
                             <div class="form-group">
                                 <label>Name</label>
-                                <input name="pTitle" type="text" class="form-control" required>
+                                <input name="title" type="text" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Image</label>
-                                <input name="postThumbnail" type="text" class="form-control" required>
+                                <input name="image" type="text" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label>Author</label>
-                                <input name="postAuthor" type="text" class="form-control" required>
+                                <label>Price</label>
+                                <input name="price" type="text" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Sale Price</label>
+                                <input name="salePrice" type="text" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Brief Info</label>
-                                <textarea name="postBriefInfo" class="form-control" required></textarea>
+                                <textarea name="briefInfo" class="form-control" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Description</label>
-                                <textarea name="postDetails" class="form-control" required></textarea>
+                                <textarea name="description" class="form-control" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Category</label>
                                 <select name="categoryID" class="form-select" aria-label="Default select example">
-                                    <c:forEach items="${listC}" var="o">
-                                        <option value="${o.postCategoryID}">${o.postCategoryname}</option>
+                                    <c:forEach items="${listCa}" var="o">
+                                        <option value="${o.categoryId}">${o.categoryName}</option>
                                     </c:forEach>
                                 </select>
                             </div>

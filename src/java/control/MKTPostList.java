@@ -5,6 +5,9 @@
 
 package control;
 
+import dao.PostListDAO;
+import entity.Post;
+import entity.PostCategories;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,13 +15,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import static java.util.Collections.list;
+import java.util.List;
 
 /**
  *
- * @author Admin
+ * @author Hi
  */
-@WebServlet(name="PostDetailControl", urlPatterns={"/postDetail"})
-public class PostDetailControl extends HttpServlet {
+@WebServlet(name="MKTPostList", urlPatterns={"/mktpostlist"})
+public class MKTPostList extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -30,18 +35,26 @@ public class PostDetailControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet PostDetailControl</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet PostDetailControl at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        PostListDAO dao = new PostListDAO();
+        
+        List<PostCategories> listc = dao.getAllPostCategories();
+        
+        String indexPage = request.getParameter("index1");
+        if(indexPage == null){
+            indexPage = "1";
         }
+        int index1 = Integer.parseInt(indexPage);
+        int count = dao.getTotalPost();
+        int endPage = count/3;
+        if(count % 3 != 0){
+            endPage++;
+        }
+        List<Post> lo = dao.pagingPost(index1);
+        
+        request.setAttribute("listC", listc);
+        request.setAttribute("endPo", endPage);
+        request.setAttribute("listpo", lo);
+        request.getRequestDispatcher("PostList.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
