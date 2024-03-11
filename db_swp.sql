@@ -913,4 +913,7 @@ Use SWP_Online_Shop
 
 Select * from Products
 
+select * from [Orders]
+select * from [OrderDetails]
+
 

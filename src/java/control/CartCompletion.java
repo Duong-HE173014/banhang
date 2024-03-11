@@ -21,6 +21,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -92,6 +96,11 @@ public class CartCompletion extends HttpServlet {
             String notes = request.getParameter("notes");
             String paymentS = request.getParameter("httt_ma");
             Integer payment = Integer.parseInt(paymentS);
+            
+            sendEmail(email, "The Completion of your order", "Your Full Name: " + fullName
+                    + "\nYour email: " + email + "\nYour gender: " + genderS + "\nYour address: " + address
+                    + "\nYour phonenumber: " + mobile + "\nTotal of your bill: " + totalS
+                    + "\nYour note: " + notes + "\nPayment method: " + paymentS);
 
             Order O = new Order(uid, total, fullName, email, mobile, address, gender, notes, payment);
             OrderDAO odao = new OrderDAO();
@@ -138,6 +147,7 @@ public class CartCompletion extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(CartCompletion.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     // Kiểm tra số lượng sản phẩm trong giỏ hàng có vượt quá số lượng sản phẩm có sẵn trong kho không
@@ -152,6 +162,49 @@ public class CartCompletion extends HttpServlet {
         // Viết mã kiểm tra lỗi kỹ thuật ở đây (ví dụ: kiểm tra cơ sở dữ liệu, kiểm tra kết nối, ...)
         // Ví dụ: giả định lỗi kỹ thuật xảy ra ngẫu nhiên
         return Math.random() < 0.5; // 50% cơ hội để có lỗi kỹ thuật
+    }
+
+    public boolean sendEmail(String to, String subject, String text) {
+        // URL to which the request will be sent
+        String url = "https://mail-sender-service.vercel.app/send-email";
+
+        try {
+            // Create a URL object
+            URL apiUrl = new URL(url);
+
+            // Open a connection to the URL
+            HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
+
+            // Set the request method
+            connection.setRequestMethod("POST");
+
+            // Enable input/output streams
+            connection.setDoOutput(true);
+
+            // Set the content type
+            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+            // Prepare the request payload
+            String payload = "{\"to\":\"" + to + "\",\"subject\":\"" + subject + "\",\"text\":\"" + text + "\"}";
+
+            // Write the payload to the output stream
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = payload.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            // Get the response code
+            int responseCode = connection.getResponseCode();
+
+            // Close the connection
+            connection.disconnect();
+
+            return responseCode == 200;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
