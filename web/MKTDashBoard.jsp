@@ -87,21 +87,7 @@
                                 </div>
                             </div>
 
-                        </div>
-
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                New Customers Trend
-                            </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-
-                                        </tbody>
-                                </table>
-                            </div>
-                        </div>
+                        </div>   
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
