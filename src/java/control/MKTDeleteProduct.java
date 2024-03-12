@@ -18,8 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Hi
  */
-@WebServlet(name="DeleteProductsControl", urlPatterns={"/mktdeleteproducts"})
-public class DeleteProductsMKTControl extends HttpServlet {
+@WebServlet(name="MKTDeleteProduct", urlPatterns={"/mktdeleteproduct"})
+public class MKTDeleteProduct extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -33,8 +33,8 @@ public class DeleteProductsMKTControl extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String productID = request.getParameter("productID");
         ProductsDAO dao = new ProductsDAO();
-        dao.deleteProducts(productID);
-        response.sendRedirect("productlistmkt");
+        dao.deleteProduct(productID);
+        response.sendRedirect("mktproductlist");
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

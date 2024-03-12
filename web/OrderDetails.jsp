@@ -31,6 +31,7 @@
         </style>
     </head>
     <body>
+        <jsp:include page="Header.jsp"></jsp:include>
 
         <div class="row">
 
@@ -49,8 +50,8 @@
                         <img class="img-fluid" src="${product.image}" />
                         <a class="nav-link" href="detail?pid=${product.productID}"> <h5 class="card-title">${product.title}</h5></a>
                         <p class="card-text">${product.briefInfo}</p>
-                        <del class="bloc_left_price">${product.price}</del>
-                        <h3 class="bloc_left_price">${product.salePrice}</h3>
+                        <del class="bloc_left_price">${product.price}VND</del>
+                        <h3 class="bloc_left_price">${product.salePrice}VND</h3>
                     </div>
                 </div>
             </div>
@@ -65,7 +66,7 @@
                     <div class="col-md-6">
                         <p><strong>Order ID:</strong> ${order.orderId}</p>
                         <p><strong>Order Date:</strong> <fmt:formatDate value="${order.orderDate}" pattern="yyyy-MM-dd HH:mm:ss"/></p>
-                        <p><strong>Total Cost:</strong> ${order.totalCost}</p>
+                        <p><strong>Total Cost:</strong> ${order.totalCost}VND</p>
                         <p><strong>Status:</strong> ${order.status}</p>
                     </div>
                     <div class="col-md-6">
@@ -96,9 +97,9 @@
                                 <td>${orderDetail.orderDetailId}</td>
                                 <td>${orderDetail.productId}</td>
                                 <td>${orderDetail.product.title}</td>
-                                <td>${orderDetail.unitPrice}</td>
+                                <td>${orderDetail.unitPrice}VND</td>
                                 <td>${orderDetail.quantity}</td>
-                                <td>${orderDetail.totalCost}</td>
+                                <td>${orderDetail.totalCost}VND</td>
                                 <td>
                                     <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#productModal${orderDetail.productId}">
                                         View
@@ -125,14 +126,14 @@
                                         </div>
                                         <p><strong>Title:</strong> ${orderDetail.product.title}</p>
                                         <p><strong>Brief Info:</strong> ${orderDetail.product.briefInfo}</p>
-                                        <p><strong>Price:</strong> ${orderDetail.product.price}</p>
+                                        <p><strong>Price:</strong> ${orderDetail.product.price}VND</p>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
                         </c:forEach>
                         </tbody>
                 </table>
@@ -153,7 +154,8 @@
             </div>
 
         </div>
-
+        <!-- đáy -->
+        <jsp:include page="Footer.jsp"></jsp:include>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>

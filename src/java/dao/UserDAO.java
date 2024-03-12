@@ -74,7 +74,7 @@ public class UserDAO {
         }
         return null;
     }
-
+    
     public User getUserByFullname(String fullname) {
         String query = "SELECT * FROM Users WHERE FullName = ?";
         try {
@@ -167,8 +167,8 @@ public class UserDAO {
             int result = ps.executeUpdate();
             return result > 0;
         } catch (Exception e) {
-
-        }
+            
+        } 
         return false;
     }
 

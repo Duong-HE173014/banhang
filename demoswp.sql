@@ -1,4 +1,4 @@
-﻿
+
 /****** Object:  Database [SWP_Online_Shop]    Script Date: 1/16/2024 3:55:04 PM ******/
 CREATE DATABASE [SWP_Online_Shop]
 GO
@@ -161,6 +161,9 @@ CREATE TABLE [dbo].[Orders](
 	[ReceiverEmail] [nvarchar](255) NULL,
 	[ReceiverMobile] [nvarchar](20) NULL,
 	[ReceiverAddress] [nvarchar](max) NULL,
+	[ReceiverGender] [int] NULL,
+	[Notes] [nvarchar](max) NULL,
+	[PaymentMethods] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[OrderID] ASC
@@ -644,6 +647,10 @@ Cuốn sách "Di Sản Hồ Chí Minh - 52 Câu Chuyện Dưới Cờ Về Chủ
 GO
 SET IDENTITY_INSERT [dbo].[Products] OFF
 GO
+UPDATE Products
+SET Quantity = 20
+WHERE ProductID BETWEEN 1 AND 83;
+GO
 SET IDENTITY_INSERT [dbo].[Settings] ON 
 GO
 INSERT [dbo].[Settings] ([SettingID], [Type], [Value], [Order]) VALUES (1, N'SiteTitle', N'My Online Store', 1)
@@ -668,6 +675,15 @@ INSERT [dbo].[Users] ([UserID], [FullName],UpdatedDate, [Email], [Password], [Ro
 GO
 INSERT INTO [dbo].[Users] ([UserID], [FullName], [UpdatedDate], [Email], [Password], [Role], [Gender], [Address], [Phone], [Note], [StatusID])
 VALUES (6, N'Vuong Dai Duong', GETDATE(), N'duongtata@gmail.com', N'duong123456', N'User', 1, N'123 Marketing Street', N'0123456789', N'Note for Vuong Dai Duong', 1);
+INSERT INTO [dbo].[Users] ([UserID], [FullName], [UpdatedDate], [Email], [Password], [Role], [Gender], [Address], [Phone], [Note], [StatusID])
+VALUES 
+    
+    (7, N'Another Name', GETDATE(), N'anotheremail@example.com', N'anotherpassword', N'Admin', 0, N'456 Admin Street', N'9876543210', N'Note for Another Name', 1),
+    (8, N'Third Name', GETDATE(), N'thirdemail@example.com', N'thirdpassword', N'User', 1, N'789 User Street', N'1234567890', N'Note for Third Name', 1),
+    (9, N'Fourth Name', GETDATE(), N'fourthemail@example.com', N'fourthpassword', N'User', 0, N'1011 User Street', N'0987654321', N'Note for Fourth Name', 1),
+    (10, N'Fifth Name', GETDATE(), N'fifthemail@example.com', N'fifthpassword', N'User', 1, N'1213 User Street', N'1357924680', N'Note for Fifth Name', 1),
+    (11, N'Sixth Name', GETDATE(), N'sixthemail@example.com', N'sixthpassword', N'Admin', 0, N'1415 Admin Street', N'8642079135', N'Note for Sixth Name', 1);
+
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 ALTER TABLE [dbo].[Cart]  WITH CHECK ADD FOREIGN KEY([ProductID])
@@ -922,6 +938,12 @@ INNER JOIN
     Products p ON od.ProductID = p.ProductID
 WHERE 
 
-    od.OrderID = '1';
-	UPDATE Users SET StatusID = ? WHERE UserID = ?"
 
+
+SELECT * FROM [Orders]
+WHERE OrderDate >= '2024-01-01' AND OrderDate <= '2024-01-31';
+
+Select * from Products
+
+SELECT * FROM [Orders]
+WHERE [OrderID] LIKE '2' OR [ReceiverFullName] LIKE '%ABC%';

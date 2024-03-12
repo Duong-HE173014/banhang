@@ -5,6 +5,7 @@
 
 package control;
 
+import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,8 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Admin
  */
-@WebServlet(name="PostDetailControl", urlPatterns={"/postDetail"})
-public class PostDetailControl extends HttpServlet {
+@WebServlet(name="SaleManagerDash", urlPatterns={"/salemanagerDash"})
+public class SaleManagerDash extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -30,18 +31,7 @@ public class PostDetailControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet PostDetailControl</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet PostDetailControl at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -56,6 +46,18 @@ public class PostDetailControl extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         processRequest(request, response);
+        OrderDAO dao = new OrderDAO();
+        int totalPending = dao.getNumberOrderByStatus("Pending");
+        int totalShipped = dao.getNumberOrderByStatus("Shipped");
+        int totalDelivered = dao.getNumberOrderByStatus("Delivered");
+        
+        request.setAttribute("tpending", totalPending);
+        request.setAttribute("tshipped", totalShipped);
+        request.setAttribute("tdelivered", totalDelivered);
+        
+        
+        request.getRequestDispatcher("SaleManagerDash.jsp").forward(request, response);
+        
     } 
 
     /** 

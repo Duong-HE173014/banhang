@@ -55,7 +55,7 @@
                                     <input name="password" type="text" class="form-control" value="${user.password}" >
                                 </div>
                                 <div class="modal-footer">
-                                    <input type="submit" class="btn btn-success" data-toggle="modal" value="updateprofile">
+                                    <input type="submit" class="btn btn-success" data-toggle="modal" value="userprofile">
                                 </div>
                             </div>
                         </div>

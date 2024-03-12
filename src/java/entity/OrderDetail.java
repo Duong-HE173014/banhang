@@ -32,6 +32,18 @@ public class OrderDetail {
         this.totalCost = totalCost;
     }
 
+    public OrderDetail(int orderId, int productId, String thumbnail, String productName, double unitPrice, int quantity, double totalCost) {
+        this.orderId = orderId;
+        this.productId = productId;
+        this.thumbnail = thumbnail;
+        this.productName = productName;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+        this.totalCost = totalCost;
+    }
+    
+    
+    
     public int getOrderDetailId() {
         return orderDetailId;
     }

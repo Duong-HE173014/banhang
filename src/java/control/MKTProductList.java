@@ -5,7 +5,9 @@
 
 package control;
 
-import dao.PostListDAO;
+import dao.ProductsDAO;
+import entity.Category;
+import entity.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,13 +15,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
  * @author Hi
  */
-@WebServlet(name="AddPostControl", urlPatterns={"/mktaddpost"})
-public class AddPostControl extends HttpServlet {
+@WebServlet(name="MKTProductList", urlPatterns={"/mktproductlist"})
+public class MKTProductList extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,16 +34,26 @@ public class AddPostControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String pTitle = request.getParameter("pTitle");
-        String postAuthor = request.getParameter("postAuthor");
-        String postThumbnail = request.getParameter("postThumbnail");
-        String postBriefInfo = request.getParameter("postBriefInfo");
-        String postDetails = request.getParameter("postDetails");
-        String categoryID = request.getParameter("categoryID");
+        ProductsDAO dao = new ProductsDAO();
         
-        PostListDAO dao = new PostListDAO();
-        dao.insentPost(pTitle, postAuthor, postDetails, categoryID, postThumbnail, postBriefInfo, postDetails);
-        response.sendRedirect("mktpostlist");
+        List<Category> listCa = dao.getAllCategory();
+        
+        String indexPage = request.getParameter("index");
+        if(indexPage == null){
+            indexPage = "1";
+        }
+        int index = Integer.parseInt(indexPage);
+        int count = dao.getTotalProduct();
+        int endPage = count/10;
+        if(count % 10 != 0){
+            endPage++;
+        }
+        List<Product> listp = dao.pacgingProduct(index);
+        
+        request.setAttribute("listCa", listCa);
+        request.setAttribute("endP", endPage);
+        request.setAttribute("listpo", listp);
+        request.getRequestDispatcher("MKTProductList.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

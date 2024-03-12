@@ -118,21 +118,21 @@
                     <span class="tooltip">Customer List</span>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="mktpostlist">
                         <i class='bx bxs-parking'></i>
                         <span class="links_name">Post list</span>
                     </a>
                     <span class="tooltip">Post list</span>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="mktproductlist">
                         <i class='bx bx-cart-alt' ></i>
                         <span class="links_name">Product</span>
                     </a>
                     <span class="tooltip">Manager Product</span>
                 </li>
                 <li>
-                    <a href="feedList">
+                    <a href="mktfeedbacklist">
                         <i class='bx bx-heart' ></i>
                         <span class="links_name">Feed List</span>
                     </a>
@@ -141,7 +141,7 @@
                 <%}%>
                 <%if("SaleManager".equals(userRole)){%> 
                 <li>
-                    <a href="#">
+                    <a href="salemanagerDash">
                         <i class='bx bx-grid-alt'></i>
                         <span class="links_name">Dashboard</span>
                     </a>
@@ -154,8 +154,14 @@
                     </a>
                     <span class="tooltip">User</span>
                 </li>
+                <li>
+                    <a href="salemanagerOrderListControl">
+                        <i class='bx bxl-blogger'></i>
+                        <span class="links_name">Order List</span>
+                    </a>
+                    <span class="tooltip">Order List</span>
+                </li>
                 <%}%>
-
                 <li class="profile">     
                     <a  href="logout">
                         <i id="log_out" class='bx bx-log-out'></i>

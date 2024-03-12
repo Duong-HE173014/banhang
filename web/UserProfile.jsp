@@ -17,14 +17,14 @@
 
     </head>
     <body>
-        <jsp:include page="Header.jsp"></jsp:include>
-        <div class="container ">
-            <div class="row">
-                <div class="col-md-4 ">
-                    <form action="userprofile" method="post">   
-                        <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                            <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
-                            <span class="font-weight-bold">${user.fullName} </span>
+        
+            <div class="container ">
+                <div class="row">
+                    <div class="col-md-4 ">
+                        <form action="userprofile" method="post">   
+                            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                                <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                                <span class="font-weight-bold">${user.fullName} </span>
                             <span class="text-black-50">${user.email}</span></div>
                     </form>
                 </div>
@@ -36,7 +36,7 @@
                             </div>
 
                             <div class="row mt-2">
-                                <div class="col-md-6"><label class="labels">Full Name:</label>
+                                <div class="col-md-6"><label class="labels">Full Name: </label>
                                     <input name="fullname"  type="text" class="form-control" value="${user.fullName}" readonly>
                                 </div>
                                 <div class="col-md-6"><label class="labels">Gender</label>

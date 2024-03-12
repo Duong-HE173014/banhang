@@ -4,94 +4,104 @@
  */
 package entity;
 
+import java.util.Date;
+
 /**
  *
  * @author Hi
  */
 public class FeedBack {
-    private int FeedbackID;
-    private int UserID;
-    private int ProductID;
-    private int RatedStar;
-    private String Feedback;
-    private String Images;
-    private String UpdatedDate;
+    private int fFeedbackID;
+    private int fUserID;
+    private int fProductID;
+    private int fRatedStar;
+    private String fFeedback;
+    private String fImages;
+    private Date fUpdatedDate;
+    private String fTitle;
 
     public FeedBack() {
     }
 
-    public FeedBack(int FeedbackID, int UserID, int ProductID, int RatedStar, String Feedback, String Images, String UpdatedDate) {
-        this.FeedbackID = FeedbackID;
-        this.UserID = UserID;
-        this.ProductID = ProductID;
-        this.RatedStar = RatedStar;
-        this.Feedback = Feedback;
-        this.Images = Images;
-        this.UpdatedDate = UpdatedDate;
+    public FeedBack(int fFeedbackID, int fUserID, int fProductID, int fRatedStar, String fFeedback, String fImages, Date fUpdatedDate, String fTitle) {
+        this.fFeedbackID = fFeedbackID;
+        this.fUserID = fUserID;
+        this.fProductID = fProductID;
+        this.fRatedStar = fRatedStar;
+        this.fFeedback = fFeedback;
+        this.fImages = fImages;
+        this.fUpdatedDate = fUpdatedDate;
+        this.fTitle = fTitle;
     }
 
-    public int getFeedbackID() {
-        return FeedbackID;
+    public int getfFeedbackID() {
+        return fFeedbackID;
     }
 
-    public void setFeedbackID(int FeedbackID) {
-        this.FeedbackID = FeedbackID;
+    public void setfFeedbackID(int fFeedbackID) {
+        this.fFeedbackID = fFeedbackID;
     }
 
-    public int getUserID() {
-        return UserID;
+    public int getfUserID() {
+        return fUserID;
     }
 
-    public void setUserID(int UserID) {
-        this.UserID = UserID;
+    public void setfUserID(int fUserID) {
+        this.fUserID = fUserID;
     }
 
-    public int getProductID() {
-        return ProductID;
+    public int getfProductID() {
+        return fProductID;
     }
 
-    public void setProductID(int ProductID) {
-        this.ProductID = ProductID;
+    public void setfProductID(int fProductID) {
+        this.fProductID = fProductID;
     }
 
-    public int getRatedStar() {
-        return RatedStar;
+    public int getfRatedStar() {
+        return fRatedStar;
     }
 
-    public void setRatedStar(int RatedStar) {
-        this.RatedStar = RatedStar;
+    public void setfRatedStar(int fRatedStar) {
+        this.fRatedStar = fRatedStar;
     }
 
-    public String getFeedback() {
-        return Feedback;
+    public String getfFeedback() {
+        return fFeedback;
     }
 
-    public void setFeedback(String Feedback) {
-        this.Feedback = Feedback;
+    public void setfFeedback(String fFeedback) {
+        this.fFeedback = fFeedback;
     }
 
-    public String getImages() {
-        return Images;
+    public String getfImages() {
+        return fImages;
     }
 
-    public void setImages(String Images) {
-        this.Images = Images;
+    public void setfImages(String fImages) {
+        this.fImages = fImages;
     }
 
-    public String getUpdatedDate() {
-        return UpdatedDate;
+    public Date getfUpdatedDate() {
+        return fUpdatedDate;
     }
 
-    public void setUpdatedDate(String UpdatedDate) {
-        this.UpdatedDate = UpdatedDate;
+    public void setfUpdatedDate(Date fUpdatedDate) {
+        this.fUpdatedDate = fUpdatedDate;
+    }
+
+    public String getfTitle() {
+        return fTitle;
+    }
+
+    public void setfTitle(String fTitle) {
+        this.fTitle = fTitle;
     }
 
     @Override
     public String toString() {
-        return "FeedBack{" + "FeedbackID=" + FeedbackID + ", UserID=" + UserID + ", ProductID=" + ProductID + ", RatedStar=" + RatedStar + ", Feedback=" + Feedback + ", Images=" + Images + ", UpdatedDate=" + UpdatedDate + '}';
+        return "FeedBack{" + "fFeedbackID=" + fFeedbackID + ", fUserID=" + fUserID + ", fProductID=" + fProductID + ", fRatedStar=" + fRatedStar + ", fFeedback=" + fFeedback + ", fImages=" + fImages + ", fUpdatedDate=" + fUpdatedDate + ", fTitle=" + fTitle + '}';
     }
 
-    
-    
     
 }

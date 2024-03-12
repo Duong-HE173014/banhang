@@ -76,8 +76,8 @@
                             <img class="img-fluid" src="${p.image}" />
                             <a class="nav-link" href="detail?pid=${p.productID}"> <h5 class="card-title">${p.title}</h5></a>
                             <p class="card-text">${p.briefInfo}</p>
-                            <del class="bloc_left_price">${p.price}</del>
-                            <h3 class="bloc_left_price">${p.salePrice}</h3>
+                            <del class="bloc_left_price">${p.price}VND</del>
+                            <h3 class="bloc_left_price">${p.salePrice}VND</h3>
                         </div>
                     </div>
                 </div>
@@ -119,8 +119,9 @@
                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                                     <del class="mb-0"><%=item.getProducts().getPrice()%>VND</del>
                                     <%
-                                    totalprice =  item.getProducts().getPrice() * item.getQuantity() + totalprice;
+                                    
                                     discountprice =  item.getProducts().getSalePrice() * item.getQuantity() + discountprice;
+                                    totalprice =  item.getProducts().getSalePrice() * item.getQuantity() + totalprice + discountprice * 5/100;
                                     %>
                                     <h5 style="color: red" class="mb-0"><%=item.getProducts().getSalePrice()%>VND</h5>
                                 </div>                               
@@ -145,17 +146,17 @@
                                             <tbody>
                                                 <tr>
                                                     <td>Price Shipping 5%</td>
-                                                    <td align="right"><%= discountprice * 5 /100 %></td>
+                                                    <td align="right"><%= discountprice * 5 /100 %>VND</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Price Total</td>
-                                                    <td align="right"><%= totalprice %></td>
+                                                    <td>Price Discount</td>
+                                                    <td align="right"><%= discountprice %>VND</td>
                                                 </tr>
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <td>Price Discount</td>
-                                                    <td align="right"><%= discountprice %></td>
+                                                    <td>Price Total</td>
+                                                    <td align="right"><%= totalprice %>VND</td>
                                                 </tr>
                                             </tfoot>
                                         </table>

@@ -81,7 +81,7 @@ public class LoginControl extends HttpServlet {
             if ("Admin".equals(role)) {
                 response.sendRedirect("admin"); 
             } else if ("SaleManager".equals(role)) {
-                response.sendRedirect("salemanagerOrderListControl"); 
+                response.sendRedirect("salemanagerDash"); 
             } else if("Saler".equals(role)){
                 response.sendRedirect("salemanagerOrderListControl"); 
             } else if("Marketing".equals(role)){
