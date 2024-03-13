@@ -1,4 +1,4 @@
-﻿
+
 /****** Object:  Database [SWP_Online_Shop]    Script Date: 1/16/2024 3:55:04 PM ******/
 CREATE DATABASE [SWP_Online_Shop]
 GO
@@ -161,6 +161,10 @@ CREATE TABLE [dbo].[Orders](
 	[ReceiverEmail] [nvarchar](255) NULL,
 	[ReceiverMobile] [nvarchar](20) NULL,
 	[ReceiverAddress] [nvarchar](max) NULL,
+	[ReceiverGender] [int] NULL,
+	[Notes] [nvarchar](max) NULL,
+	[PaymentMethods] [int] NULL,
+	[NameUpdater][nvarchar](255) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[OrderID] ASC
@@ -299,17 +303,7 @@ CREATE TABLE CustomerStatusHistory (
     FOREIGN KEY (OldStatusID) REFERENCES Status(StatusID),
     FOREIGN KEY (NewStatusID) REFERENCES Status(StatusID)
 );
-GO
-
-SET IDENTITY_INSERT [dbo].[Cart] ON 
-GO
-INSERT [dbo].[Cart] ([CartID], [UserID], [ProductID], [Quantity]) VALUES (1, 1, 1, 2)
-GO
-INSERT [dbo].[Cart] ([CartID], [UserID], [ProductID], [Quantity]) VALUES (2, 2, 2, 1)
-GO
-INSERT [dbo].[Cart] ([CartID], [UserID], [ProductID], [Quantity]) VALUES (3, 3, 3, 3)
-GO
-SET IDENTITY_INSERT [dbo].[Cart] OFF
+--Insert:
 GO
 SET IDENTITY_INSERT [dbo].[Categories] ON 
 GO
@@ -644,6 +638,10 @@ Cuốn sách "Di Sản Hồ Chí Minh - 52 Câu Chuyện Dưới Cờ Về Chủ
 GO
 SET IDENTITY_INSERT [dbo].[Products] OFF
 GO
+UPDATE Products
+SET Quantity = 20
+WHERE ProductID BETWEEN 1 AND 83;
+GO
 SET IDENTITY_INSERT [dbo].[Settings] ON 
 GO
 INSERT [dbo].[Settings] ([SettingID], [Type], [Value], [Order]) VALUES (1, N'SiteTitle', N'My Online Store', 1)
@@ -668,6 +666,15 @@ INSERT [dbo].[Users] ([UserID], [FullName],UpdatedDate, [Email], [Password], [Ro
 GO
 INSERT INTO [dbo].[Users] ([UserID], [FullName], [UpdatedDate], [Email], [Password], [Role], [Gender], [Address], [Phone], [Note], [StatusID])
 VALUES (6, N'Vuong Dai Duong', GETDATE(), N'duongtata@gmail.com', N'duong123456', N'User', 1, N'123 Marketing Street', N'0123456789', N'Note for Vuong Dai Duong', 1);
+INSERT INTO [dbo].[Users] ([UserID], [FullName], [UpdatedDate], [Email], [Password], [Role], [Gender], [Address], [Phone], [Note], [StatusID])
+VALUES 
+    
+    (7, N'Another Name', GETDATE(), N'anotheremail@example.com', N'anotherpassword', N'Admin', 0, N'456 Admin Street', N'9876543210', N'Note for Another Name', 1),
+    (8, N'Third Name', GETDATE(), N'thirdemail@example.com', N'thirdpassword', N'User', 1, N'789 User Street', N'1234567890', N'Note for Third Name', 1),
+    (9, N'Fourth Name', GETDATE(), N'fourthemail@example.com', N'fourthpassword', N'User', 0, N'1011 User Street', N'0987654321', N'Note for Fourth Name', 1),
+    (10, N'Fifth Name', GETDATE(), N'fifthemail@example.com', N'fifthpassword', N'User', 1, N'1213 User Street', N'1357924680', N'Note for Fifth Name', 1),
+    (11, N'Sixth Name', GETDATE(), N'sixthemail@example.com', N'sixthpassword', N'Admin', 0, N'1415 Admin Street', N'8642079135', N'Note for Sixth Name', 1);
+
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 ALTER TABLE [dbo].[Cart]  WITH CHECK ADD FOREIGN KEY([ProductID])
@@ -899,29 +906,4 @@ INSERT INTO [SWP_Online_Shop].[dbo].[Sliders] ([Title], [Image], [Backlink])
 VALUES
 ('Slider 1', 'https://bookbuy.vn/Res/Images/Album/ffd62e0e-02fb-4e7a-96fe-42ed8966c89b.png?w=920&h=420&mode=crop', 'https://bookbuy.vn/Res/Images/Album/ffd62e0e-02fb-4e7a-96fe-42ed8966c89b.png?w=920&h=420&mode=crop'),
 ('Slider 2', 'https://bookbuy.vn/Res/Images/Album/efefae23-5cb2-42e9-8d4f-59ca99d500af.png?w=920&h=420&mode=crop', 'https://bookbuy.vn/Res/Images/Album/efefae23-5cb2-42e9-8d4f-59ca99d500af.png?w=920&h=420&mode=crop');
-
-Use SWP_Online_Shop
-
-SELECT 
-    o.OrderID,
-    o.OrderDate,
-    o.TotalCost,
-    o.Status,
-    o.ReceiverFullName,
-    o.ReceiverEmail,
-    o.ReceiverMobile,
-    o.ReceiverAddress,
-    od.ProductID,
-    p.Title AS ProductTitle,
-    od.Quantity
-FROM 
-    Orders o
-INNER JOIN 
-    OrderDetails od ON o.OrderID = od.OrderID
-INNER JOIN 
-    Products p ON od.ProductID = p.ProductID
-WHERE 
-
-    od.OrderID = '1';
-	UPDATE Users SET StatusID = ? WHERE UserID = ?"
 
