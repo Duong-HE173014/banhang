@@ -62,7 +62,7 @@ public class SaleManageEditOrder extends HttpServlet {
                         + "INNER JOIN \n"
                         + "    Products p ON od.ProductID = p.ProductID\n"
                         + "WHERE \n" 
-               + "    o.UserID = " + orderID + "");
+               + "    o.OrderID = " + orderID + "");
                                               
                 
 
