@@ -17,6 +17,7 @@
 
     </head>
     <body>
+        <jsp:include page="Header.jsp"></jsp:include>
         
             <div class="container ">
                 <div class="row">
@@ -54,7 +55,7 @@
                                 <div class="col-md-12"><label class="labels">Password</label>
                                     <input name="password" type="text" class="form-control" value="${user.password}" readonly>
                                 </div>
-                                <a href="uploadprofile?userID=${user.userID}"  class="btn btn-success" data-toggle="modal"><span>Update Profile</span></a>
+                                <a href="uploadprofile?userID=${user.userID}"  class="btn btn-dark mt-3" data-toggle="modal"><span>Update Profile</span></a>
                             </div>
                         </div>
                     </form>

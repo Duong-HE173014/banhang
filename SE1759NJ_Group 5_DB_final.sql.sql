@@ -164,6 +164,7 @@ CREATE TABLE [dbo].[Orders](
 	[ReceiverGender] [int] NULL,
 	[Notes] [nvarchar](max) NULL,
 	[PaymentMethods] [int] NULL,
+	[IDUpdater][int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[OrderID] ASC
@@ -289,6 +290,7 @@ CREATE TABLE [dbo].[Users](
     [Phone] [nvarchar](20) NULL,
     [Note] [nvarchar](255) NULL,
     [StatusID] [int] NULL,
+	[LoggedIn] BIT NOT NULL DEFAULT 0,
     CONSTRAINT [FK_Users_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status]([StatusID])
 );
 GO
@@ -677,13 +679,15 @@ INSERT INTO [dbo].[Users] ([UserID], [FullName], [UpdatedDate], [Email], [Passwo
 VALUES (6, N'Vuong Dai Duong', GETDATE(), N'duongtata@gmail.com', N'duong123456', N'User', 1, N'123 Marketing Street', N'0123456789', N'Note for Vuong Dai Duong', 1);
 INSERT INTO [dbo].[Users] ([UserID], [FullName], [UpdatedDate], [Email], [Password], [Role], [Gender], [Address], [Phone], [Note], [StatusID])
 VALUES 
-    
     (7, N'Another Name', GETDATE(), N'anotheremail@example.com', N'anotherpassword', N'Admin', 0, N'456 Admin Street', N'9876543210', N'Note for Another Name', 1),
     (8, N'Third Name', GETDATE(), N'thirdemail@example.com', N'thirdpassword', N'User', 1, N'789 User Street', N'1234567890', N'Note for Third Name', 1),
     (9, N'Fourth Name', GETDATE(), N'fourthemail@example.com', N'fourthpassword', N'User', 0, N'1011 User Street', N'0987654321', N'Note for Fourth Name', 1),
     (10, N'Fifth Name', GETDATE(), N'fifthemail@example.com', N'fifthpassword', N'User', 1, N'1213 User Street', N'1357924680', N'Note for Fifth Name', 1),
-    (11, N'Sixth Name', GETDATE(), N'sixthemail@example.com', N'sixthpassword', N'Admin', 0, N'1415 Admin Street', N'8642079135', N'Note for Sixth Name', 1);
-
+    (11, N'Sixth Name', GETDATE(), N'sixthemail@example.com', N'sixthpassword', N'Admin', 0, N'1415 Admin Street', N'8642079135', N'Note for Sixth Name', 1),  
+	(12, N'First Saler', GETDATE(), N'firstsaler@example.com', N'firstsalerpassword', N'Saler', 0, N'123 Saler Street', N'1234567890', N'Note for First Saler', 1),
+    (13, N'Second Saler', GETDATE(), N'secondsaler@example.com', N'secondsalerpassword', N'Saler', 1, N'456 Saler Street', N'2345678901', N'Note for Second Saler', 1),
+    (14, N'Third Saler', GETDATE(), N'thirdsaler@example.com', N'thirdsalerpassword', N'Saler', 0, N'789 Saler Street', N'3456789012', N'Note for Third Saler', 1);
+	(15, N'Nông Văn Dền', GETDATE(), N'shipper@gmail.com', N'password123456', N'Staff', 0, N'789 Saler Street', N'3456789012', N'Note for Third Saler', 1);
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 ALTER TABLE [dbo].[Cart]  WITH CHECK ADD FOREIGN KEY([ProductID])
@@ -916,34 +920,22 @@ VALUES
 ('Slider 1', 'https://bookbuy.vn/Res/Images/Album/ffd62e0e-02fb-4e7a-96fe-42ed8966c89b.png?w=920&h=420&mode=crop', 'https://bookbuy.vn/Res/Images/Album/ffd62e0e-02fb-4e7a-96fe-42ed8966c89b.png?w=920&h=420&mode=crop'),
 ('Slider 2', 'https://bookbuy.vn/Res/Images/Album/efefae23-5cb2-42e9-8d4f-59ca99d500af.png?w=920&h=420&mode=crop', 'https://bookbuy.vn/Res/Images/Album/efefae23-5cb2-42e9-8d4f-59ca99d500af.png?w=920&h=420&mode=crop');
 
-Use SWP_Online_Shop
+use SWP_Online_Shop
+UPDATE Orders SET Status = 'Shipped', IDUpdater = '12' WHERE OrderID = 1
+select * from Orders
 
-SELECT 
-    o.OrderID,
-    o.OrderDate,
-    o.TotalCost,
-    o.Status,
-    o.ReceiverFullName,
-    o.ReceiverEmail,
-    o.ReceiverMobile,
-    o.ReceiverAddress,
-    od.ProductID,
-    p.Title AS ProductTitle,
-    od.Quantity
-FROM 
-    Orders o
-INNER JOIN 
-    OrderDetails od ON o.OrderID = od.OrderID
-INNER JOIN 
-    Products p ON od.ProductID = p.ProductID
-WHERE 
+DELETE FROM OrderDetails WHERE OrderID = '5';
+DELETE FROM Orders WHERE OrderID = '5';
 
 
+SELECT *
+FROM [dbo].[Users]
 
-SELECT * FROM [Orders]
-WHERE OrderDate >= '2024-01-01' AND OrderDate <= '2024-01-31';
+UPDATE Orders SET Status = 'Pending', IDUpdater = '14' WHERE OrderID = '1010'
 
-Select * from Products
+SELECT u.UserID, u.FullName, COUNT(o.OrderID) AS NumOrdersWithUserID
+FROM Users u
+LEFT JOIN Orders o ON u.UserID = o.IDUpdater
+WHERE u.Role = 'Saler'
+GROUP BY u.UserID, u.FullName
 
-SELECT * FROM [Orders]
-WHERE [OrderID] LIKE '2' OR [ReceiverFullName] LIKE '%ABC%';

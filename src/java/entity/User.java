@@ -17,10 +17,34 @@ public class User {
     private String address;
     private String phone;
     private String image;
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
     private String updatedDate;
     private String note;
     private int status;
 
+    public User(int userID, String fullName, String email, String password, String role, boolean gender, String address, String phone, String image, String updatedDate, String note, int status, boolean loggedIn) {
+        this.userID = userID;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.gender = gender;
+        this.address = address;
+        this.phone = phone;
+        this.image = image;
+        this.updatedDate = updatedDate;
+        this.note = note;
+        this.status = status;
+        this.loggedIn = loggedIn;
+    }
+    private boolean loggedIn;
     public User() {
     }
 

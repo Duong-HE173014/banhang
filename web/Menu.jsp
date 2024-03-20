@@ -41,7 +41,7 @@
                 <%if(acc != null){%> 
                 <%if("Saler".equals(userRole)){%> 
                 <li>
-                    <a href="salerDashboard">
+                    <a href="salerDash">
                         <i class='bx bx-grid-alt'></i>
                         <span class="links_name">Dashboard</span>
                     </a>
@@ -161,6 +161,23 @@
                     </a>
                     <span class="tooltip">Order List</span>
                 </li>
+                <%}%>
+                <%if("Staff".equals(userRole)){%> 
+                <li>
+                    <a href="staffdashboardcontrol">
+                        <i class='bx bx-grid-alt'></i>
+                        <span class="links_name">Dashboard</span>
+                    </a>
+                    <span class="tooltip">Dashboard</span>
+                </li>
+                <li>
+                    <a href="userprofile">
+                        <i class='bx bx-user' ></i>
+                        <span class="links_name">User</span>
+                    </a>
+                    <span class="tooltip">User</span>
+                </li>
+                
                 <%}%>
                 <li class="profile">     
                     <a  href="logout">

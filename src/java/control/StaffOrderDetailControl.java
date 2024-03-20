@@ -6,7 +6,6 @@ package control;
 
 import dao.DAO;
 import dao.OrderDAO;
-import dao.UserDAO;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,8 +23,8 @@ import java.util.logging.Logger;
  *
  * @author Admin
  */
-@WebServlet(name = "SaleManageEditOrder", urlPatterns = {"/salemanagerOrderEdit"})
-public class SaleManageEditOrder extends HttpServlet {
+@WebServlet(name = "StaffOrderDetailControl", urlPatterns = {"/staffOrderDetailControl"})
+public class StaffOrderDetailControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,61 +40,46 @@ public class SaleManageEditOrder extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            String submit = request.getParameter("submit");
-            if (submit == null) {
-                request.setCharacterEncoding("UTF-8");
-                String orderID = request.getParameter("orderId");
-                HttpSession session = request.getSession();
-                User user = (User) session.getAttribute("user");
 
-                DAO dao = new DAO();
+            request.setCharacterEncoding("UTF-8");
+            String orderID = request.getParameter("orderId");
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
 
-                ResultSet rsInfoSaler = dao.getResultSet("SELECT u.UserID, u.FullName, COUNT(o.OrderID) AS NumOrdersWithUserID\n"
-                        + "FROM Users u\n"
-                        + "LEFT JOIN Orders o ON u.UserID = o.IDUpdater\n"
-                        + "WHERE u.Role = 'Saler'\n"
-                        + "GROUP BY u.UserID, u.FullName");
+            DAO dao = new DAO();
 
-                ResultSet rsdetail = dao.getResultSet("SELECT \n"
-                        + "    o.OrderID,\n"
-                        + "    o.OrderDate,\n"
-                        + "    o.TotalCost,\n"
-                        + "    o.Status,\n"
-                        + "    o.ReceiverFullName,\n"
-                        + "    o.ReceiverEmail,\n"
-                        + "    o.ReceiverMobile,\n"
-                        + "    o.ReceiverAddress,\n"
-                        + "    o.IDUpdater,\n"
-                        + "    o.Notes,\n"
-                        + "    od.ProductName,\n"
-                        + "    od.Quantity\n"
-                        + "FROM \n"
-                        + "    Orders o\n"
-                        + "INNER JOIN \n"
-                        + "    OrderDetails od ON o.OrderID = od.OrderID\n"
-                        + "INNER JOIN \n"
-                        + "    Products p ON od.ProductID = p.ProductID\n"
-                        + "WHERE \n"
-                        + "    o.OrderID = " + orderID + "");
+            ResultSet rsInfoSaler = dao.getResultSet("SELECT u.UserID, u.FullName, COUNT(o.OrderID) AS NumOrdersWithUserID\n"
+                    + "FROM Users u\n"
+                    + "LEFT JOIN Orders o ON u.UserID = o.IDUpdater\n"
+                    + "WHERE u.Role = 'Saler'\n"
+                    + "GROUP BY u.UserID, u.FullName");
 
-                System.out.println(" rsdetail" + rsdetail);
-                request.setAttribute("rsInfoSaler", rsInfoSaler);
-                request.setAttribute("detail", rsdetail);
-                request.getRequestDispatcher("SalemanagerOrderDetail.jsp").forward(request, response);
-            } else {
-                OrderDAO dao = new OrderDAO();
+            ResultSet rsdetail = dao.getResultSet("SELECT \n"
+                    + "    o.OrderID,\n"
+                    + "    o.OrderDate,\n"
+                    + "    o.TotalCost,\n"
+                    + "    o.Status,\n"
+                    + "    o.ReceiverFullName,\n"
+                    + "    o.ReceiverEmail,\n"
+                    + "    o.ReceiverMobile,\n"
+                    + "    o.ReceiverAddress,\n"
+                    + "    o.IDUpdater,\n"
+                    + "    o.Notes,\n"
+                    + "    od.ProductName,\n"
+                    + "    od.Quantity\n"
+                    + "FROM \n"
+                    + "    Orders o\n"
+                    + "INNER JOIN \n"
+                    + "    OrderDetails od ON o.OrderID = od.OrderID\n"
+                    + "INNER JOIN \n"
+                    + "    Products p ON od.ProductID = p.ProductID\n"
+                    + "WHERE \n"
+                    + "    o.OrderID = " + orderID + "");
 
-                String orderID = request.getParameter("id");
-                String status = request.getParameter("status");
-                String salerID = request.getParameter("salerID");
-                int Id = Integer.parseInt(orderID);
-                int SalerID = Integer.parseInt(salerID);
-                boolean success = dao.updateOrderStatus(Id, status, SalerID);
-
-                response.sendRedirect("salemanagerOrderListControl");
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(mktCustomerListControl.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(" rsdetail" + rsdetail);
+            request.setAttribute("rsInfoSaler", rsInfoSaler);
+            request.setAttribute("detail", rsdetail);
+            request.getRequestDispatcher("StaffOrderDetail.jsp").forward(request, response);
         }
     }
 

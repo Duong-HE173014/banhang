@@ -65,7 +65,7 @@
 
                                 <div class="py-5 text-center">
                                     <i class="fa fa-credit-card fa-4x" aria-hidden="true"></i>
-                                    <h2>Thanh toán</h2>
+                                    <h2>Cart Contact</h2>
                                     <p class="lead">Vui lòng kiểm tra thông tin Khách hàng, thông tin Giỏ hàng trước khi Đặt hàng.</p>
                                 </div>
 
@@ -77,7 +77,7 @@
                                         <%
     double totalCost = 0; // Tổng thành tiền của giỏ hàng
     double totalCostOfProducts = 0; // Tổng thành tiền của các sản phẩm
-    double shipFeeRate = 0.05; // Tỷ lệ phí ship (5%)
+    double shipFeeRate = 0.02; // Tỷ lệ phí ship (2%)
     double shipFee = 0; // Phí ship
     // Lấy thông tin từ request
     Object totalCostOfProductsObj = request.getAttribute("totalCostOfProducts");
@@ -113,7 +113,7 @@
                                                 totalCost = totalCostOfProducts + shipFee; // Tính tổng giá trị cuối cùng của giỏ hàng bao gồm cả phí ship
                                             %>
                                             <li class="list-group-item d-flex justify-content-between">
-                                                <div>Shipping Fee(5%):</div>
+                                                <div>Shipping Fee(2%):</div>
                                                 <span><%= shipFee %>VND</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
@@ -121,7 +121,7 @@
                                                 <span name="total"><%= totalCost %>VND</span>
                                             </li>
                                         </ul>
-                                            <input hidden="" name="total" type="text" value="<%= totalCost %>">
+                                        <input hidden="" name="total" type="text" value="<%= totalCost %>">
                                         <div class="input-group">
                                             <input type="text" class="form-control" placeholder="Mã khuyến mãi">
                                             <div class="input-group-append">
@@ -240,14 +240,12 @@
 
                                         <div class="d-block my-3">
                                             <div class="custom-control custom-radio">
-                                                <input id="httt-2" name="httt_ma" type="radio" class="custom-control-input" required=""
-                                                       value="1">
-                                                <label class="custom-control-label" for="httt-2">Chuyển khoản</label>
+                                                <input id="httt-2" name="httt_ma" type="radio" class="custom-control-input" required="" value="1">
+                                                <label class="custom-control-label" for="httt-2">Electronic Funds Transfer</label>
                                             </div>
                                             <div class="custom-control custom-radio">
-                                                <input id="httt-3" name="httt_ma" type="radio" class="custom-control-input" required=""
-                                                       value="2">
-                                                <label class="custom-control-label" for="httt-3">Ship COD</label>
+                                                <input id="httt-3" name="httt_ma" type="radio" class="custom-control-input" required="" value="2">
+                                                <label class="custom-control-label" for="httt-3">COD</label>
                                             </div>
                                         </div>
                                         <hr class="mb-4">
@@ -267,5 +265,20 @@
 
         <!-- đáy -->
         <jsp:include page="Footer.jsp"></jsp:include>
+            <script>
+                // Lấy giá trị của <%= totalCost %>
+                var totalCost = <%= totalCost %>;
+                // Kiểm tra nếu totalCost lớn hơn 1 triệu
+                if (totalCost > 1000000.0) {
+                    // Hiển thị radio "Chuyển khoản"
+                    document.getElementById("httt-2").parentNode.style.display = "block";
+                    // Ẩn radio "Ship COD"
+                    document.getElementById("httt-3").parentNode.style.display = "none";
+                } else {
+                    // Ẩn radio "Chuyển khoản" và giữ nguyên radio "Ship COD"
+                    document.getElementById("httt-2").parentNode.style.display = "block";
+                    document.getElementById("httt-3").parentNode.style.display = "block";
+                }
+        </script>
     </body>
 </html>

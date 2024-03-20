@@ -35,8 +35,8 @@ public class OrderDetailControl extends HttpServlet {
             case "cancel" -> {
 
                 order.setStatus("Canceled");
-                new OrderDAO().updateOrder(order);
-                response.sendRedirect("order-details?id=" + orderid);
+                new OrderDAO().deleteOrder(order);
+                response.sendRedirect("my-order");
 
             }
             default -> {

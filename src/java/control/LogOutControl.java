@@ -5,6 +5,8 @@
  */
 package control;
 
+import dao.UserDAO;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -35,7 +37,13 @@ public class LogOutControl extends HttpServlet {
         try ( PrintWriter out = response.getWriter()) {
             response.setContentType("text/html;charset=UTF-8");
             HttpSession session = request.getSession();
-            session.invalidate();
+            User user = (User) session.getAttribute("user");
+            UserDAO userDAO = new UserDAO();
+            if (user != null) {
+            // Đặt trạng thái đăng nhập của người dùng là false
+            userDAO.updateLoggedInStatus(user.getUserID(), false);
+        }
+            session.invalidate();            
             response.sendRedirect("home");
         }
     }

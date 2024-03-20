@@ -54,8 +54,8 @@
                                 <div class="col-md-12"><label class="labels">Password</label>
                                     <input name="password" type="text" class="form-control" value="${user.password}" >
                                 </div>
-                                <div class="modal-footer">
-                                    <input type="submit" class="btn btn-success" data-toggle="modal" value="userprofile">
+                                <div class="modal-footer mt-3">
+                                    <input type="submit" class="btn btn-dark" data-toggle="modal" value="Save">
                                 </div>
                             </div>
                         </div>

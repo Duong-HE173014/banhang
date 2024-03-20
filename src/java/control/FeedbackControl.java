@@ -5,7 +5,9 @@
 
 package control;
 
-import dao.OrderDAO;
+import dao.FeedBackDAO;
+import entity.FeedBack;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,10 +18,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Admin
+ * @author Hi
  */
-@WebServlet(name="SaleManagerDash", urlPatterns={"/salemanagerDash"})
-public class SaleManagerDash extends HttpServlet {
+@WebServlet(name="FeedbackController", urlPatterns={"/feedback"})
+public class FeedbackControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,7 +33,18 @@ public class SaleManagerDash extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet FeedbackController</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet FeedbackController at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -46,20 +59,6 @@ public class SaleManagerDash extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         processRequest(request, response);
-        OrderDAO dao = new OrderDAO();
-        int totalPending = dao.getNumberOrderByStatus("Pending");
-        int totalDelivering = dao.getNumberOrderByStatus("Delivering");
-        int totalSuccessfully = dao.getNumberOrderByStatus("Successfully");
-        int totalConfirm = dao.getNumberOrderByStatus("Confirm");
-        
-        request.setAttribute("tpending", totalPending);
-        request.setAttribute("tdelivering", totalDelivering);
-        request.setAttribute("tconfirm", totalConfirm);
-        request.setAttribute("tsuccessfully", totalSuccessfully);
-        
-        
-        request.getRequestDispatcher("SaleManagerDash.jsp").forward(request, response);
-        
     } 
 
     /** 
@@ -72,7 +71,22 @@ public class SaleManagerDash extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        User user = (User) request.getSession().getAttribute("user");
+        
+        int productId = Integer.parseInt(request.getParameter("id"));
+        int orderDetailId = Integer.parseInt(request.getParameter("orderDetailId"));
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+        
+        FeedBack feedBack = new FeedBack();
+        
+        feedBack.setfFeedback(request.getParameter("content"));
+        feedBack.setfProductID(productId);
+        feedBack.setfRatedStar(Integer.parseInt(request.getParameter("rating")));
+        feedBack.setfUserID(user.getUserID());
+        
+        new FeedBackDAO().insertFeedback(feedBack);
+        
+        response.sendRedirect("order-details?id=" + orderId + "&success");
     }
 
     /** 

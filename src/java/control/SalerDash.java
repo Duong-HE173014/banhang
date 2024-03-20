@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package control;
 
 import dao.OrderDAO;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,30 +13,34 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="SaleManagerDash", urlPatterns={"/salemanagerDash"})
-public class SaleManagerDash extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+@WebServlet(name = "SalerDash", urlPatterns = {"/salerDash"})
+public class SalerDash extends HttpServlet {
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-    } 
+
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -44,26 +48,29 @@ public class SaleManagerDash extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
         OrderDAO dao = new OrderDAO();
-        int totalPending = dao.getNumberOrderByStatus("Pending");
-        int totalDelivering = dao.getNumberOrderByStatus("Delivering");
-        int totalSuccessfully = dao.getNumberOrderByStatus("Successfully");
-        int totalConfirm = dao.getNumberOrderByStatus("Confirm");
-        
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        int userID = user.getUserID();
+        int totalPending = dao.getNumberOrderByStatusAndidSale("Pending",userID);
+        int totalDelivering = dao.getNumberOrderByStatusAndidSale("Delivering",userID);
+        int totalConfirm = dao.getNumberOrderByStatusAndidSale("Confirm",userID);
+        int totalSuccessfully = dao.getNumberOrderByStatusAndidSale("Successfully",userID);
+
         request.setAttribute("tpending", totalPending);
         request.setAttribute("tdelivering", totalDelivering);
         request.setAttribute("tconfirm", totalConfirm);
         request.setAttribute("tsuccessfully", totalSuccessfully);
-        
-        
-        request.getRequestDispatcher("SaleManagerDash.jsp").forward(request, response);
-        
-    } 
 
-    /** 
+        request.getRequestDispatcher("SaleDash.jsp").forward(request, response);
+
+    }
+
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -71,12 +78,13 @@ public class SaleManagerDash extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

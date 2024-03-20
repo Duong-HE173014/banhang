@@ -2,12 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+
 package control;
 
-import dao.DAO;
 import dao.OrderDAO;
 import entity.Order;
-import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,16 +14,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.ResultSet;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "OrderListControl", urlPatterns = {"/salemanagerOrderListControl"})
-public class OrderListControl extends HttpServlet {
-
+@WebServlet(name="StaffDashBoard", urlPatterns={"/staffdashboardcontrol"})
+public class StaffDashBoardControl extends HttpServlet {
+   
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -48,33 +48,52 @@ public class OrderListControl extends HttpServlet {
         if (service.equals("showManagerOrder")) {
             String pageString = request.getParameter("page");
             int page = pageString == null ? 1 : Integer.parseInt(pageString);
-            List<Order> orderList = new OrderDAO().getOrders(pageSize, page);
+            List<Order> orderList = new OrderDAO().getOrdersStaff(pageSize, page);
             if (orderList.isEmpty() && page != 1) {
-                response.sendRedirect("salemanagerOrderListControl");
+                response.sendRedirect("staffdashboardcontrol");
                 return;
             }
             request.setAttribute("orderList", orderList);
             request.setAttribute("page", page);
-            request.getRequestDispatcher("OrderList.jsp").forward(request, response);
+            request.getRequestDispatcher("StaffDashBoard.jsp").forward(request, response);
         }
         if (service.equals("searchOrder")) {
             request.setCharacterEncoding("UTF-8");
             String txt = request.getParameter("txt");
             OrderDAO dao = new OrderDAO();
-            List<Order> list = dao.SearchOrders(txt);
+            List<Order> list = dao.SearchOrdersByStaff(txt);
             request.setAttribute("txtS", txt);
             request.setAttribute("orderList", list);
-            request.getRequestDispatcher("OrderList.jsp").forward(request, response);
+            request.getRequestDispatcher("StaffDashBoard.jsp").forward(request, response);
         }
         if (service.equals("dateOrder")) {
             request.setCharacterEncoding("UTF-8");
             String startDate = request.getParameter("startDate");
             String endDate = request.getParameter("endDate");
             OrderDAO dao = new OrderDAO();
-            List<Order> listByDate = dao.SearchOrdersByDate(startDate, endDate);
+            List<Order> listByDate = dao.SearchOrdersByDateStaff(startDate, endDate);
             
             request.setAttribute("orderList", listByDate);
-            request.getRequestDispatcher("OrderList.jsp").forward(request, response);
+            request.getRequestDispatcher("StaffDashBoard.jsp").forward(request, response);
+              }
+        
+        if (service.equals("edit")) {
+            request.setCharacterEncoding("UTF-8");
+             OrderDAO dao = new OrderDAO();
+
+                String orderID = request.getParameter("id");
+                String status = request.getParameter("status");
+                String salerID = request.getParameter("salerID");
+                int Id = Integer.parseInt(orderID);
+                int SalerID = Integer.parseInt(salerID);
+            try {
+                boolean success = dao.updateOrderStatus(Id, status, SalerID);
+            } catch (Exception ex) {
+                Logger.getLogger(StaffDashBoardControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+               response.sendRedirect("staffdashboardcontrol");
+
               }
     }
 

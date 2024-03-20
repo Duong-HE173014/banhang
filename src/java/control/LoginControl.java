@@ -77,17 +77,35 @@ public class LoginControl extends HttpServlet {
             String role = user.getRole();
             HttpSession session = request.getSession();
             session.setAttribute("role", role);
-            session.setAttribute("user", user);
+            session.setAttribute("user", user); 
+            
+
+                // Kiểm tra xem có người dùng nào khác đang đăng nhập với vai trò "saler" không
+                if ("Saler".equals(role)) {
+                    UserDAO salerDAO = new UserDAO();
+                    if (salerDAO.isAnySalerLoggedIn()) {
+                        // Người dùng không thể đăng nhập do đã có người dùng khác đang đăng nhập với vai trò "saler"
+                        
+                        response.sendRedirect("errLogin.html");
+                        return;
+                    }                    
+                }
+
+               
+             userDAO.updateLoggedInStatus(user.getUserID(), true);
+
             if ("Admin".equals(role)) {
-                response.sendRedirect("admin"); 
+                response.sendRedirect("admin/dashboard");
             } else if ("SaleManager".equals(role)) {
-                response.sendRedirect("salemanagerDash"); 
-            } else if("Saler".equals(role)){
-                response.sendRedirect("salemanagerOrderListControl"); 
-            } else if("Marketing".equals(role)){
-                response.sendRedirect("mktdashboard"); 
-            }else {
-                response.sendRedirect("home"); 
+                response.sendRedirect("salemanagerDash");
+            } else if ("Saler".equals(role)) {
+                response.sendRedirect("salerDash");
+            } else if ("Marketing".equals(role)) {
+                response.sendRedirect("mktdashboard");
+            }else if ("Staff".equals(role)) {
+                response.sendRedirect("staffdashboardcontrol");
+            } else {
+                response.sendRedirect("home");
             }
         } else {
             // Login failed
@@ -95,7 +113,6 @@ public class LoginControl extends HttpServlet {
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         }
     }
-
 
     /**
      * Returns a short description of the servlet.

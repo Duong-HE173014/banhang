@@ -1,4 +1,10 @@
 <%-- 
+    Document   : SaleDash
+    Created on : Mar 14, 2024, 1:21:34 AM
+    Author     : Admin
+--%>
+
+<%-- 
     Document   : SaleManagerDash
     Created on : Mar 12, 2024, 11:05:11 AM
     Author     : Admin
@@ -55,7 +61,7 @@
                                                 margin-left: 20px;
                                             }
                                             .show{
-                                               margin-bottom: 30px; 
+                                                margin-bottom: 30px;
                                             }
                                         </style>  
                                         <div class="row show">
@@ -128,4 +134,5 @@
         <script src="js/datatables-simple-demo.js"></script>
     </body>
 </html>
+
 

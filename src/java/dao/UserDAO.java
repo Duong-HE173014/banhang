@@ -74,7 +74,7 @@ public class UserDAO {
         }
         return null;
     }
-    
+
     public User getUserByFullname(String fullname) {
         String query = "SELECT * FROM Users WHERE FullName = ?";
         try {
@@ -167,8 +167,8 @@ public class UserDAO {
             int result = ps.executeUpdate();
             return result > 0;
         } catch (Exception e) {
-            
-        } 
+
+        }
         return false;
     }
 
@@ -213,7 +213,7 @@ public class UserDAO {
         }
         return false;
     }
-    
+
     // Delete (Delete User)
     public boolean deleteUser(int userID) {
         String query = "DELETE FROM Users WHERE UserID=?";
@@ -303,4 +303,43 @@ public class UserDAO {
         return filteredUserList;
     }
 
+    public boolean isAnySalerLoggedIn() {
+        try {
+            String query = "SELECT COUNT(*) AS SalerCount FROM Users WHERE Role = 'Saler' AND LoggedIn = 1";
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int salerCount = rs.getInt("SalerCount");
+                return salerCount > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void updateLoggedInStatus(int userID, boolean loggedIn) {
+        try {
+            String query = "UPDATE Users SET LoggedIn = ? WHERE UserID = ?";
+            ps = conn.prepareStatement(query);
+            ps.setBoolean(1, loggedIn);
+            ps.setInt(2, userID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+   
+    public static void main(String[] args) {
+        UserDAO userDAO = new UserDAO();
+        
+        // Kiểm tra xem có bất kỳ nhân viên bán hàng nào đang đăng nhập hay không
+        boolean anySalerLoggedIn = userDAO.isAnySalerLoggedIn();
+        
+        if (anySalerLoggedIn) {
+            System.out.println("Có nhân viên bán hàng đang đăng nhập.");
+        } else {
+            System.out.println("Không có nhân viên bán hàng nào đang đăng nhập.");
+        }
+    }
 }

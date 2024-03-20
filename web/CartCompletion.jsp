@@ -3,7 +3,8 @@
     Created on : Feb 22, 2024, 11:13:16 AM
     Author     : pc
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.Vector" %>
 <%@page import="entity.Product" %>
@@ -20,8 +21,8 @@
         <%  
             int i = 0;
             User user = (User) session.getAttribute("user");
-//            String userRole = (String) session.getAttribute("role");
-//            Vector<Product> listP =(Vector<Product>)request.getAttribute("listP");
+            String userRole = (String) session.getAttribute("role");
+            Vector<Product> listP =(Vector<Product>)request.getAttribute("listP");
             Vector<Category> listC =(Vector<Category>)request.getAttribute("listC");
             Product last = (Product)request.getAttribute("p");
             int tag = 0; // Default value
@@ -39,10 +40,10 @@
             <!--end of menu-->
             <div class="row">
 
-            <div class="col-sm-3">
-                <div class="card bg-light mb-2">
-                    <div class="card-header bg-dark text-white text-uppercase"><i class="fa fa-list"></i> Categories</div>
-                    <ul class="list-group category_block">
+                <div class="col-sm-3">
+                    <div class="card bg-light mb-2">
+                        <div class="card-header bg-dark text-white text-uppercase"><i class="fa fa-list"></i> Categories</div>
+                        <ul class="list-group category_block">
                         <c:forEach var="category" items="${categoryList}">
                             <li class="list-group-item text-white>"><a class="text-decoration-none" href="category?categoryId=${category.categoryId}">${category.categoryName}</a></li>
                             </c:forEach>
@@ -71,19 +72,23 @@
                 <h2 class="text-center mb-4">Order Details</h2>
 
                 <!-- Display Order Information -->
-                <div class="mb-4 row">
-                    <div class="col-md-6">
-                        <p><strong>Order ID:</strong> ${order.orderId}</p>
-                        <p><strong>Order Date:</strong> <fmt:formatDate value="${order.orderDate}" pattern="yyyy-MM-dd HH:mm:ss"/></p>
-                        <p><strong>Total Cost:</strong> ${order.totalCost}VND</p>
-                        <p><strong>Status:</strong> ${order.status}</p>
+                <div class="mb-4 row justify-content-center">
+                    <div class="col-md-2 order-md-last">
+                        <p><strong>Order ID:</strong></p>
+                        <p><strong>Receiver Name:</strong></p>
+                        <p><strong>Receiver Email:</strong></p>
+                        <p><strong>Receiver Mobile:</strong></p>
+                        <p><strong>Receiver Address:</strong></p>
+                        <p><strong>Total Cost:</strong></p>
                     </div>
-                    <div class="col-md-6">
-                        <p><strong>Receiver Name:</strong> ${order.receiverFullName}</p>
-                        <p><strong>Receiver Email:</strong> ${order.receiverEmail}</p>
-                        <p><strong>Receiver Mobile:</strong> ${order.receiverMobile}</p>
-                        <p><strong>Receiver Address:</strong> ${order.receiverAddress}</p>
-                    </div>         
+                    <div class="col-md-3 order-md-last">
+                        <p>${order.orderId}</p>
+                        <p>${order.receiverFullName}</p>
+                        <p>${order.receiverEmail}</p>
+                        <p>${order.receiverMobile}</p>
+                        <p>${order.receiverAddress}</p>
+                        <p>${order.totalCost}VND</p>
+                    </div>
                 </div>
 
                 <!-- Display Order Details Table -->
@@ -110,16 +115,12 @@
                                 <td>${orderDetail.totalCost}VND</td>
                             </tr>
                         </c:forEach>
-                        </tbody>
+                    </tbody>
                 </table>
 
                 <!-- Order Actions -->
                 <div class="text-center mt-5">
-                    <!-- Cancel button -->
-                    <c:if test="${order.status ne 'Canceled'}">
-                        <a class="btn btn-danger" href="order-details?id=${order.orderId}&action=cancel">Cancel Order</a>
-                    </c:if>
-                    
+                        <a class="btn btn-mo" href="my-order?id=${order.orderId}">My Order</a>
                 </div>
 
             </div>

@@ -119,9 +119,8 @@
                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                                     <del class="mb-0"><%=item.getProducts().getPrice()%>VND</del>
                                     <%
-                                    
-                                    discountprice =  item.getProducts().getSalePrice() * item.getQuantity() + discountprice;
-                                    totalprice =  item.getProducts().getSalePrice() * item.getQuantity() + totalprice + discountprice * 5/100;
+                                    discountprice +=  item.getProducts().getSalePrice() * item.getQuantity();
+                                    totalprice +=  item.getProducts().getSalePrice() * item.getQuantity();
                                     %>
                                     <h5 style="color: red" class="mb-0"><%=item.getProducts().getSalePrice()%>VND</h5>
                                 </div>                               
@@ -132,7 +131,9 @@
                         </div> 
                     </div>
                     <%
-                    }
+                        }
+                    // Tính tổng totalprice và giá trị shipping
+                    totalprice += discountprice * 0.02;
                     session.setAttribute("totalprice", totalprice);
                     session.setAttribute("discountprice", discountprice);
                     %>
@@ -145,8 +146,8 @@
                                         <table>
                                             <tbody>
                                                 <tr>
-                                                    <td>Price Shipping 5%</td>
-                                                    <td align="right"><%= discountprice * 5 /100 %>VND</td>
+                                                    <td>Price Shipping 2%</td>
+                                                    <td align="right"><%= discountprice * 0.02 %>VND</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Price Discount</td>

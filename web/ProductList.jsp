@@ -37,11 +37,23 @@
                 text-decoration: none;
             }
             .pagination a.active {
-                background-color: #4CAF50;
+                background-color: #343a40;
                 color: white;
             }
             .pagination a:hover:not(.active) {
-                background-color: chocolate;
+                background-color: #343a40;
+                color: white;
+            }
+            .cardpd {
+                height: 100%; /* Đảm bảo khung có chiều cao bằng nhau */
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .cardpd .cardp-body {
+                flex-grow: 1; /* Thẻ body mở rộng để lấp đầy không gian còn trống */
+            }
         </style>
     </head>
     <body>
@@ -60,20 +72,20 @@
             }else txtS = (String)request.getAttribute("txtS");
         %>
         <jsp:include page="Header.jsp"></jsp:include>
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="home">Home</a></li>
-                            <li class="breadcrumb-item"><a href="#">Category</a></li>
-                            <li class="breadcrumb-item active" aria-current="#">Sub-category</li>
-                        </ol>
-                    </nav>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="home">Home</a></li>
+                                <li class="breadcrumb-item"><a href="#">Category</a></li>
+                                <li class="breadcrumb-item active" aria-current="#">Sub-category</li>
+                            </ol>
+                        </nav>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="container"> <%-- category --%> 
+            <div class="container"> <%-- category --%> 
             <div class="row">
                 <div class="col-sm-3">
                     <div class="card bg-light mb-2">
@@ -99,7 +111,7 @@
                         <div class="card-header bg-dark text-white text-uppercase">NEW POST</div>
                         <div class="card-body">                            
                             <img class="img-fluid" src="${lPost.postThumbnail}" />
-                           <a class="nav-link" href="postDetail"> <h5 class="card-title">${lPost.pTitle}</h5></a>
+                            <a class="nav-link" href="postDetail"> <h5 class="card-title">${lPost.pTitle}</h5></a>
                             <p class="card-text">${lPost.postAuthor}</p>
                             <p class="card-text">${lPost.postBriefInfo}</p>                           
                         </div>
@@ -110,19 +122,20 @@
                 <div class="col-sm-9"> <%-- show sản phẩm --%> 
                     <div class="row text-center">
                         <% for (Product pro : listP){%>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <div class="card cardp">
-                                <img class="cardp-img-top" src="<%=pro.getImage()%>" alt="Card image cap">
-                                <div class="cardp-body">
-                                    <h4 class="cardp-title show_txt"><a class="text-decoration-none" href="detail?pid=<%=pro.getProductID()%>" title="View Product"><%=pro.getTitle()%></a></h4>
-                                    <p class="cardp-text show_txt"><%=pro.getBriefInfo()%></p>
-                                    <div class="row">                              
-                                        <div class="col">
-                                             <del class="cardp-text text-muted me-2"><%=pro.getPrice()%>VND</del>
-                                             <h2 class="cardp-text" style="color: red"><%=pro.getSalePrice()%>VND</h2> 
+                        <div class="col-12 col-md-6 col-lg-3 mb-4">
+                            <div class="card cardp h-100">
+                                <img class="cardpd-img-top" src="<%=pro.getImage()%>" alt="Card image cap">
+                                <div class="cardpd-body">
+                                    <h4 class="cardpd-title show_txt"><a class="text-decoration-none" href="detail?pid=<%=pro.getProductID()%>" title="View Product"><%=pro.getTitle()%></a></h4>
+                                    <p class="cardpd-text show_txt"><%=pro.getBriefInfo()%></p>
+                                    <div class="row align-items-center">                              
+                                        <div class="colPN d-flex flex-column">
+                                            <del class="cardpd-text text-muted me-2"><%=pro.getPrice()%>VND</del>
+                                            <br/>
+                                            <h3 class="cardpd-text" style="color: red"><%=pro.getSalePrice()%>VND</h3> 
                                         </div>
-                                        <div class="col">
-                                            <a href="showCart?go=add&id=<%=pro.getProductID()%>" class="btn btn-dark btn-block">Add to cart</a>
+                                        <div class="colPN">
+                                            <a href="showCart?go=addInMain&id=<%=pro.getProductID()%>" class="btn btn-dark btn-block">Add to cart</a>
                                         </div>
                                     </div>
                                 </div>
@@ -134,16 +147,16 @@
 
             </div>
         </div>
-                        <div class="container-fluid text-center d-flex align-items-center justify-content-center">
-                        <c:set var="page" value="${requestScope.page}" />
-                        
-                        <div class="pagination">
-                            <h2>Page: </h2>
-                            <c:forEach begin="${1}" end="${requestScope.num}" var="i">
-                                <a href="products?page=${i}" class="${i==page?"active":""}" ><h5>${i}</h5> </a>
-                            </c:forEach>
-                        </div>
-                    </div>
+        <div class="container-fluid text-center d-flex align-items-center justify-content-center">
+            <c:set var="page" value="${requestScope.page}" />
+
+            <div class="pagination">
+                <h2>Page: </h2>
+                <c:forEach begin="${1}" end="${requestScope.num}" var="i">
+                    <a href="products?page=${i}" class="${i==page?"active":""}" ><h5>${i}</h5> </a>
+                        </c:forEach>
+            </div>
+        </div>
         <!-- đáy -->
         <footer class="text-light">
             <div class="container-fluid">

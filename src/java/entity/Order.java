@@ -26,9 +26,48 @@ public class Order {
     private int receiverGender;
     private String notes;
     private int paymentMethods;
+    private int idUpdater;
 
+    
     public Order() {
     }
+    
+    
+    
+    public Order(int orderId, int userId, Date orderDate, double totalCost, String status, String receiverFullName, String receiverEmail, String receiverMobile, String receiverAddress, int idUpdater) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.orderDate = orderDate;
+        this.totalCost = totalCost;
+        this.status = status;
+        this.receiverFullName = receiverFullName;
+        this.receiverEmail = receiverEmail;
+        this.receiverMobile = receiverMobile;
+        this.receiverAddress = receiverAddress;
+        this.idUpdater = idUpdater;
+    }
+    
+    
+    public Order(int orderId, int userId, Date orderDate, double totalCost, String status, String receiverFullName, String receiverEmail, String receiverMobile, String receiverAddress, int receiverGender, String notes, int paymentMethods, int idUpdater, List<OrderDetail> orderDetailList) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.orderDate = orderDate;
+        this.totalCost = totalCost;
+        this.status = status;
+        this.receiverFullName = receiverFullName;
+        this.receiverEmail = receiverEmail;
+        this.receiverMobile = receiverMobile;
+        this.receiverAddress = receiverAddress;
+        this.receiverGender = receiverGender;
+        this.notes = notes;
+        this.paymentMethods = paymentMethods;
+        this.idUpdater = idUpdater;
+        this.orderDetailList = orderDetailList;
+    }
+    
+    
+  
+    
 
     public Order(int orderId, int userId, Date orderDate, double totalCost, String status, String receiverFullName, String receiverEmail, String receiverMobile, String receiverAddress) {
         this.orderId = orderId;
@@ -126,19 +165,6 @@ public class Order {
         this.receiverAddress = receiverAddress;
     }
 
-    private List<OrderDetail> orderDetailList;
-
-    public List<OrderDetail> getOrderDetailList() {
-        if (orderDetailList == null) {
-            orderDetailList = new OrderDetailDAO().getOrderDetailsByOrderID(orderId);
-        }
-        return orderDetailList;
-    }
-
-    public void setOrderDetailList(List<OrderDetail> orderDetailList) {
-        this.orderDetailList = orderDetailList;
-    }
-
     public int getReceiverGender() {
         return receiverGender;
     }
@@ -162,5 +188,28 @@ public class Order {
     public void setPaymentMethods(int paymentMethods) {
         this.paymentMethods = paymentMethods;
     }
+
+    public int getIdUpdater() {
+        return idUpdater;
+    }
+
+    public void setIdUpdater(int idUpdater) {
+        this.idUpdater = idUpdater;
+    }
+
+
+
+
+
+    private List<OrderDetail> orderDetailList;
+
+    public List<OrderDetail> getOrderDetailList() {
+        if (orderDetailList == null) {
+            orderDetailList = new OrderDetailDAO().getOrderDetailsByOrderID(orderId);
+        }
+        return orderDetailList;
+    }
+
+
 
 }

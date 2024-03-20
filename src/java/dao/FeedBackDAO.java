@@ -57,6 +57,42 @@ public class FeedBackDAO {
         }
     }
 
+    public void insertFeedback(FeedBack feedback) {
+        String query = "INSERT INTO Feedbacks (UserID, ProductID, RatedStar, Feedback, Images, UpdatedDate) "
+                + "VALUES (?, ?, ?, ?, ?, GETDATE())";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, feedback.getfUserID());
+            ps.setInt(2, feedback.getfProductID());
+            ps.setInt(3, feedback.getfRatedStar());
+            ps.setString(4, feedback.getfFeedback());
+            ps.setString(5, feedback.getfImages());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Close resources
+            closeResources();
+        }
+    }
+    
+    private void closeResources() {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         FeedBackDAO dao = new FeedBackDAO();
         List<FeedBack> list = dao.getAllFeedBack();

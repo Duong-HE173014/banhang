@@ -5,12 +5,10 @@
 package control;
 
 import dao.DAO;
-import dao.OrderDAO;
 import entity.Cart;
 import entity.Category;
 import entity.Post;
 import entity.Product;
-import entity.Slider;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -95,7 +93,8 @@ public class CheckOutControl extends HttpServlet {
             request.setAttribute("listP", listP);
             request.setAttribute("listC", listC);
             request.setAttribute("p", last);
-            request.getRequestDispatcher("CheckOut.jsp").forward(request, response);
+            
+            request.getRequestDispatcher("CartContact.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }

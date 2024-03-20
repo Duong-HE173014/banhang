@@ -19,106 +19,107 @@
     </head>
     <body class="sb-nav-fixed">
         <jsp:include page="Menu.jsp"></jsp:include>    
-        <section class="home-section">
-      <div class="text">Dashboard</div>
-  
-        <div id="layoutSidenav">
-            <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <section class="home-section">
+                <div class="text">Dashboard</div>
 
-                    <div class="sb-sidenav-footer">
+                <div id="layoutSidenav">
+                    <div id="layoutSidenav_nav">
+                        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
 
-                        <h2 class="mt-3" style="color:#3333ff" >General statistics & trends</h2>
+                            <div class="sb-sidenav-footer">
+
+                                <h2 class="mt-3" style="color:#3333ff" >General statistics & trends</h2>
+                            </div>
+                        </nav>
                     </div>
-                </nav>
+                    <div id="layoutSidenav_content">
+                        <main>
+                            <div class="container-fluid px-4">
+
+                                <ol class="breadcrumb mb-4">
+                                    <li class="breadcrumb-item active">Dashboard</li>
+                                </ol>
+
+                                <div class="row" >
+                                    <style>
+                                        .card-body {
+                                            display: flex;
+                                            justify-content: space-between;
+                                        }
+
+                                        .card-body span {
+                                            margin-left: 10px; /* Điều chỉnh khoảng cách bằng cách thay đổi giá trị của margin */
+                                        }
+                                    </style>                      
+                                    <div class="col-xl-3 col-md-6">
+                                        <div class="card bg-primary text-white mb-4">
+                                            <div class="card-body">Posts <span>${requestScope.tpost}</span></div>
+                                        <div class="card-footer d-flex align-items-center justify-content-between">
+                                            <a class="small text-white stretched-link" href="mktpostlist">View Details</a>
+                                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="card bg-warning text-white mb-4">
+                                        <div class="card-body">Products <span>${requestScope.tproduct}</span></div>
+                                        <div class="card-footer d-flex align-items-center justify-content-between">
+                                            <a class="small text-white stretched-link" href="mktproductlist">View Details</a>
+                                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="card bg-success text-white mb-4">
+                                        <div class="card-body">Customers <span>${requestScope.tuser}</span></div>
+                                        <div class="card-footer d-flex align-items-center justify-content-between">
+                                            <a class="small text-white stretched-link" href="#">View Details</a>
+                                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="card bg-danger text-white mb-4">
+                                        <div class="card-body">Feedbacks <span>${requestScope.tfeedback}</span></div>
+                                        <div class="card-footer d-flex align-items-center justify-content-between">
+                                            <a class="small text-white stretched-link" href="mktfeedbacklist">View Details</a>
+                                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-table me-1"></i>
+                                    New Customers Trend
+                                </div>
+                                <div class="card-body">
+                                    <table id="datatablesSimple">
+                                        <thead>
+
+                                            </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    <footer class="py-4 bg-light mt-auto">
+                        <div class="container-fluid px-4">
+                            <div class="d-flex align-items-center justify-content-between small">
+                                <div class="text-muted">Copyright &copy; Your Website 2021</div>
+                                <div>
+                                    <a href="#">Privacy Policy</a>
+                                    &middot;
+                                    <a href="#">Terms &amp; Conditions</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
             </div>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Dashboard</li>
-                        </ol>
-                        <div class="row" >
-                            <style>
-                                .card-body {
-                                    display: flex;
-                                    justify-content: space-between;
-                                }
-
-                                .card-body span {
-                                    margin-left: 10px; /* Điều chỉnh khoảng cách bằng cách thay đổi giá trị của margin */
-                                }
-                            </style>                      
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Posts <span>${requestScope.tpost}</span></div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="mktpostlist">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">Products <span>${requestScope.tproduct}</span></div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="mktproductlist">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">Customers <span>${requestScope.tuser}</span></div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Feedbacks <span>${requestScope.tfeedback}</span></div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="mktfeedbacklist">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                New Customers Trend
-                            </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-
-                                        </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2021</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-            </div>
-        </div>
-                                    </section>
+        </section>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>

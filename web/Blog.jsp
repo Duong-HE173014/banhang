@@ -33,9 +33,9 @@
 
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3"> <!-- Đặt phần tìm kiếm vào cột đầy đủ chiều rộng -->
+                    <div class="col-md-12"> <!-- Đặt phần tìm kiếm vào cột đầy đủ chiều rộng -->
                         <form action="blogsearch" method="post" class="form-inline my-2 my-lg-0 ml-auto">
-                            <div class="input-group input-group-sm">
+                            <div class="input-group input-group-sm" style="width: 308px">
                                 <input value="" name="txt" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="Search...">
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-secondary btn-number">
@@ -46,11 +46,10 @@
                         </form>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-3"> <!-- Định nghĩa cột cho category -->
                         <div class="card bg-light mb-2">
-                            <div class="card-header bg-primary text-white text-uppercase"><i class="fa fa-list"></i> Categories</div>
+                            <div class="card-header bg-dark text-white text-uppercase"><i class="fa fa-list"></i> Categories</div>
                             <ul class="list-group category_block">
                             <c:forEach items="${listpC}" var="o">
                                 <li class="list-group-item text-white"><a href="blogcategory?postCategoryID=${o.postCategoryID}">${o.postCategoryname}</a></li>  
@@ -62,19 +61,21 @@
                 <div class="col-md-9"> <!-- Định nghĩa cột cho sản phẩm -->
                     <div class="row text-center">
                         <c:forEach items="${requestScope.listPo}" var="o">
-                            <div class="col-12 col-md-6 col-lg-4">
-                                <div class="card">
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <div class="card h-100">
                                     <img class="card-img-top" src="${o.postThumbnail}" alt="Card image cap">
-                                    <div class="card-body">
+                                    <div class="card-body d-flex flex-column">
                                         <h4 class="card-title show_txt">${o.pTitle}</h4>
                                         <p class="card-text show_txt">${o.postAuthor}</p>
                                         <p class="card-text show_txt">${o.postBriefInfo}</p> 
-                                        <div class="row">                              
-                                            <div class="col">
+                                        <div class="row flex-grow-1 justify-content-center">                              
+                                            <div class="col d-flex align-items-end justify-content-center">
                                                 <p class="card-text show_txt text-muted">${o.postUpdatedDate}</p> 
                                             </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col">
-                                                <a href="detail1?postID=${o.postID}" class="btn btn-dark btn-block">View more</a>
+                                                <a href="detail1?postID=${o.postID}" class="btn btn-dark btn-block mt-auto">View more</a>
                                             </div>
                                         </div>
                                     </div>

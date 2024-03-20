@@ -13,7 +13,6 @@
 .category_block li a {
     color: #343a40 ;
       transition: transform 0.3s;
-      
 }
 
 a .active {
@@ -23,6 +22,8 @@ footer {
     background-color: #343a40;
     padding: 40px;
     margin-top: 20px;
+    display: flex;
+    justify-content: center;
 }
 footer a {
     color: #f8f9fa!important
@@ -110,4 +111,9 @@ body {
     #carouselExample .carousel-inner .carousel-item img {
         max-width: 100%; /* Đảm bảo hình ảnh trong slider không vượt quá chiều rộng của slider */
         max-height: 100%; /* Đảm bảo hình ảnh trong slider không vượt quá chiều cao của slider */
+    }
+    
+    .btn-mo{
+        background-color: #343a40;
+        color: #ffffff;
     }

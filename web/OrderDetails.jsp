@@ -33,12 +33,12 @@
     <body>
         <jsp:include page="Header.jsp"></jsp:include>
 
-        <div class="row">
+            <div class="row">
 
-            <div class="col-sm-3">
-                <div class="card bg-light mb-2">
-                    <div class="card-header bg-dark text-white text-uppercase"><i class="fa fa-list"></i> Categories</div>
-                    <ul class="list-group category_block">
+                <div class="col-sm-3">
+                    <div class="card bg-light mb-2">
+                        <div class="card-header bg-dark text-white text-uppercase"><i class="fa fa-list"></i> Categories</div>
+                        <ul class="list-group category_block">
                         <c:forEach var="category" items="${categoryList}">
                             <li class="list-group-item text-white>"><a class="text-decoration-none" href="category?categoryId=${category.categoryId}">${category.categoryName}</a></li>
                             </c:forEach>
@@ -105,7 +105,14 @@
                                         View
                                     </button>
                                     <a class="btn btn-primary" target="_blank" href="detail?pid=${orderDetail.productId}">Rebuy</a>
-                                    <a class="btn btn-warning" href="#">Feedback</a>
+                                    <c:if test="${order.status eq 'Successfully'}">
+                                        <button type="button" class="btn btn-warning feedback-button"
+                                                data-order-detail-id="${orderDetail.orderDetailId}"
+                                                data-product-id="${orderDetail.productId}"
+                                                data-product-title="${orderDetail.product.title}">
+                                            Feedback
+                                        </button>
+                                    </c:if>
                                 </td>
                             </tr>
 
@@ -138,6 +145,12 @@
                         </tbody>
                 </table>
 
+                <c:if test="${param.success ne null}">
+                    <div class="alert alert-success" role="alert">
+                        Feedback success!
+                    </div>
+                </c:if>
+
                 <!-- Order Actions -->
                 <div class="text-center mt-5">
                     <!-- Cancel button (if not "Delivered") -->
@@ -145,19 +158,77 @@
                         <a class="btn btn-danger" href="order-details?id=${order.orderId}&action=cancel">Cancel Order</a>
                     </c:if>
 
-                    <!-- Edit button (if "Pending") -->
-                    <c:if test="${order.status eq 'Pending' && order.status ne 'Canceled'}">
-                        <a class="btn btn-info" href="#">Edit Order</a>
-                    </c:if>
+
                 </div>
 
             </div>
 
         </div>
         <!-- đáy -->
+
+
+        <!-- Feedback Modal -->
+        <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="feedbackModalLabel">Feedback</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Feedback form -->
+                        <form id="feedbackForm" action="feedback" method="post">
+                            <input type="hidden" id="productId" name="id" value="">
+                            <input type="hidden" id="orderDetailId" name="orderDetailId" value="">
+                            <input type="hidden" id="orderId" name="orderId" value="${order.orderId}">
+                            <div class="form-group">
+                                <label for="feedbackContent">Your Feedback:</label>
+                                <textarea class="form-control" id="feedbackContent" name="content" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="feedbackRating">Rating:</label>
+                                <select class="form-control" id="feedbackRating" name="rating" required>
+                                    <option value="1">1 Star</option>
+                                    <option value="2">2 Stars</option>
+                                    <option value="3">3 Stars</option>
+                                    <option value="4">4 Stars</option>
+                                    <option value="5">5 Stars</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <jsp:include page="Footer.jsp"></jsp:include>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                // Show feedback modal when "Feedback" button is clicked
+                $('.feedback-button').click(function () {
+                    // Get the order detail information from data attributes
+                    var orderDetailId = $(this).data('order-detail-id');
+                    var productId = $(this).data('product-id');
+                    var productTitle = $(this).data('product-title');
+
+                    // Set the order detail information in the modal
+                    $('#feedbackModal').find('#orderDetailId').val(orderDetailId);
+                    $('#feedbackModal').find('#productId').val(productId);
+                    $('#feedbackModal').find('#productTitle').val(productTitle);
+
+                    // Show the modal
+                    $('#feedbackModal').modal('show');
+                });
+            });
+        </script>
+
+
     </body>
 </html>

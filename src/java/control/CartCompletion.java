@@ -81,6 +81,8 @@ public class CartCompletion extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+
+            // Lấy thông tin từ request
             String uidS = request.getParameter("uid");
             Integer uid = Integer.parseInt(uidS);
             String fullName = request.getParameter("full_name");
@@ -90,78 +92,150 @@ public class CartCompletion extends HttpServlet {
             String address = request.getParameter("address");
             String mobile = request.getParameter("mobile");
             String totalS = request.getParameter("total");
-//        PrintWriter out = response.getWriter();
-//        out.print(totalS);
             Double total = Double.parseDouble(totalS);
             String notes = request.getParameter("notes");
             String paymentS = request.getParameter("httt_ma");
             Integer payment = Integer.parseInt(paymentS);
-            
-            sendEmail(email, "The Completion of your order", "Your Full Name: " + fullName
-                    + "\nYour email: " + email + "\nYour gender: " + genderS + "\nYour address: " + address
-                    + "\nYour phonenumber: " + mobile + "\nTotal of your bill: " + totalS
-                    + "\nYour note: " + notes + "\nPayment method: " + paymentS);
 
-            Order O = new Order(uid, total, fullName, email, mobile, address, gender, notes, payment);
+            // Chuyển đổi giới tính từ số sang chuỗi
+            String genderString;
+            if (gender == 0) {
+                genderString = "Female";
+            } else if (gender == 1) {
+                genderString = "Male";
+            } else {
+                genderString = "Unknown";
+            }
+
+            // Chuyển đổi phương thức thanh toán từ số sang chuỗi
+            String paymentString = null;
+            if (payment == 2) {
+                paymentString = "COD";
+            } else {
+                paymentString = "Electronic Funds Transfer" + "\\nBạn đã thanh toán thành công!";
+            }
+
+            // Nếu notes rỗng, gán giá trị là "Không có"
+            if (notes == null || notes.isEmpty()) {
+                notes = "Không có";
+            }
+
+            // Gửi email
+            sendEmail(email, "The Completion of your order", "Your Full Name: " + fullName
+                    + "\\nYour gender: " + genderString + "\\nYour email: " + email + "\\nYour phonenumber: " + mobile
+                    + "\\nYour address: " + address + "\\nYour note: " + notes + "\\nPayment method: " + paymentString
+                    + "\\n" + "--------------------" + "\\nTotal of your bill: " + totalS + "VND");
+
+            // Tạo đơn hàng
             OrderDAO odao = new OrderDAO();
-            Order oder = odao.createOrder(O);
+            Order order = odao.createOrder(new Order(uid, total, fullName, email, mobile, address, gender, notes, payment));
+
+            // Lưu chi tiết đơn hàng
             HttpSession session = request.getSession();
             Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
             boolean test = false;
             for (Cart items : cart) {
-                OrderDetail od = new OrderDetail(oder.getOrderId(),
+                OrderDetail od = new OrderDetail(order.getOrderId(),
                         Integer.parseInt(items.getProducts().getProductID()),
                         email, items.getProducts().getTitle(),
                         items.getProducts().getPrice(),
                         items.getQuantity(), total);
                 test = odao.createOrderDetails(od);
             }
-            DAO dao = new DAO();
-            Vector<Product> listP = new Vector<>();
-            Vector<Category> listC = dao.getAllCategory();
-            Product last = dao.getLast();
 
-            request.setAttribute("tag", 0);
-            request.setAttribute("listP", listP);
-            request.setAttribute("listC", listC);
-            request.setAttribute("p", last);
-// Kiểm tra xem số lượng sản phẩm trong giỏ hàng có vượt quá số lượng sản phẩm có sẵn trong kho không
-            boolean productsAvailableInStock = checkProductsAvailabilityInStock(request); // Phương thức này trả về true nếu tất cả sản phẩm trong giỏ hàng có sẵn trong kho
+            // Kiểm tra số lượng sản phẩm trong kho
+            boolean productsAvailableInStock = checkProductsAvailabilityInStock(request);
 
             if (!productsAvailableInStock) {
-                // Nếu có sản phẩm trong giỏ hàng không có sẵn trong kho, chuyển hướng đến trang thông báo hết hàng
                 response.sendRedirect(request.getContextPath() + "/cart_out_of_stock.html");
             } else {
-                // Nếu tất cả sản phẩm đều có sẵn trong kho, tiếp tục xử lý hoàn thành đơn hàng
-                // Kiểm tra xem có lỗi kỹ thuật nào xảy ra không (đây là một ví dụ, bạn có thể thay thế bằng kiểm tra thực tế)
-                boolean technicalError = checkForTechnicalError(); // Phương thức này trả về true nếu có lỗi kỹ thuật
+                boolean methodpayment = checkForPaymentMethod(payment);
+                if (methodpayment) {
+                    // Kiểm tra xem giá trị "completed" có được gửi từ trang "Electronic Funds Transfer.jsp" không
+                    String completed = request.getParameter("completed");
+                    if (completed != null && completed.equals("true")) {
+                        // Nếu giá trị "completed" là "true", chuyển hướng đến trang "CartCompletion.jsp"
+                        // Lấy danh sách sản phẩm và danh mục
+                        DAO dao = new DAO();
+                        Vector<Product> listP = new Vector<>();
+                        Vector<Category> listC = dao.getAllCategory();
+                        Product last = dao.getLast();
 
-                if (test) {
-                    // Nếu có lỗi kỹ thuật, chuyển hướng đến trang lỗi
-                    response.sendRedirect(request.getContextPath() + "/cart_completion_error.html");
+                        // Đặt các thuộc tính vào request
+                        request.setAttribute("categoryList", new DAO().getAllCategory());
+                        request.setAttribute("product", new DAO().getLast());
+
+                        request.setAttribute("order", order);
+                        request.setAttribute("orderDetails", order.getOrderDetailList());
+                        request.getRequestDispatcher("CartCompletion.jsp").forward(request, response);
+                    } else {
+                        
+                        User user = (User) session.getAttribute("user");
+                        request.setAttribute("uid", uid);
+                        request.setAttribute("fullName", fullName);
+                        request.setAttribute("email", email);  
+                        request.setAttribute("gender", gender);
+                        request.setAttribute("address", address);
+                        request.setAttribute("total",  total);
+                        request.setAttribute("notes", notes);
+                        request.setAttribute("payment", payment);
+ 
+                            
+
+                        request.getRequestDispatcher("ElectronicFundsTransfer.jsp").forward(request, response);
+                    }
                 } else {
-                    // Nếu không có lỗi kỹ thuật, hiển thị trang hoàn thành đơn hàng
-                    request.getRequestDispatcher("/CartCompletion.jsp").forward(request, response);
+                    if (test) {
+                        // Lấy danh sách sản phẩm và danh mục
+                        DAO dao = new DAO();
+                        Vector<Product> listP = new Vector<>();
+                        Vector<Category> listC = dao.getAllCategory();
+                        Product last = dao.getLast();
+
+                        // Đặt các thuộc tính vào request
+                        request.setAttribute("categoryList", new DAO().getAllCategory());
+                        request.setAttribute("product", new DAO().getLast());
+
+                        request.setAttribute("order", order);
+                        request.setAttribute("orderDetails", order.getOrderDetailList());
+
+                        // Chuyển hướng đến trang CartCompletion.jsp
+                        request.getRequestDispatcher("CartCompletion.jsp").forward(request, response);
+                    }
                 }
             }
         } catch (SQLException ex) {
             Logger.getLogger(CartCompletion.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-
     // Kiểm tra số lượng sản phẩm trong giỏ hàng có vượt quá số lượng sản phẩm có sẵn trong kho không
+
     private boolean checkProductsAvailabilityInStock(HttpServletRequest request) {
-        // Viết mã kiểm tra số lượng sản phẩm trong giỏ hàng so với số lượng sản phẩm có sẵn trong kho ở đây
-        // Ví dụ: giả định không có sản phẩm nào trong giỏ hàng vượt quá số lượng có sẵn trong kho
+        // Lấy danh sách sản phẩm trong giỏ hàng từ session
+        HttpSession session = request.getSession();
+        Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
+
+        // Lặp qua các sản phẩm trong giỏ hàng để kiểm tra số lượng
+        for (Cart cartItem : cart) {
+            // Lấy sản phẩm và số lượng từ giỏ hàng
+            Product product = cartItem.getProducts();
+            int quantityInCart = cartItem.getQuantity();
+
+            // Kiểm tra số lượng sản phẩm trong kho
+            int quantityInStock = product.getQuantity();
+
+            // Nếu số lượng trong giỏ hàng vượt quá số lượng trong kho
+            if (quantityInCart > quantityInStock) {
+                // Trả về false, tức là sản phẩm trong giỏ hàng không có sẵn đủ
+                return false;
+            }
+        }
+        // Nếu không có sản phẩm nào vượt quá số lượng trong kho, trả về true
         return true;
     }
 
-    // Giả định phương thức này kiểm tra các lỗi kỹ thuật trong quá trình hoàn thành đơn hàng
-    private boolean checkForTechnicalError() {
-        // Viết mã kiểm tra lỗi kỹ thuật ở đây (ví dụ: kiểm tra cơ sở dữ liệu, kiểm tra kết nối, ...)
-        // Ví dụ: giả định lỗi kỹ thuật xảy ra ngẫu nhiên
-        return Math.random() < 0.5; // 50% cơ hội để có lỗi kỹ thuật
+    private boolean checkForPaymentMethod(int payment) {
+        return payment == 1;
     }
 
     public boolean sendEmail(String to, String subject, String text) {

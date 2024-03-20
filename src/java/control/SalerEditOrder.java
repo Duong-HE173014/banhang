@@ -24,8 +24,8 @@ import java.util.logging.Logger;
  *
  * @author Admin
  */
-@WebServlet(name = "SaleManageEditOrder", urlPatterns = {"/salemanagerOrderEdit"})
-public class SaleManageEditOrder extends HttpServlet {
+@WebServlet(name = "SalerEditOrder", urlPatterns = {"/salerEditOrder"})
+public class SalerEditOrder extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -50,12 +50,6 @@ public class SaleManageEditOrder extends HttpServlet {
 
                 DAO dao = new DAO();
 
-                ResultSet rsInfoSaler = dao.getResultSet("SELECT u.UserID, u.FullName, COUNT(o.OrderID) AS NumOrdersWithUserID\n"
-                        + "FROM Users u\n"
-                        + "LEFT JOIN Orders o ON u.UserID = o.IDUpdater\n"
-                        + "WHERE u.Role = 'Saler'\n"
-                        + "GROUP BY u.UserID, u.FullName");
-
                 ResultSet rsdetail = dao.getResultSet("SELECT \n"
                         + "    o.OrderID,\n"
                         + "    o.OrderDate,\n"
@@ -78,10 +72,8 @@ public class SaleManageEditOrder extends HttpServlet {
                         + "WHERE \n"
                         + "    o.OrderID = " + orderID + "");
 
-                System.out.println(" rsdetail" + rsdetail);
-                request.setAttribute("rsInfoSaler", rsInfoSaler);
                 request.setAttribute("detail", rsdetail);
-                request.getRequestDispatcher("SalemanagerOrderDetail.jsp").forward(request, response);
+                request.getRequestDispatcher("SalerEditOrder.jsp").forward(request, response);
             } else {
                 OrderDAO dao = new OrderDAO();
 
@@ -92,7 +84,7 @@ public class SaleManageEditOrder extends HttpServlet {
                 int SalerID = Integer.parseInt(salerID);
                 boolean success = dao.updateOrderStatus(Id, status, SalerID);
 
-                response.sendRedirect("salemanagerOrderListControl");
+                request.getRequestDispatcher("salerOrderListControl").forward(request, response);
             }
         } catch (Exception ex) {
             Logger.getLogger(mktCustomerListControl.class.getName()).log(Level.SEVERE, null, ex);
