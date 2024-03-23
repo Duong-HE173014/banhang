@@ -164,7 +164,7 @@ CREATE TABLE [dbo].[Orders](
 	[ReceiverGender] [int] NULL,
 	[Notes] [nvarchar](max) NULL,
 	[PaymentMethods] [int] NULL,
-	[NameUpdater][nvarchar](255) NULL,
+	[IDUpdater][int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[OrderID] ASC
@@ -290,6 +290,7 @@ CREATE TABLE [dbo].[Users](
     [Phone] [nvarchar](20) NULL,
     [Note] [nvarchar](255) NULL,
     [StatusID] [int] NULL,
+	[LoggedIn] BIT NOT NULL DEFAULT 0,
     CONSTRAINT [FK_Users_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status]([StatusID])
 );
 GO
@@ -303,7 +304,17 @@ CREATE TABLE CustomerStatusHistory (
     FOREIGN KEY (OldStatusID) REFERENCES Status(StatusID),
     FOREIGN KEY (NewStatusID) REFERENCES Status(StatusID)
 );
---Insert:
+GO
+
+SET IDENTITY_INSERT [dbo].[Cart] ON 
+GO
+INSERT [dbo].[Cart] ([CartID], [UserID], [ProductID], [Quantity]) VALUES (1, 1, 1, 2)
+GO
+INSERT [dbo].[Cart] ([CartID], [UserID], [ProductID], [Quantity]) VALUES (2, 2, 2, 1)
+GO
+INSERT [dbo].[Cart] ([CartID], [UserID], [ProductID], [Quantity]) VALUES (3, 3, 3, 3)
+GO
+SET IDENTITY_INSERT [dbo].[Cart] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Categories] ON 
 GO
@@ -668,13 +679,15 @@ INSERT INTO [dbo].[Users] ([UserID], [FullName], [UpdatedDate], [Email], [Passwo
 VALUES (6, N'Vuong Dai Duong', GETDATE(), N'duongtata@gmail.com', N'duong123456', N'User', 1, N'123 Marketing Street', N'0123456789', N'Note for Vuong Dai Duong', 1);
 INSERT INTO [dbo].[Users] ([UserID], [FullName], [UpdatedDate], [Email], [Password], [Role], [Gender], [Address], [Phone], [Note], [StatusID])
 VALUES 
-    
     (7, N'Another Name', GETDATE(), N'anotheremail@example.com', N'anotherpassword', N'Admin', 0, N'456 Admin Street', N'9876543210', N'Note for Another Name', 1),
     (8, N'Third Name', GETDATE(), N'thirdemail@example.com', N'thirdpassword', N'User', 1, N'789 User Street', N'1234567890', N'Note for Third Name', 1),
     (9, N'Fourth Name', GETDATE(), N'fourthemail@example.com', N'fourthpassword', N'User', 0, N'1011 User Street', N'0987654321', N'Note for Fourth Name', 1),
     (10, N'Fifth Name', GETDATE(), N'fifthemail@example.com', N'fifthpassword', N'User', 1, N'1213 User Street', N'1357924680', N'Note for Fifth Name', 1),
-    (11, N'Sixth Name', GETDATE(), N'sixthemail@example.com', N'sixthpassword', N'Admin', 0, N'1415 Admin Street', N'8642079135', N'Note for Sixth Name', 1);
-
+    (11, N'Sixth Name', GETDATE(), N'sixthemail@example.com', N'sixthpassword', N'Admin', 0, N'1415 Admin Street', N'8642079135', N'Note for Sixth Name', 1),  
+	(12, N'First Saler', GETDATE(), N'firstsaler@example.com', N'firstsalerpassword', N'Saler', 0, N'123 Saler Street', N'1234567890', N'Note for First Saler', 1),
+    (13, N'Second Saler', GETDATE(), N'secondsaler@example.com', N'secondsalerpassword', N'Saler', 1, N'456 Saler Street', N'2345678901', N'Note for Second Saler', 1),
+    (14, N'Third Saler', GETDATE(), N'thirdsaler@example.com', N'thirdsalerpassword', N'Saler', 0, N'789 Saler Street', N'3456789012', N'Note for Third Saler', 1);
+	(15, N'Nông Văn Dền', GETDATE(), N'shipper@gmail.com', N'password123456', N'Staff', 0, N'789 Saler Street', N'3456789012', N'Note for Third Saler', 1);
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 ALTER TABLE [dbo].[Cart]  WITH CHECK ADD FOREIGN KEY([ProductID])
@@ -907,3 +920,23 @@ VALUES
 ('Slider 1', 'https://bookbuy.vn/Res/Images/Album/ffd62e0e-02fb-4e7a-96fe-42ed8966c89b.png?w=920&h=420&mode=crop', 'https://bookbuy.vn/Res/Images/Album/ffd62e0e-02fb-4e7a-96fe-42ed8966c89b.png?w=920&h=420&mode=crop'),
 ('Slider 2', 'https://bookbuy.vn/Res/Images/Album/efefae23-5cb2-42e9-8d4f-59ca99d500af.png?w=920&h=420&mode=crop', 'https://bookbuy.vn/Res/Images/Album/efefae23-5cb2-42e9-8d4f-59ca99d500af.png?w=920&h=420&mode=crop');
 
+use SWP_Online_Shop
+UPDATE Orders SET Status = 'Shipped', IDUpdater = '12' WHERE OrderID = 1
+select * from Orders
+
+DELETE FROM OrderDetails WHERE OrderID = '5';
+DELETE FROM Orders WHERE OrderID = '5';
+
+
+SELECT * from Products
+FROM [dbo].[Users]
+
+UPDATE Orders SET Status = 'Pending', IDUpdater = '14' WHERE OrderID = '1010'
+
+SELECT u.UserID, u.FullName, COUNT(o.OrderID) AS NumOrdersWithUserID
+FROM Users u
+LEFT JOIN Orders o ON u.UserID = o.IDUpdater
+WHERE u.Role = 'Saler'
+GROUP BY u.UserID, u.FullName
+
+UPDATE Products SET Quantity = Quantity + '1' WHERE ProductID = 1
