@@ -154,7 +154,7 @@
                 <!-- Order Actions -->
                 <div class="text-center mt-5">
                     <!-- Cancel button (if not "Delivered") -->
-                    <c:if test="${order.status ne 'Delivered' && order.status ne 'Canceled'}">
+                    <c:if test="${order.status ne 'Successfully'}">
                         <a class="btn btn-danger" href="order-details?id=${order.orderId}&action=cancel">Cancel Order</a>
                     </c:if>
 

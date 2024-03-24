@@ -921,3 +921,4 @@ VALUES
 ('Slider 2', 'https://nguvan.vn/wp-content/uploads/2021/05/kim_duan-1.jpg', 'https://nguvan.vn/wp-content/uploads/2021/05/kim_duan-1.jpg');
 
 use SWP_Online_Shop
+
