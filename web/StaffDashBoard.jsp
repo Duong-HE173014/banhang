@@ -85,7 +85,7 @@
                                 <th>Receiver Name</th>
                                 <th>ID Saler</th>
                                 <th>Status</th>
-                                <th>UpDate</th>
+                                <th>Action</th>
                                 <th>Details</th>
                             </tr>
                         </thead>

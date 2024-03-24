@@ -4,6 +4,7 @@
     Author     : Admin
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="entity.Post" %>
 <%@page import="entity.Cart" %>
@@ -38,6 +39,11 @@
 
             .submitbutton:hover {
                 background-color: #FF3333;
+            }
+
+            .disabled-link {
+                pointer-events: none; /* Không cho phép sự kiện click */
+                opacity: 0.5; /* Mờ đi */
             }
         </style>
     </head>
@@ -97,30 +103,44 @@
                         </div>
                     </div>
                     <%
-                    double totalprice = 0;
-                    double discountprice = 0;
+    double totalprice = 0;
+    double discountprice = 0;
 
-                    Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
-                    for (Cart item : cart) {
-                    %>                    
+    Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
+    for (Cart item : cart) {
+                    %>
                     <div class="card w-100">
                         <div class="card-body p-4">
                             <div class="row d-flex justify-content-between align-items-center">
                                 <div class="col-md-2 col-lg-2 col-xl-2">
-                                    <img src="<%=item.getProducts().getImage()%>" class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                    <img src="<%=item.getProducts().getImage()%>" class="img-fluid rounded-3">
                                 </div>
                                 <div class="col-md-3 col-lg-3 col-xl-3">
                                     <p class="lead fw-normal mb-2"><%=item.getProducts().getTitle()%></p>
+                                    <p class="form-label" for="form1" style="font-size: 12px; color: gray;"><%=item.getProducts().getQuantity()%> products available</p>
                                 </div>
                                 <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                    <input value="<%= item.getQuantity()%>" type="number" class="form-control form-control-sm" readonly>
+                                    <!-- Số lượng sản phẩm -->
+                                    <div class="d-flex mb-4" style="max-width: 300px">
+                                        <button class="btn btn-dark px-3 me-2">
+                                            <a<% if (item.getQuantity() < 2) { %> class="fas fa-minus disabled-link" <% } else { %> href="updatequantity?pid=<%= item.getProducts().getProductID()%>&type=1" class="fas fa-minus" <% } %> style="color: white; text-decoration: none; max-width: 100%;"></a>
+                                        </button>
+
+                                        <input style="color: black" id="form<%= item.getProducts().getProductID() %>" name="quantity" value="<%=item.getQuantity() %>" type="number" class="form-control form-control-sm" readonly>
+
+                                        <button class="btn btn-dark px-3 ms-2" >
+                                            <a <% if (item.getQuantity() == item.getProducts().getQuantity()) { %> class="fas fa-plus disabled-link" <% } else { %> href="updatequantity?pid=<%= item.getProducts().getProductID()%>&type=2" class="fas fa-plus" <% } %> style="color: white; text-decoration: none; max-width: 100%;"></a>
+                                        </button>
+                                    </div>
+                                    <!-- Số lượng sản phẩm -->
                                 </div>
 
                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                                     <del class="mb-0"><%=item.getProducts().getPrice()%>VND</del>
                                     <%
-                                    discountprice +=  item.getProducts().getSalePrice() * item.getQuantity();
-                                    totalprice +=  item.getProducts().getSalePrice() * item.getQuantity();
+                                    // Tính tổng discountprice và totalprice
+                                    discountprice += item.getProducts().getSalePrice() * item.getQuantity();
+                                    totalprice += item.getProducts().getSalePrice() * item.getQuantity();
                                     %>
                                     <h5 style="color: red" class="mb-0"><%=item.getProducts().getSalePrice()%>VND</h5>
                                 </div>                               
@@ -179,11 +199,11 @@
             </div>
             <div class="card col-md-12 w-75 m-auto">
                 <div class="card-body p-4">           
-                    <div class="showmore d-flex justify-content-end">
-                        <div class="showmore-title">
+                    <div class="showmore">
+                        <div class="showmore-title d-flex justify-content-between">
                             <div>
                                 <font style="vertical-align: inherit">
-                                <font style="vertical-align: inherit"> You may also like </font>
+                                <font style="vertical-align: inherit"> YOU MAY ALSO LIKE </font>
                                 </font>
                             </div>
                             <a class="seeall" href="products">

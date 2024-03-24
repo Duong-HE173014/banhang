@@ -117,7 +117,7 @@
                                 <th>Product</th>
                                 <th>Receiver Name</th>
                                 <th>Status</th> 
-                                <th>Update</th>
+                                <th>Action</th>
                                 <th>Details</th>
                             </tr>
                         </thead>
@@ -156,7 +156,7 @@
                                 <th>Product</th>
                                 <th>Receiver Name</th>
                                 <th>Status</th>  
-                                <th>Update</th>
+                                
                                 <th>Details</th>
                             </tr>
                         </thead>
@@ -171,29 +171,7 @@
                                         ${order.orderDetailList.size()} Products
                                     </td>
                                     <td>${order.receiverFullName}</td>
-                                    <td>${order.status}</td>
-                                    <c:choose>
-                                        <c:when test="${order.status == 'Pending'}">
-                                    <form action="salerEditOrder" method="post">
-                                        <input type="hidden" name="id" value="${order.orderId}">
-                                        <input type="hidden" name="status" value="Confirm">
-                                        <input type="hidden" name="salerID" class="form-control" value="${user.userID}">
-                                        <td><button type="submit" name="submit" class="btn btn-primary">Confirm</button></td>
-                                    </form>
-                                </c:when>
-                                <c:when test="${order.status == 'Delivering'}">
-                                    <form action="salerEditOrder" method="post">
-                                        <input type="hidden" name="id" value="${order.orderId}">
-                                        <input type="hidden" name="status" value="Successfully">
-                                        <input type="hidden" name="salerID" class="form-control" value="${user.userID}">
-                                        <td><button type="submit" name="submit" class="btn btn-success">Successfully</button></td>
-                                    </form>
-                                </c:when>
-                                <c:otherwise>
-                                    <td></td>
-                                </c:otherwise>
-                            </c:choose>
-
+                                    <td>${order.status}</td>       
                             <td class="align-items-center"> <a href="salerEditOrder?orderId=${order.orderId}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4m.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
                                     </svg></a></td>

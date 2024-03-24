@@ -686,7 +686,7 @@ VALUES
     (11, N'Sixth Name', GETDATE(), N'sixthemail@example.com', N'sixthpassword', N'Admin', 0, N'1415 Admin Street', N'8642079135', N'Note for Sixth Name', 1),  
 	(12, N'First Saler', GETDATE(), N'firstsaler@example.com', N'firstsalerpassword', N'Saler', 0, N'123 Saler Street', N'1234567890', N'Note for First Saler', 1),
     (13, N'Second Saler', GETDATE(), N'secondsaler@example.com', N'secondsalerpassword', N'Saler', 1, N'456 Saler Street', N'2345678901', N'Note for Second Saler', 1),
-    (14, N'Third Saler', GETDATE(), N'thirdsaler@example.com', N'thirdsalerpassword', N'Saler', 0, N'789 Saler Street', N'3456789012', N'Note for Third Saler', 1);
+    (14, N'Third Saler', GETDATE(), N'thirdsaler@example.com', N'thirdsalerpassword', N'Saler', 0, N'789 Saler Street', N'3456789012', N'Note for Third Saler', 1),
 	(15, N'Nông Văn Dền', GETDATE(), N'shipper@gmail.com', N'password123456', N'Staff', 0, N'789 Saler Street', N'3456789012', N'Note for Third Saler', 1);
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
@@ -917,25 +917,7 @@ GO
 
 INSERT INTO [SWP_Online_Shop].[dbo].[Sliders] ([Title], [Image], [Backlink])
 VALUES
-('Slider 1', 'https://bookbuy.vn/Res/Images/Album/ffd62e0e-02fb-4e7a-96fe-42ed8966c89b.png?w=920&h=420&mode=crop', 'https://bookbuy.vn/Res/Images/Album/ffd62e0e-02fb-4e7a-96fe-42ed8966c89b.png?w=920&h=420&mode=crop'),
-('Slider 2', 'https://bookbuy.vn/Res/Images/Album/efefae23-5cb2-42e9-8d4f-59ca99d500af.png?w=920&h=420&mode=crop', 'https://bookbuy.vn/Res/Images/Album/efefae23-5cb2-42e9-8d4f-59ca99d500af.png?w=920&h=420&mode=crop');
+('Slider 1', 'https://lambanner.com/wp-content/uploads/2022/08/MNT-DESIGN-MAU-BIA-SACH-DEP-TYPO.jpg', 'https://lambanner.com/wp-content/uploads/2022/08/MNT-DESIGN-MAU-BIA-SACH-DEP-TYPO.jpg'),
+('Slider 2', 'https://nguvan.vn/wp-content/uploads/2021/05/kim_duan-1.jpg', 'https://nguvan.vn/wp-content/uploads/2021/05/kim_duan-1.jpg');
 
 use SWP_Online_Shop
-UPDATE Orders SET Status = 'Shipped', IDUpdater = '12' WHERE OrderID = 1
-select * from Orders
-
-DELETE FROM OrderDetails WHERE OrderID = '5';
-DELETE FROM Orders WHERE OrderID = '5';
-
-
-SELECT *
-FROM [dbo].[Users]
-
-UPDATE Orders SET Status = 'Pending', IDUpdater = '14' WHERE OrderID = '1010'
-
-SELECT u.UserID, u.FullName, COUNT(o.OrderID) AS NumOrdersWithUserID
-FROM Users u
-LEFT JOIN Orders o ON u.UserID = o.IDUpdater
-WHERE u.Role = 'Saler'
-GROUP BY u.UserID, u.FullName
-

@@ -45,6 +45,7 @@ public class SaleManageEditOrder extends HttpServlet {
             if (submit == null) {
                 request.setCharacterEncoding("UTF-8");
                 String orderID = request.getParameter("orderId");
+                String salerID = request.getParameter("salerID");
                 HttpSession session = request.getSession();
                 User user = (User) session.getAttribute("user");
 
@@ -54,6 +55,12 @@ public class SaleManageEditOrder extends HttpServlet {
                         + "FROM Users u\n"
                         + "LEFT JOIN Orders o ON u.UserID = o.IDUpdater\n"
                         + "WHERE u.Role = 'Saler'\n"
+                        + "GROUP BY u.UserID, u.FullName");
+                
+                ResultSet rsInfoSalerNow = dao.getResultSet("SELECT u.UserID, u.FullName, COUNT(o.OrderID) AS NumOrdersWithUserID\n"
+                        + "FROM Users u\n"
+                        + "LEFT JOIN Orders o ON u.UserID = o.IDUpdater\n"
+                        + "WHERE u.Role = 'Saler' AND o.IDUpdater = " + salerID + "\n"
                         + "GROUP BY u.UserID, u.FullName");
 
                 ResultSet rsdetail = dao.getResultSet("SELECT \n"
@@ -80,6 +87,7 @@ public class SaleManageEditOrder extends HttpServlet {
 
                 System.out.println(" rsdetail" + rsdetail);
                 request.setAttribute("rsInfoSaler", rsInfoSaler);
+                request.setAttribute("rsInfoSalerNow", rsInfoSalerNow);
                 request.setAttribute("detail", rsdetail);
                 request.getRequestDispatcher("SalemanagerOrderDetail.jsp").forward(request, response);
             } else {

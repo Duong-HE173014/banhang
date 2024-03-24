@@ -106,14 +106,19 @@ public class FilterAcc implements Filter {
         HttpSession session = httpRequest.getSession();
         String currentPath = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
 
+        if (currentPath.startsWith("/assets")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         //đường dẫn không yêu cầu quyền
-        if (Arrays.asList("/home", "/products", "/login", "/logout", "/blog", "/detail1", "/blogcategory", "/blogsearch", "/category", "/detail", "/postDetail", "/register", "/verify", "/search", "/reset-password", "/new-password", "/css/style.css", "/js/script.js", "/orderListControl", "/css/manager.css", "/errLogin.html").contains(currentPath)) {
+        if (Arrays.asList("/vnpay_return.jsp", "/payment","/home", "/products", "/login", "/logout", "/blog", "/detail1", "/blogcategory", "/blogsearch", "/category", "/detail", "/postDetail", "/register", "/verify", "/search", "/reset-password", "/new-password", "/css/style.css", "/js/script.js", "/orderListControl", "/css/manager.css", "/errLogin.html").contains(currentPath)) {
             chain.doFilter(request, response);
             return;
         }
 
         //đường dẫn đặc biệt
-        if (Arrays.asList("/mktaddproduct", "/mkteditproduct", "/showCart", "/cartcompletion", "/cart", "/userprofile", "/updateprofile", "/uploadprofile", "/new-password", "/my-order", "/order-details", "/change-password", "/checkout", "/css/menu.css", "/cart_completion_error.html", "/cart_out_of_stock.html", "/feedback").contains(currentPath)) {
+        if (Arrays.asList("/updatequantity", "/mktaddproduct", "/mkteditproduct", "/showCart", "/cartcompletion", "/cart", "/userprofile", "/updateprofile", "/uploadprofile", "/new-password", "/my-order", "/order-details", "/change-password", "/checkout", "/css/menu.css", "/cart_completion_error.html", "/cart_out_of_stock.html", "/feedback").contains(currentPath)) {
             if (session != null && session.getAttribute("role") != null) {
                 chain.doFilter(request, response);
                 return;

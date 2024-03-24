@@ -70,7 +70,7 @@
                                         </div>
                                         <div class="col-xl-6 col-md-6 mb-6">
                                             <div class="card bg-warning text-white">
-                                                <div class="card-body">Order has been confirmed <span>${requestScope.tconfirm}</span></div>
+                                                <div class="card-body">Commercial packaging <span>${requestScope.tconfirm}</span></div>
                                                 <div class="card-footer d-flex align-items-center justify-content-between">
                                                     <a class="small text-white stretched-link" href="salemanagerOrderListControl">View Details</a>
                                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>

@@ -69,10 +69,10 @@
                     <p class="lead">Bạn đã đặt hàng thành công. Dưới đây là thông tin của bạn.</p>
                 </div>
 
-                <h2 class="text-center mb-4">Order Details</h2>
+                <h2 class="text-left mb-4">Order Details</h2>
 
                 <!-- Display Order Information -->
-                <div class="mb-4 row justify-content-center">
+                <div class="mb-4 row">
                     <div class="col-md-2 order-md-last">
                         <p><strong>Order ID:</strong></p>
                         <p><strong>Receiver Name:</strong></p>
@@ -92,7 +92,6 @@
                 </div>
 
                 <!-- Display Order Details Table -->
-                <h4>Order Details</h4>
                 <table class="table table-bordered">
                     <thead class="thead-dark">
                         <tr>

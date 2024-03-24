@@ -4,8 +4,7 @@
  */
 package control;
 
-import dao.UserDAO;
-import entity.User;
+import entity.Cart;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,14 +13,24 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Vector;
 
 /**
  *
- * @author anhdu
+ * @author pc
  */
-@WebServlet(name = "LoginControl", urlPatterns = {"/login"})
-public class LoginControl extends HttpServlet {
+@WebServlet(name = "UpdateQuantityCartControl", urlPatterns = {"/updatequantity"})
+public class UpdateQuantityControl extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -30,10 +39,10 @@ public class LoginControl extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginControl</title>");
+            out.println("<title>Servlet UpdateQuantityServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginControl at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UpdateQuantityServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -51,7 +60,23 @@ public class LoginControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("Login.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
+        String pid = request.getParameter("pid");
+        String type = request.getParameter("type");
+
+        for (Cart c : cart) {
+            if (c.getProducts().getProductID().contains(pid)) {
+                if (type.contains("1")) {
+                    c.setQuantity(c.getQuantity() - 1);
+                }
+                if (type.contains("2")) {
+                    c.setQuantity(c.getQuantity() + 1);
+                }
+            }
+        }
+
+        response.sendRedirect("showCart");
     }
 
     /**
@@ -65,44 +90,7 @@ public class LoginControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        UserDAO userDAO = new UserDAO();
-        User user = userDAO.loginUser(email, password);
-
-        if (user != null) {
-            // Login successful
-            String role = user.getRole();
-            HttpSession session = request.getSession();
-            session.setAttribute("role", role);
-            session.setAttribute("user", user); 
-            
-
-               
-
-               
-             userDAO.updateLoggedInStatus(user.getUserID(), true);
-
-            if ("Admin".equals(role)) {
-                response.sendRedirect("admin/dashboard");
-            } else if ("SaleManager".equals(role)) {
-                response.sendRedirect("salemanagerDash");
-            } else if ("Saler".equals(role)) {
-                response.sendRedirect("salerDash");
-            } else if ("Marketing".equals(role)) {
-                response.sendRedirect("mktdashboard");
-            }else if ("Staff".equals(role)) {
-                response.sendRedirect("staffdashboardcontrol");
-            } else {
-                response.sendRedirect("home");
-            }
-        } else {
-            // Login failed
-            request.setAttribute("errorMessage", "Invalid email or password");
-            request.getRequestDispatcher("Login.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /**

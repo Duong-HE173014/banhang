@@ -6,13 +6,17 @@ package control;
 
 import dao.DAO;
 import dao.OrderDAO;
+import dao.OrderDetailDAO;
 import entity.Order;
+import entity.OrderDetail;
+import entity.Product;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
@@ -34,7 +38,14 @@ public class OrderDetailControl extends HttpServlet {
         switch (action) {
             case "cancel" -> {
 
+                // Cập nhật trạng thái của đơn hàng thành "Canceled"
                 order.setStatus("Canceled");
+
+                List<OrderDetail> orderDetails = order.getOrderDetailList();
+                // Cập nhật số lượng sản phẩm trở lại kho hàng
+                updateProductQuantityForCanceledOrder(orderDetails);
+
+                // Xóa đơn hàng
                 new OrderDAO().deleteOrder(order);
                 response.sendRedirect("my-order");
 
@@ -42,7 +53,7 @@ public class OrderDetailControl extends HttpServlet {
             default -> {
                 request.setAttribute("categoryList", new DAO().getAllCategory());
                 request.setAttribute("product", new DAO().getLast());
-                
+
                 request.setAttribute("order", order);
                 request.setAttribute("orderDetails", order.getOrderDetailList());
 
@@ -58,4 +69,13 @@ public class OrderDetailControl extends HttpServlet {
             throws ServletException, IOException {
     }
 
+    private void updateProductQuantityForCanceledOrder(List<OrderDetail> canceledOrderDetails) {
+    for (OrderDetail orderDetail : canceledOrderDetails) {
+        int quantity = orderDetail.getQuantity();
+        String productID = orderDetail.getProduct().getProductID();
+  
+        DAO productDAO = new DAO();
+        productDAO.editProductQuantity(productID, quantity);
+    }
+}
 }

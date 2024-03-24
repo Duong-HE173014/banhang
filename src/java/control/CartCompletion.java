@@ -128,8 +128,8 @@ public class CartCompletion extends HttpServlet {
 
             // Tạo đơn hàng
             OrderDAO odao = new OrderDAO();
-            Order order = odao.createOrder(new Order(uid, total, fullName, email, mobile, address, gender, notes, payment));
-
+            int salerId = odao.getSalerIdWithMinOrders();
+            Order order = odao.createOrder(new Order(uid, total, fullName, email, mobile, address, gender, notes, payment, salerId));
             // Lưu chi tiết đơn hàng
             HttpSession session = request.getSession();
             Vector<Cart> cart = (Vector<Cart>) session.getAttribute("cart");
@@ -145,6 +145,8 @@ public class CartCompletion extends HttpServlet {
 
             // Kiểm tra số lượng sản phẩm trong kho
             boolean productsAvailableInStock = checkProductsAvailabilityInStock(request);
+            // Trừ số lượng sản phẩm trong kho khi đặt hàng
+            updateProductQuantityForOrder(cart);
 
             if (!productsAvailableInStock) {
                 response.sendRedirect(request.getContextPath() + "/cart_out_of_stock.html");
@@ -167,22 +169,24 @@ public class CartCompletion extends HttpServlet {
 
                         request.setAttribute("order", order);
                         request.setAttribute("orderDetails", order.getOrderDetailList());
+
                         request.getRequestDispatcher("CartCompletion.jsp").forward(request, response);
                     } else {
-                        
+
                         User user = (User) session.getAttribute("user");
                         request.setAttribute("uid", uid);
                         request.setAttribute("fullName", fullName);
-                        request.setAttribute("email", email);  
+                        request.setAttribute("email", email);
                         request.setAttribute("gender", gender);
+                        request.setAttribute("mobile", mobile);
                         request.setAttribute("address", address);
-                        request.setAttribute("total",  total);
+                        request.setAttribute("total", total);
                         request.setAttribute("notes", notes);
                         request.setAttribute("payment", payment);
- 
-                            
 
-                        request.getRequestDispatcher("ElectronicFundsTransfer.jsp").forward(request, response);
+                        request.getRequestDispatcher("vnpay_pay.jsp").forward(request, response);
+
+//                        request.getRequestDispatcher("ElectronicFundsTransfer.jsp").forward(request, response);
                     }
                 } else {
                     if (test) {
@@ -198,12 +202,14 @@ public class CartCompletion extends HttpServlet {
 
                         request.setAttribute("order", order);
                         request.setAttribute("orderDetails", order.getOrderDetailList());
-
+                        // Trừ số lượng sản phẩm trong kho khi đặt hàng
+                        
                         // Chuyển hướng đến trang CartCompletion.jsp
                         request.getRequestDispatcher("CartCompletion.jsp").forward(request, response);
                     }
                 }
             }
+
         } catch (SQLException ex) {
             Logger.getLogger(CartCompletion.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -281,12 +287,33 @@ public class CartCompletion extends HttpServlet {
         }
     }
 
+    // Hàm cập nhật số lượng sản phẩm trong kho khi đặt hàng
+    private void updateProductQuantityForOrder(Vector<Cart> cart) throws SQLException {
+        for (Cart cartItem : cart) {
+            int quantity = cartItem.getQuantity();
+            Product product = cartItem.getProducts();
+            int currentStock = product.getQuantity();
+
+            // Tính toán số lượng còn lại sau khi đã trừ đi số lượng sản phẩm trong giỏ hàng
+            int updatedStock = currentStock - quantity;
+
+            // Cập nhật số lượng sản phẩm trong kho
+            product.setQuantity(updatedStock);
+
+            // Cập nhật vào cơ sở dữ liệu
+            DAO productDAO = new DAO();
+            productDAO.editProduct(product);
+        }
+
+    }
+
     /**
      * Returns a short description of the servlet.
      *
      * @return a String containing servlet description
      */
     @Override
+
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>

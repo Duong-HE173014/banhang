@@ -212,15 +212,46 @@ public class OrderDAO {
         }
         return orders;
     }
-
-    public List<Order> getOrdersBySalerNull(int pageSize, int pageNumber) {
+    
+    public List<Order> getOrdersStaffConfirm(int pageSize, int pageNumber) {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM Orders WHERE Status = 'Pending'  ORDER BY OrderDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        String query = "SELECT * FROM Orders WHERE Status = 'Delivering' ORDER BY OrderDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, (pageNumber - 1) * pageSize);
             ps.setInt(2, pageSize);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order(
+                        rs.getInt("OrderID"),
+                        rs.getInt("UserID"),
+                        rs.getTimestamp("OrderDate"),
+                        rs.getDouble("TotalCost"),
+                        rs.getString("Status"),
+                        rs.getString("ReceiverFullName"),
+                        rs.getString("ReceiverEmail"),
+                        rs.getString("ReceiverMobile"),
+                        rs.getString("ReceiverAddress"),
+                        rs.getInt("IDUpdater")
+                );
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+    public List<Order> getOrdersBySalerNull(int pageSize, int pageNumber, int IDUpdater) {
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT * FROM Orders WHERE Status = 'Pending' AND [IDUpdater] = ? ORDER BY OrderDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, IDUpdater);
+            ps.setInt(2, (pageNumber - 1) * pageSize);
+            ps.setInt(3, pageSize);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Order order = new Order(
@@ -244,7 +275,7 @@ public class OrderDAO {
 
     public List<Order> getOrdersBySaler(int pageSize, int pageNumber, int IDUpdater) {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM Orders WHERE [IDUpdater] = ? ORDER BY OrderDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        String query = "SELECT * FROM Orders WHERE [IDUpdater] = ? AND Status != 'Pending' ORDER BY OrderDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
         try {
             int offset = (pageNumber - 1) * pageSize;
             ps = conn.prepareStatement(query);
@@ -332,14 +363,46 @@ public class OrderDAO {
         return orders;
     }
 
-    public List<Order> SearchOrdersBySaler(String txt) {
+    
+     public List<Order> SearchOrdersByStaffSuc(String txt) {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM [Orders] "
-                + "WHERE [OrderID] like ? or [ReceiverFullName] like ?";
+                + "WHERE ([OrderID] like ? or [ReceiverFullName] like ?) AND Status = 'Delivering'";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, "%" + txt + "%");
             ps.setString(2, "%" + txt + "%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order(
+                        rs.getInt("OrderID"),
+                        rs.getInt("UserID"),
+                        rs.getTimestamp("OrderDate"),
+                        rs.getDouble("TotalCost"),
+                        rs.getString("Status"),
+                        rs.getString("ReceiverFullName"),
+                        rs.getString("ReceiverEmail"),
+                        rs.getString("ReceiverMobile"),
+                        rs.getString("ReceiverAddress"),
+                        rs.getInt("IDUpdater")
+                );
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+    public List<Order> SearchOrdersBySaler(String txt, int IDUpdater) {
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT * FROM [Orders] "
+                + "WHERE [OrderID] like ? or [ReceiverFullName] like ? AND [IDUpdater] = ?";
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setString(1, "%" + txt + "%");
+            ps.setString(2, "%" + txt + "%");
+            ps.setInt(3, IDUpdater);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Order order = new Order(
@@ -420,15 +483,50 @@ public class OrderDAO {
         }
         return orders;
     }
-
-    public List<Order> SearchOrdersByDateAndSaler(String startDate, String endDate) {
+    
+    
+    public List<Order> SearchOrdersByDateStaffSuc(String startDate, String endDate) {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM [Orders] "
-                + "WHERE OrderDate >= ? AND OrderDate <= ?";
+                + "WHERE (OrderDate >= ? AND OrderDate <= ?) AND Status = 'Delivering'";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, startDate);
             ps.setString(2, endDate);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order(
+                        rs.getInt("OrderID"),
+                        rs.getInt("UserID"),
+                        rs.getTimestamp("OrderDate"),
+                        rs.getDouble("TotalCost"),
+                        rs.getString("Status"),
+                        rs.getString("ReceiverFullName"),
+                        rs.getString("ReceiverEmail"),
+                        rs.getString("ReceiverMobile"),
+                        rs.getString("ReceiverAddress"),
+                        rs.getInt("IDUpdater")
+                );
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+    
+    
+    
+    public List<Order> SearchOrdersByDateAndSaler(String startDate, String endDate,int IDUpdater) {
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT * FROM [Orders] "
+                + "WHERE OrderDate >= ? AND OrderDate <= ? AND [IDUpdater] = ?";
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setString(1, startDate);
+            ps.setString(2, endDate);
+            ps.setInt(3, IDUpdater);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Order order = new Order(
@@ -450,12 +548,12 @@ public class OrderDAO {
         return orders;
     }
 
-    public Order createOrder(Order o) throws SQLException {
+public Order createOrder(Order o) throws SQLException {
         String query = "INSERT INTO [dbo].[Orders]\n"
                 + "           ([UserID],[OrderDate],[TotalCost],[Status]\n"
                 + "           ,[ReceiverFullName],[ReceiverEmail],[ReceiverMobile]\n"
-                + "           ,[ReceiverAddress],[ReceiverGender],[Notes],[PaymentMethods])\n"
-                + "     VALUES (?,GETDATE(),?,'Pending',?,?,?,?,?,?,?)";
+                + "           ,[ReceiverAddress],[ReceiverGender],[Notes],[PaymentMethods],[IDUpdater])\n"
+                + "     VALUES (?,GETDATE(),?,'Pending',?,?,?,?,?,?,?,?)";
 
         try {
             ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -468,6 +566,7 @@ public class OrderDAO {
             ps.setInt(7, o.getReceiverGender());
             ps.setString(8, o.getNotes());
             ps.setInt(9, o.getPaymentMethods());
+            ps.setInt(10, o.getIdUpdater());
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 ResultSet rs = ps.getGeneratedKeys();
@@ -480,10 +579,8 @@ public class OrderDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
-
     public boolean createOrderDetails(OrderDetail o) {
         String query = "INSERT INTO [dbo].[OrderDetails]\n"
                 + "           ([OrderID],[ProductID],[Thumbnail]\n"
@@ -524,11 +621,9 @@ public class OrderDAO {
             if (rowsUpdated > 0) {
                 success = true;
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return success;
     }
 
@@ -565,7 +660,7 @@ public class OrderDAO {
         String query = "";
         switch (type) {
             case "Pending":
-                query = "SELECT COUNT(*) AS Total FROM Orders WHERE Status = 'Pending'";
+                query = "SELECT COUNT(*) AS Total FROM Orders WHERE Status = 'Pending' AND IDUpdater = ?";
                 break;
             case "Delivering":
                 query = "SELECT COUNT(*) AS Total FROM Orders WHERE Status = 'Delivering' AND IDUpdater = ?";
@@ -581,9 +676,9 @@ public class OrderDAO {
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query); // Sử dụng prepareStatement thay vì prepareCall
-            if (type.equals("Shipped") || type.equals("Confirm") || type.equals("Successfully")) {
+            
                 ps.setInt(1, IDUpdater);
-            }
+            
             rs = ps.executeQuery();
             if (rs.next()) {
                 total = rs.getInt("Total");
@@ -594,18 +689,43 @@ public class OrderDAO {
         return total;
     }
 
-    public static void main(String[] args) {
-        // Tạo một đối tượng OrderDAO
-        OrderDAO orderDAO = new OrderDAO();
-
-        // Tìm kiếm các đơn hàng theo người bán và in kết quả ra màn hình
-        String searchText = "Jo";
-        List<Order> searchResults = orderDAO.SearchOrdersBySaler(searchText);
-
-        // In kết quả tìm kiếm ra console
-        for (Order order : searchResults) {
-            System.out.println("Order ID: " + order.getOrderId() + ", Receiver: " + order.getReceiverFullName());
+    
+    public int getSalerIdWithMinOrders(){
+         String query = "SELECT TOP 1 u.UserID " +
+                           "FROM Users u " +
+                           "LEFT JOIN Orders o ON u.UserID = o.IDUpdater " +
+                           "WHERE u.Role = 'Saler' " +
+                           "GROUP BY u.UserID " +
+                           "ORDER BY COUNT(o.OrderID)";
+         int SalerId = 0;
+         try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                SalerId = rs.getInt("UserID");
+            }
+        } catch (Exception e) {
         }
-    }
+         return SalerId;
+     }
+    
+    
+    
+    
+    
+//    public static void main(String[] args) {
+//        // Tạo một đối tượng OrderDAO
+//        OrderDAO orderDAO = new OrderDAO();
+//
+//        // Tìm kiếm các đơn hàng theo người bán và in kết quả ra màn hình
+//        String searchText = "Jo";
+//        List<Order> searchResults = orderDAO.SearchOrdersBySaler(searchText);
+//
+//        // In kết quả tìm kiếm ra console
+//        for (Order order : searchResults) {
+//            System.out.println("Order ID: " + order.getOrderId() + ", Receiver: " + order.getReceiverFullName());
+//        }
+//    }
 
 }

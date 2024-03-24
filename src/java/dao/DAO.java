@@ -472,6 +472,27 @@ public class DAO {
 
     }
 
+    public void editProductQuantity(String productID, int quantity) {
+        String query = "UPDATE Products SET Quantity = Quantity + ? WHERE ProductID = ?";
+        try {
+            conn = new DBContext().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query);
+            
+            
+            ps.setInt(1, quantity);
+            ps.setString(2, productID);
+
+            // Thực thi câu lệnh SQL
+             ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+    }
+    
+    public static void main(String[] args) {
+        new DAO().editProductQuantity("1", 5);
+    }
+
 //    public static void main(String[] args) {
 //        DAO dao = new DAO();
 //

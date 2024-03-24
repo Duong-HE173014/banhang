@@ -177,7 +177,13 @@
                     </a>
                     <span class="tooltip">User</span>
                 </li>
-                
+                <li>
+                    <a href="staffCanAndSucControl">
+                        <i class='bx bx-pie-chart-alt-2' ></i>
+                        <span class="links_name">List</span>
+                    </a>
+                    <span class="tooltip">List</span>
+                </li>
                 <%}%>
                 <li class="profile">     
                     <a  href="logout">

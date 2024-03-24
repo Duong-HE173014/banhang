@@ -92,7 +92,18 @@ public class Order {
         this.notes = notes;
         this.paymentMethods = paymentMethods;
     }
-
+public Order(int userId, double totalCost, String receiverFullName, String receiverEmail, String receiverMobile, String receiverAddress, int receiverGender, String notes, int paymentMethods, int idUpdater) {
+        this.userId = userId;
+        this.totalCost = totalCost;
+        this.receiverFullName = receiverFullName;
+        this.receiverEmail = receiverEmail;
+        this.receiverMobile = receiverMobile;
+        this.receiverAddress = receiverAddress;
+        this.receiverGender = receiverGender;
+        this.notes = notes;
+        this.paymentMethods = paymentMethods;
+        this.idUpdater = idUpdater;
+    }
     public int getOrderId() {
         return orderId;
     }

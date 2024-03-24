@@ -27,10 +27,44 @@
         <!------ Include the above in your HEAD tag ---------->
         <style>
             #carouselExample .carousel-inner .carousel-item img {
-                width: 1700px; /* Đảm bảo hình ảnh chiếm toàn bộ chiều rộng của slider */
-                height: 430px; /* Điều chỉnh chiều cao của hình ảnh trong slider */
+                width: 100%; /* Chiếm toàn bộ chiều rộng của carousel-item */
+                height: auto; /* Chiều cao tự động điều chỉnh để giữ tỉ lệ */
                 object-fit: cover; /* Đảm bảo hình ảnh không bị biến dạng khi thay đổi kích thước */
             }
+
+            #carouselExample .carousel-inner .carousel-item img {
+                width: 100%; /* Chiếm toàn bộ chiều rộng của carousel-item */
+                height: 100%; /* Chiếm toàn bộ chiều cao của carousel-item */
+                object-fit: cover; /* Đảm bảo hình ảnh không bị biến dạng khi thay đổi kích thước */
+            }
+
+            .carousel {
+                width: 100%; /* Chiếm toàn bộ chiều rộng của carousel */
+                margin: 0 auto; /* Canh giữa carousel */
+            }
+
+            .carousel-indicators {
+                margin-top: 10px; /* Khoảng cách giữa carousel và các chỉ số */
+            }
+
+            .carousel-indicators li {
+                background-color: #888; /* Màu của các chỉ số */
+                border-radius: 50%; /* Đảm bảo chỉ số là hình tròn */
+                width: 12px; /* Kích thước chiều rộng */
+                height: 12px; /* Kích thước chiều cao */
+                margin: 0 5px; /* Khoảng cách giữa các chỉ số */
+            }
+
+            .carousel-indicators .active {
+                background-color: #555; /* Màu của chỉ số hoạt động */
+            }
+
+            .carousel-image {
+                width: 100%; /* Chiếm toàn bộ chiều rộng của carousel-item */
+                max-height: 500px; /* Chiều cao tự động điều chỉnh để giữ tỉ lệ */
+                object-fit: cover; /* Đảm bảo hình ảnh không bị biến dạng khi thay đổi kích thước */
+            }
+
             .pagination {
                 display: flex;
                 margin-left: 20px;
@@ -49,6 +83,8 @@
             }
             .pagination a:hover:not(.active) {
                 background-color: chocolate;
+
+
             </style>
         </head>
         <body>
@@ -67,13 +103,13 @@
             %>    
             <jsp:include page="Header.jsp"></jsp:include>    
                 <!--end of menu-->
-                <div id="carouselExample" class="carousel slide mt-4">
+                <div id="carouselExample" class="carousel slide mt-4" style="">
                     <div class="carousel-inner">
 
                     <% for (Slider slider : listS) { %>
                     <div class="carousel-item <%=i == 0 ? "active" : "" %>">
                         <a href="<%= slider.getBacklink() %>">
-                            <img src="<%=slider.getsImage()%>" class="d-block mx-auto" alt="<%=slider.getsTitle()%>">
+                            <img src="<%=slider.getsImage()%>" class="d-block mx-auto carousel-image" alt="<%=slider.getsTitle()%>">
                         </a>
                     </div>
                     <% i++; %>

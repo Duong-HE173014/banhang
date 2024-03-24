@@ -4,6 +4,8 @@
     Author     : Admin
 --%>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.Vector" %>
 <%@page import="java.sql.ResultSet" %>
@@ -50,7 +52,7 @@
         <jsp:include page="Menu.jsp"></jsp:include> 
         <%
             ResultSet rsInfoSaler = (ResultSet) request.getAttribute("rsInfoSaler");  
-            
+            ResultSet rsInfoSalerNow = (ResultSet) request.getAttribute("rsInfoSalerNow");
             ResultSet detail = (ResultSet) request.getAttribute("detail"); 
             if (detail != null && detail.next()) {
         %>
@@ -143,7 +145,10 @@
                                     <span class="readonly-indicator"></i></span>
                                 </div>
                             </div>
-
+<%
+                            String status = detail.getString(4);
+                            if (status.equals("Pending")) {
+                            %>
                             <div class="form-group mb-3"> 
                                 <div class="row">
                                     <div class="col">
@@ -160,13 +165,38 @@
                                     </div>
                                 </div>
                             </div>
+                            <%     }else {%>
+                            <div class="form-group mb-3"> 
+                                <div class="row">
+                                    <div class="col">
+                                        <label class="mb-1">Status</label> 
+                                        <div class="readonly-textarea" readonly><%=detail.getString(4)%></div>                                  
+                                    </div>
+                                    <div class="col">
+                                        <label class="mb-1">Order Fulfillment Sales Associate</label> 
+                                        <%   if (rsInfoSalerNow.next()) { %>
+                                        <div class="readonly-textarea" readonly>ID Saler: <%= rsInfoSalerNow.getInt(1) %> - Name Saler: <%= rsInfoSalerNow.getString(2) %> - Number of orders received: <%= rsInfoSalerNow.getString(3) %></div>      
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <%}%>
                         </div>
+                        <%                      
+                        if (status.equals("Pending")) {
+                        %>
                         <div class="modal-footer">
                             <button type="submit" name="submit" class="btn btn-sm btn-success">Save Change</button> 
                             <span style="margin-left: 10px;"></span> <!-- Khoảng cách -->
                             <button type="button"  class="btn btn-sm btn-danger" onclick="window.history.back()">Back</button>
                         </div>
-
+                        <% }else {%>
+                        <div class="modal-footer">                            
+                            <span style="margin-left: 10px;"></span> <!-- Khoảng cách -->
+                            <button type="button"  class="btn btn-sm btn-danger" onclick="window.history.back()">Back</button>
+                        </div>
+                        <%}%>
                 </form>
             </div>
         </section>

@@ -10,7 +10,7 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Thêm thẻ link cho Bootstrap Icons từ CDN -->
+        <!-- ThÃÂªm thÃ¡ÂºÂ» link cho Bootstrap Icons tÃ¡Â»Â« CDN -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
         <!-- Font Awesome CSS -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
@@ -357,7 +357,7 @@
                 </div>
             </div>
         </form>
-        <!-- đáy -->
+        <!-- footer -->
         <jsp:include page="Footer.jsp"></jsp:include>
 
         <!-- Bootstrap JavaScript -->
@@ -385,16 +385,12 @@
                     $(this).addClass('active');
                 });
             });
-
-            // Bắt sự kiện khi nhấp vào nút Pay
+            
             document.getElementById("payButton").addEventListener("click", function () {
-                // Điều hướng đến trang "cartcompletion" với tham số completed=true
                 window.location.href = "cartcompletion?completed=true";
             });
 
-            // Bắt sự kiện khi nhấp vào nút Complete the order
             document.getElementById("completeOrderButton").addEventListener("click", function () {
-                // Điều hướng đến trang "cartcompletion" với tham số completed=true
                 window.location.href = "cartcompletion?completed=true";
             });
         </script>
